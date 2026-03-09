@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>机器人仿真平台技术选型分析</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f7fa;
+        }
+
+        /* 导航 */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(13, 71, 161, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 0 2rem;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+        }
+
+        .nav-title {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        /* 封面 */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0d47a1 0%, #1976d2 50%, #00acc1 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 2rem;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-content .subtitle {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-content .meta {
+            font-size: 1rem;
+            opacity: 0.7;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+
+        /* 内容区 */
+        .section {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: #0d47a1;
+            margin-bottom: 2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #00acc1;
+            display: inline-block;
+        }
+
+        .section-subtitle {
+            font-size: 1.3rem;
+            color: #1976d2;
+            margin: 2rem 0 1rem;
+        }
+
+        /* 卡片 */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* 平台卡片 */
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .platform-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .platform-header {
+            padding: 1.5rem;
+            color: white;
+        }
+
+        .mujoco .platform-header {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+        }
+
+        .isaac .platform-header {
+            background: linear-gradient(135deg, #1976d2, #0d47a1);
+        }
+
+        .unity .platform-header {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+        }
+
+        .platform-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .platform-tagline {
+            opacity: 0.9;
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+
+        .platform-body {
+            padding: 1.5rem;
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .pros,
+        .cons {
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .pros {
+            background: #e8f5e9;
+        }
+
+        .cons {
+            background: #ffebee;
+        }
+
+        .pros h4 {
+            color: #2e7d32;
+            margin-bottom: 0.5rem;
+        }
+
+        .cons h4 {
+            color: #c62828;
+            margin-bottom: 0.5rem;
+        }
+
+        .pros ul,
+        .cons ul {
+            list-style: none;
+            font-size: 0.85rem;
+        }
+
+        .pros li::before {
+            content: "✓ ";
+            color: #4caf50;
+            font-weight: bold;
+        }
+
+        .cons li::before {
+            content: "✗ ";
+            color: #f44336;
+            font-weight: bold;
+        }
+
+        /* 表格 */
+        .table-container {
+            overflow-x: auto;
+            margin: 2rem 0;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th {
+            background: #0d47a1;
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 0.875rem 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        tr:hover {
+            background: #e3f2fd;
+        }
+
+        .score-excellent {
+            color: #4caf50;
+            font-weight: 600;
+        }
+
+        .score-good {
+            color: #ff9800;
+            font-weight: 600;
+        }
+
+        .score-poor {
+            color: #f44336;
+            font-weight: 600;
+        }
+
+        /* 决策流程 */
+        .decision-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .decision-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: #0d47a1;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: #0d47a1;
+            margin-bottom: 0.5rem;
+        }
+
+        /* 结论 */
+        .conclusion {
+            background: linear-gradient(135deg, #0d47a1, #1976d2);
+            color: white;
+            padding: 3rem;
+            border-radius: 16px;
+            margin: 2rem 0;
+        }
+
+        .conclusion h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .conclusion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .conclusion-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .conclusion-item h4 {
+            margin-bottom: 0.5rem;
+            color: #80deea;
+        }
+
+        /* 标签 */
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .tag-primary {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .tag-success {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .tag-warning {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .tag-danger {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+
+        /* 列表 */
+        ul.feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul.feature-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        ul.feature-list li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #00acc1;
+            font-weight: bold;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .platform-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pros-cons {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 导航 -->
+    <nav class="nav">
+        <div class="nav-content">
+            <div class="nav-title">
+                <a href="index.html"
+                    style="color: white; text-decoration: none; margin-right: 15px; font-weight: normal; opacity: 0.8;">←
+                    返回主页</a>
+                机器人仿真平台技术选型
+            </div>
+            <div class="nav-links">
+                <a href="#background">背景</a>
+                <a href="#platforms">平台对比</a>
+                <a href="#comparison">详细对比</a>
+                <a href="#decision">决策建议</a>
+            </div>
+        </div>
+    </nav>
+    <!-- 封面 -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>机器人仿真平台技术选型</h1>
+            <div class="subtitle">MuJoCo · Isaac Sim · Unity ML-Agents</div>
+            <div class="meta">深度技术分析与决策建议报告</div>
+        </div>
+        <div class="scroll-hint">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                <path d="M12 5v14M19 12l-7 7-7-7" />
+            </svg>
+        </div>
+    </section>
+
+    <!-- 背景 -->
+    <section class="section" id="background">
+        <h2 class="section-title">01 项目背景与需求</h2>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon" style="background: #e3f2fd;">📋</div>
+                <div class="card-title">项目现状</div>
+            </div>
+            <ul class="feature-list">
+                <li><strong>团队现状：</strong>已有组员开始使用 MuJoCo 进行建模，具备一定代码基础</li>
+                <li><strong>核心任务：</strong>数据采集用于机器人控制算法训练</li>
+                <li><strong>最终目标：</strong>Sim-to-Real 迁移，部署到真实机器人</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon" style="background: #fff3e0;">⚠️</div>
+                <div class="card-title">关键约束</div>
+            </div>
+            <ul class="feature-list">
+                <li><strong>开发周期：</strong>需要快速迭代验证，时间有限</li>
+                <li><strong>硬件资源：</strong>GPU 资源有限，不能依赖高端显卡</li>
+                <li><strong>人员技能：</strong>以算法工程师为主，非专业仿真工程师</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon" style="background: #e8f5e9;">🎯</div>
+                <div class="card-title">选型目标</div>
+            </div>
+            <ul class="feature-list">
+                <li>评估 MuJoCo 当前路径的可行性</li>
+                <li>对比 Isaac Sim 和 Unity ML-Agents 的优劣势</li>
+                <li>给出明确的技术选型建议和实施路径</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 平台对比 -->
+    <section class="section" id="platforms">
+        <h2 class="section-title">02 候选平台深度分析</h2>
+
+        <div class="platform-grid">
+            <!-- MuJoCo -->
+            <div class="platform-card mujoco">
+                <div class="platform-header">
+                    <div class="platform-name">MuJoCo</div>
+                    <div class="platform-tagline">Multi-Joint dynamics with Contact</div>
+                </div>
+                <div class="platform-body">
+                    <p style="margin-bottom: 1rem; color: #666; font-size: 0.9rem;">
+                        Google DeepMind 开源的物理引擎，专为模型优化设计，强化学习领域事实标准。
+                    </p>
+                    <div class="pros-cons">
+                        <div class="pros">
+                            <h4>核心优势</h4>
+                            <ul>
+                                <li>物理精度顶尖</li>
+                                <li>Sim-to-Real最强</li>
+                                <li>CPU轻量高效</li>
+                                <li>开源免费</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h4>主要局限</h4>
+                            <ul>
+                                <li>渲染能力弱</li>
+                                <li>无GPU并行</li>
+                                <li>学习曲线陡峭</li>
+                                <li>视觉任务受限</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Isaac Sim -->
+            <div class="platform-card isaac">
+                <div class="platform-header">
+                    <div class="platform-name">Isaac Sim</div>
+                    <div class="platform-tagline">NVIDIA Omniverse Robotics</div>
+                </div>
+                <div class="platform-body">
+                    <p style="margin-bottom: 1rem; color: #666; font-size: 0.9rem;">
+                        NVIDIA 的 GPU 加速机器人仿真平台，支持大规模并行和真实感渲染。
+                    </p>
+                    <div class="pros-cons">
+                        <div class="pros">
+                            <h4>核心优势</h4>
+                            <ul>
+                                <li>GPU并行顶尖</li>
+                                <li>真实感渲染</li>
+                                <li>ROS2集成</li>
+                                <li>工业级生态</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h4>主要局限</h4>
+                            <ul>
+                                <li>硬件门槛高</li>
+                                <li>单环境开销大</li>
+                                <li>学习成本高</li>
+                                <li>部分需授权</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unity -->
+            <div class="platform-card unity">
+                <div class="platform-header">
+                    <div class="platform-name">Unity ML-Agents</div>
+                    <div class="platform-tagline">Game Engine + Machine Learning</div>
+                </div>
+                <div class="platform-body">
+                    <p style="margin-bottom: 1rem; color: #666; font-size: 0.9rem;">
+                        游戏引擎结合机器学习工具包，面向游戏 AI 和原型开发。
+                    </p>
+                    <div class="pros-cons">
+                        <div class="pros">
+                            <h4>核心优势</h4>
+                            <ul>
+                                <li>渲染能力最强</li>
+                                <li>生态资源丰富</li>
+                                <li>可视化友好</li>
+                                <li>跨平台部署</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h4>主要局限</h4>
+                            <ul>
+                                <li>物理精度不足</li>
+                                <li>Sim-to-Real差</li>
+                                <li>并行性能弱</li>
+                                <li>机器人支持弱</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 详细对比 -->
+    <section class="section" id="comparison">
+        <h2 class="section-title">03 多维度技术对比</h2>
+
+        <h3 class="section-subtitle">物理仿真精度对比</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>评估维度</th>
+                        <th>MuJoCo</th>
+                        <th>Isaac Sim</th>
+                        <th>Unity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>刚体动力学</td>
+                        <td class="score-excellent">优秀</td>
+                        <td class="score-excellent">优秀</td>
+                        <td class="score-good">良好</td>
+                    </tr>
+                    <tr>
+                        <td>接触/碰撞检测</td>
+                        <td class="score-excellent">优秀</td>
+                        <td class="score-good">良好</td>
+                        <td class="score-poor">一般</td>
+                    </tr>
+                    <tr>
+                        <td>摩擦模型</td>
+                        <td class="score-excellent">优秀</td>
+                        <td class="score-good">良好</td>
+                        <td class="score-poor">一般</td>
+                    </tr>
+                    <tr>
+                        <td>数值稳定性</td>
+                        <td class="score-excellent">优秀</td>
+                        <td class="score-good">良好</td>
+                        <td class="score-poor">一般</td>
+                    </tr>
+                    <tr>
+                        <td>计算精度</td>
+                        <td>双精度</td>
+                        <td>单精度</td>
+                        <td>单精度</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="section-subtitle">并行性能对比</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>评估维度</th>
+                        <th>MuJoCo</th>
+                        <th>Isaac Sim</th>
+                        <th>Unity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>并行方式</td>
+                        <td>CPU多线程</td>
+                        <td>GPU大规模</td>
+                        <td>CPU有限</td>
+                    </tr>
+                    <tr>
+                        <td>最大环境数</td>
+                        <td>~100</td>
+                        <td class="score-excellent">4096+</td>
+                        <td>~50</td>
+                    </tr>
+                    <tr>
+                        <td>单环境开销</td>
+                        <td class="score-excellent">极低</td>
+                        <td class="score-poor">高</td>
+                        <td class="score-good">中等</td>
+                    </tr>
+                    <tr>
+                        <td>多GPU支持</td>
+                        <td class="score-poor">无</td>
+                        <td class="score-excellent">有</td>
+                        <td class="score-poor">无</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="section-subtitle">Sim-to-Real 迁移能力对比</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>评估维度</th>
+                        <th>MuJoCo</th>
+                        <th>Isaac Sim</th>
+                        <th>Unity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>物理一致性</td>
+                        <td class="score-excellent">优秀</td>
+                        <td class="score-good">良好</td>
+                        <td class="score-poor">一般</td>
+                    </tr>
+                    <tr>
+                        <td>迁移成功率</td>
+                        <td class="score-excellent">高</td>
+                        <td class="score-good">中</td>
+                        <td class="score-poor">低</td>
+                    </tr>
+                    <tr>
+                        <td>真实部署友好度</td>
+                        <td class="score-excellent">友好</td>
+                        <td class="score-good">中等</td>
+                        <td class="score-poor">困难</td>
+                    </tr>
+                    <tr>
+                        <td>学术界采用度</td>
+                        <td class="score-excellent">广泛</td>
+                        <td class="score-good">增长中</td>
+                        <td class="score-poor">少</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 决策建议 -->
+    <section class="section" id="decision">
+        <h2 class="section-title">04 决策建议与实施路径</h2>
+
+        <div class="conclusion">
+            <h2>🎯 核心结论</h2>
+            <p style="font-size: 1.1rem; opacity: 0.9;">
+                推荐继续使用 <strong>MuJoCo</strong> 作为主力平台，按需引入 <strong>Isaac Sim</strong> 作为视觉/并行训练补充。
+            </p>
+
+            <div class="conclusion-grid">
+                <div class="conclusion-item">
+                    <h4>选择 MuJoCo 的理由</h4>
+                    <p>物理精度高、Sim-to-Real迁移强、团队已有基础、开发效率高</p>
+                </div>
+                <div class="conclusion-item">
+                    <h4>引入 Isaac Sim 的时机</h4>
+                    <p>需要大规模并行(>100环境)、视觉感知任务、工业级ROS2部署</p>
+                </div>
+                <div class="conclusion-item">
+                    <h4>避免使用 Unity</h4>
+                    <p>物理精度不足、Sim-to-Real差距大，不适合核心算法研发</p>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-subtitle">实施路径</h3>
+        <div class="decision-flow">
+            <div class="decision-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <div class="step-title">阶段一：MuJoCo 快速验证（1-2周）</div>
+                    <p>利用现有代码基础，快速验证控制算法可行性，建立技术基线</p>
+                </div>
+            </div>
+            <div class="decision-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <div class="step-title">阶段二：MuJoCo 深度开发（3-8周）</div>
+                    <p>完善控制算法，进行 Sim-to-Real 验证，产出核心研究成果</p>
+                </div>
+            </div>
+            <div class="decision-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <div class="step-title">阶段三：Isaac Sim 按需引入（如需要）</div>
+                    <p>如需大规模数据或视觉任务，引入 Isaac Sim 作为补充工具</p>
+                </div>
+            </div>
+            <div class="decision-step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <div class="step-title">阶段四：混合部署优化（9-12周）</div>
+                    <p>MuJoCo 负责控制核心，Isaac Sim 负责视觉感知，形成完整方案</p>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-subtitle">风险提示</h3>
+        <div class="card">
+            <ul class="feature-list">
+                <li><span class="tag tag-warning">风险1</span> <strong>MuJoCo 渲染能力不足</strong> → 后期引入 Isaac Sim 或真实相机数据
+                </li>
+                <li><span class="tag tag-warning">风险2</span> <strong>Isaac Sim 硬件门槛</strong> → 云服务按需租用，或保持 MuJoCo 为主
+                </li>
+                <li><span class="tag tag-warning">风险3</span> <strong>双平台维护复杂度</strong> → 明确分工，MuJoCo 负责控制，Isaac 负责视觉
+                </li>
+                <li><span class="tag tag-warning">风险4</span> <strong>Sim-to-Real 差距</strong> → 域随机化 + 系统辨识 + 高保真物理</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <section class="section" style="text-align: center; padding: 3rem 2rem; color: #666;">
+        <p>机器人仿真平台技术选型分析报告</p>
+        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Generated for Technical Review</p>
+    </section>
+
+    <script>
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

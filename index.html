@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>W's Research Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#0d47a1',
+                        secondary: '#00acc1',
+                        dark: '#1e293b',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            scroll-behavior: smooth;
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0d47a1 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at top right, rgba(0, 172, 193, 0.2), transparent 50%);
+        }
+
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Animated grid background */
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #60a5fa, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-primary selection:text-white relative">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-nav transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                        W
+                    </div>
+                    <span class="font-bold text-xl tracking-tight text-gray-900">Research Portal</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home"
+                        class="text-sm font-semibold text-gray-600 hover:text-primary transition-colors">主页</a>
+                    <a href="#sections"
+                        class="text-sm font-semibold text-gray-600 hover:text-primary transition-colors">研究板块</a>
+                    <a href="#publish"
+                        class="text-sm font-semibold text-gray-600 hover:text-primary transition-colors">发布中心</a>
+                </div>
+                <div>
+                    <a href="editor.html"
+                        class="inline-flex items-center justify-center px-5 py-2.5 border border-transparent text-sm font-semibold rounded-lg text-white bg-primary hover:bg-blue-800 shadow-md hover:shadow-lg transition-all">
+                        在线编辑器
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-gradient pt-32 pb-20 lg:pt-48 lg:pb-32 min-h-[90vh] flex items-center">
+        <div class="absolute inset-0 bg-grid opacity-20"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-4xl mx-auto">
+                <h1 class="text-4xl tracking-tight font-extrabold text-white sm:text-5xl md:text-7xl mb-6">
+                    探索与构建 <span class="gradient-text">未来的智能</span>
+                </h1>
+                <p class="mt-3 text-base text-gray-300 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl mx-auto mb-10">
+                    一个集成了技术分享、仿真平台研究以及在线发布HTML文档的综合性科研空间。记录每一次技术选型与实验过程。
+                </p>
+                <div class="flex justify-center gap-4">
+                    <a href="#sections"
+                        class="px-8 py-4 border border-transparent text-base font-medium rounded-xl text-primary bg-white hover:bg-gray-50 md:text-lg transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
+                        探索研究板块
+                    </a>
+                    <a href="https://github.com/new" target="_blank"
+                        class="px-8 py-4 border border-white text-base font-medium rounded-xl text-white hover:bg-white hover:text-primary md:text-lg transition-all shadow-lg transform hover:-translate-y-1">
+                        部署到 GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll Down Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center animate-bounce">
+            <span class="text-white/60 text-sm mb-2 font-medium">向下滚动</span>
+            <svg class="w-6 h-6 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3">
+                </path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Featured Section (Like 2.html) -->
+    <section id="sections" class="py-24 bg-white relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-sm font-semibold text-secondary tracking-wide uppercase">核心板块</h2>
+                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                    机器人仿真平台分析
+                </p>
+                <p class="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">
+                    基于深度技术分析与决策建议报告，选择最适合团队的仿真平台基建。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <!-- MuJoCo Card -->
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden card-hover">
+                    <div class="h-32 bg-gradient-to-r from-green-500 to-green-700 flex items-center px-6">
+                        <div>
+                            <h3 class="text-2xl font-bold text-white">MuJoCo</h3>
+                            <p class="text-green-100 mt-1">Multi-Joint dynamics</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 mb-6 text-sm">Google DeepMind 开源的物理引擎，专为模型优化设计，强化学习领域事实标准。</p>
+                        <div class="flex flex-col gap-2">
+                            <div class="flex items-center gap-2 text-sm"><span class="text-green-500 font-bold">✓</span>
+                                物理精度顶尖</div>
+                            <div class="flex items-center gap-2 text-sm"><span class="text-green-500 font-bold">✓</span>
+                                Sim-to-Real最强</div>
+                            <div class="flex items-center gap-2 text-sm text-red-400"><span class="font-bold">✗</span>
+                                渲染能力较弱</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Isaac Sim Card -->
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden card-hover">
+                    <div class="h-32 bg-gradient-to-r from-blue-600 to-blue-800 flex items-center px-6">
+                        <div>
+                            <h3 class="text-2xl font-bold text-white">Isaac Sim</h3>
+                            <p class="text-blue-100 mt-1">NVIDIA Omniverse</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 mb-6 text-sm">NVIDIA 的 GPU 加速机器人仿真平台，支持大规模并行和真实感渲染与传感器仿真。</p>
+                        <div class="flex flex-col gap-2">
+                            <div class="flex items-center gap-2 text-sm"><span class="text-green-500 font-bold">✓</span>
+                                GPU并行顶尖</div>
+                            <div class="flex items-center gap-2 text-sm"><span class="text-green-500 font-bold">✓</span>
+                                真实感渲染与ROS2集成</div>
+                            <div class="flex items-center gap-2 text-sm text-red-400"><span class="font-bold">✗</span>
+                                硬件门槛高昂</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Unity Card -->
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden card-hover">
+                    <div class="h-32 bg-gradient-to-r from-orange-400 to-orange-600 flex items-center px-6">
+                        <div>
+                            <h3 class="text-2xl font-bold text-white">Unity ML-Agents</h3>
+                            <p class="text-orange-100 mt-1">Game Engine + ML</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 mb-6 text-sm">游戏引擎结合机器学习工具包，面向游戏 AI 和视觉要求高的原型快速开发。</p>
+                        <div class="flex flex-col gap-2">
+                            <div class="flex items-center gap-2 text-sm"><span class="text-green-500 font-bold">✓</span>
+                                生态资源极度丰富</div>
+                            <div class="flex items-center gap-2 text-sm"><span class="text-green-500 font-bold">✓</span>
+                                可视化与UI友好</div>
+                            <div class="flex items-center gap-2 text-sm text-red-400"><span class="font-bold">✗</span>
+                                Sim-to-Real难度大</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center">
+                <a href="tech_selection.html"
+                    class="inline-flex items-center font-medium text-primary hover:text-blue-700 text-lg transition-colors group">
+                    查看完整技术选型报告
+                    <svg class="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Publishing/Editor Section -->
+    <section id="publish" class="py-24 bg-gray-50 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+                <div class="grid grid-cols-1 md:grid-cols-2">
+                    <div class="p-12 lg:p-16 flex flex-col justify-center">
+                        <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-8">
+                            <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                </path>
+                            </svg>
+                        </div>
+                        <h2 class="text-3xl font-extrabold text-gray-900 mb-4">在线排版与发布</h2>
+                        <p class="text-lg text-gray-600 mb-8">想要编辑新的文章、笔记或者HTML内容，并部署到网络上？使用我们内置的富文本在线编辑器，即写即得标准 HTML
+                            格式文件。</p>
+
+                        <ul class="space-y-4 mb-8">
+                            <li class="flex items-center text-gray-600 text-sm">
+                                <span
+                                    class="w-6 h-6 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mr-3 font-bold text-xs">1</span>
+                                使用在线编辑器撰写内容并获取HTML代码
+                            </li>
+                            <li class="flex items-center text-gray-600 text-sm">
+                                <span
+                                    class="w-6 h-6 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mr-3 font-bold text-xs">2</span>
+                                在仓库中创建新文件 (如 `posts/article.html`)
+                            </li>
+                            <li class="flex items-center text-gray-600 text-sm">
+                                <span
+                                    class="w-6 h-6 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mr-3 font-bold text-xs">3</span>
+                                通过 GitHub Pages 自动部署和更新你的网站
+                            </li>
+                        </ul>
+
+                        <a href="editor.html"
+                            class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-primary hover:bg-blue-800 shadow-md hover:shadow-lg transition-all w-max">
+                            立即开始写作
+                        </a>
+                    </div>
+                    <div class="bg-gray-100 p-8 flex items-center justify-center min-h-[400px]">
+                        <!-- Editor Mockup -->
+                        <div class="w-full max-w-sm bg-white rounded-lg shadow-2xl p-4 border border-gray-200">
+                            <div class="flex items-center border-b pb-2 mb-4 gap-2 text-gray-400">
+                                <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                                <div class="ml-4 text-xs font-mono">editor.html</div>
+                            </div>
+                            <div class="h-4 bg-gray-100 w-3/4 rounded mb-2"></div>
+                            <div class="h-4 bg-gray-100 w-1/2 rounded mb-6"></div>
+
+                            <div
+                                class="h-32 bg-blue-50/50 rounded-lg border border-dashed border-blue-200 flex items-center justify-center">
+                                <span class="text-blue-400 text-sm font-medium">&lt;div
+                                    class="content"&gt;...&lt;/div&gt;</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Listing Section (Dynamic feeling, static HTML) -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-8 border-b pb-4">已发布的内容</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Post Item -->
+                <a href="tech_selection.html" class="block group">
+                    <div
+                        class="border border-gray-100 rounded-xl p-6 hover:border-primary hover:shadow-lg transition-all">
+                        <div class="text-xs font-semibold text-secondary mb-2 uppercase tracking-wide">仿真平台</div>
+                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors">
+                            机器人仿真平台技术选型分析</h3>
+                        <p class="mt-2 text-gray-500 text-sm line-clamp-2">对于MuJoCo、Isaac Sim 和 Unity
+                            ML-Agents的深度评测与路线规划，帮助团队选择最优研发底层工具。</p>
+                        <div class="mt-4 text-sm text-gray-400 font-mono">2026-03-09</div>
+                    </div>
+                </a>
+
+                <!-- Placeholder for future posts -->
+                <a href="editor.html" class="block">
+                    <div
+                        class="border-2 border-dashed border-gray-200 rounded-xl p-8 flex flex-col items-center justify-center hover:border-primary hover:bg-blue-50 transition-all h-full min-h-[200px] text-gray-400 hover:text-primary">
+                        <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4">
+                            </path>
+                        </svg>
+                        <span class="font-medium">新建内容并发布上来</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark py-12 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="text-gray-400 font-medium mb-4">
+                &copy; 2026 W's Research Portal. All rights reserved.
+            </div>
+            <p class="text-gray-500 text-sm max-w-md mx-auto">
+                Powered by GitHub Pages. Pure Static HTML/CSS architecture for maximum flexibility and performance.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar transparency on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 20) {
+                nav.classList.add('shadow-md');
+                nav.style.background = 'rgba(255, 255, 255, 0.9)';
+            } else {
+                nav.classList.remove('shadow-md');
+                nav.style.background = 'rgba(255, 255, 255, 0.8)';
+            }
+        });
+    </script>
+</body>
+
+</html>
