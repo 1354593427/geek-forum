@@ -772,9 +772,220 @@
         </div>
     </section>
 
+    <!-- 最新研究综述 -->
+    <section class="section" id="research">
+        <h2 class="section-title">04 最新研究进展与论文综述 (2024-2025)</h2>
+        
+        <div class="card">
+            <p style="font-size: 1.05rem; color: #555; margin-bottom: 1.5rem;">
+                基于对 arXiv 2024-2025 年最新论文的调研，整理了 <strong>15+ 篇高质量论文</strong>，分析当前机器人仿真平台的使用趋势和新兴技术。
+            </p>
+        </div>
+
+        <h3 class="section-subtitle">📊 仿真平台使用统计</h3>
+        <div class="card">
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>仿真平台</th>
+                        <th>使用频率</th>
+                        <th>典型应用场景</th>
+                        <th>趋势</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>MuJoCo</strong></td>
+                        <td class="score-excellent">★★★★★ (最高)</td>
+                        <td>强化学习、控制算法、Sim-to-Real</td>
+                        <td class="score-excellent">持续增长</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Isaac Sim/Gym</strong></td>
+                        <td class="score-good">★★★★☆</td>
+                        <td>大规模并行训练、视觉感知、工业部署</td>
+                        <td class="score-excellent">快速上升</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Gazebo</strong></td>
+                        <td class="score-good">★★★☆☆</td>
+                        <td>ROS集成、传统机器人、教育</td>
+                        <td class="score-medium">稳定</td>
+                    </tr>
+                    <tr>
+                        <td><strong>PyBullet</strong></td>
+                        <td class="score-good">★★★☆☆</td>
+                        <td>快速原型、多体动力学、抓取</td>
+                        <td class="score-medium">稳定</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Unity ML-Agents</strong></td>
+                        <td class="score-poor">★★☆☆☆</td>
+                        <td>游戏化场景、视觉任务</td>
+                        <td class="score-poor">下降</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="section-subtitle">📑 重点论文推荐 (15篇)</h3>
+        
+        <div class="platform-grid">
+            <div class="platform-card mujoco">
+                <div class="platform-header">
+                    <div class="platform-name">MuJoCo 相关</div>
+                </div>
+                <div style="padding: 1.5rem;">
+                    <div class="paper-item" style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                        <h4 style="color: #2e7d32; font-size: 0.95rem; margin-bottom: 0.5rem;">1. Few-Shot Neural Differentiable Simulator</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">结合分析仿真与GNN的少样本Real-to-Sim方法</p>
+                        <a href="https://arxiv.org/abs/2603.06218" target="_blank" style="font-size: 0.8rem; color: #1976d2;">arXiv:2603.06218 →</a>
+                    </div>
+                    <div class="paper-item" style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                        <h4 style="color: #2e7d32; font-size: 0.95rem; margin-bottom: 0.5rem;">2. Dual-Agent RL for Human-Robot Co-Adaptation</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">基于MuJoCo的双智能体多模型强化学习</p>
+                        <a href="https://arxiv.org/abs/2603.06163" target="_blank" style="font-size: 0.8rem; color: #1976d2;">arXiv:2603.06163 →</a>
+                    </div>
+                    <div class="paper-item" style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                        <h4 style="color: #2e7d32; font-size: 0.95rem; margin-bottom: 0.5rem;">3. Contact-Grounded Policy (CGP)</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">基于接触感知的灵巧操作策略</p>
+                        <a href="https://arxiv.org/abs/2603.05687" target="_blank" style="font-size: 0.8rem; color: #1976d2;">arXiv:2603.05687 →</a>
+                    </div>
+                    <div class="paper-item" style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                        <h4 style="color: #2e7d32; font-size: 0.95rem; margin-bottom: 0.5rem;">4. OpenHEART: Legged Manipulator</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">腿式机械臂操作异构关节物体</p>
+                        <a href="https://arxiv.org/abs/2603.05830" target="_blank" style="font-size: 0.8rem; color: #1976d2;">arXiv:2603.05830 →</a>
+                    </div>
+                    <div class="paper-item">
+                        <h4 style="color: #2e7d32; font-size: 0.95rem; margin-bottom: 0.5rem;">5. TDGC: Quadruped Navigation</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">任务级决策到步态控制的层次策略</p>
+                        <a href="https://arxiv.org/abs/2603.05783" target="_blank" style="font-size: 0.8rem; color: #1976d2;">arXiv:2603.05783 →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="platform-card isaac">
+                <div class="platform-header">
+                    <div class="platform-name">Isaac Sim/新兴平台</div>
+                </div>
+                <div style="padding: 1.5rem;">
+                    <div class="paper-item" style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                        <h4 style="color: #0d47a1; font-size: 0.95rem; margin-bottom: 0.5rem;">6. MagRobot: Magnetic Navigation Simulator</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">首个开源磁导航机器人仿真平台</p>
+                        <a href="https://arxiv.org/abs/2603.05992" target="_blank" style="font-size: 0.8rem; color: #1976d2;">arXiv:2603.05992 →</a>
+                    </div>
+                    <div class="paper-item" style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                        <h4 style="color: #0d47a1; font-size: 0.95rem; margin-bottom: 0.5rem;">7. Multimodal Behavior Tree Generation</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">VLM生成行为树，在仿真器中评估</p>
+                        <a href="https://arxiv.org/abs/2603.06084" target="_blank" style="font-size: 0.8rem; color: #1976d2;">arXiv:2603.06084 →</a>
+                    </div>
+                    <div class="paper-item" style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                        <h4 style="color: #0d47a1; font-size: 0.95rem; margin-bottom: 0.5rem;">8. TADPO: RL Off-road Driving</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">端到端强化学习越野驾驶</p>
+                        <a href="https://arxiv.org/abs/2603.05995" target="_blank" style="font-size: 0.8rem; color: #1976d2;">arXiv:2603.05995 →</a>
+                    </div>
+                    <div class="paper-item" style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                        <h4 style="color: #0d47a1; font-size: 0.95rem; margin-bottom: 0.5rem;">9. DeFM: Depth Foundation Model</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">机器人深度基础表示学习</p>
+                        <a href="https://arxiv.org/abs/2601.18923" target="_blank" style="font-size: 0.8rem; color: #1976d2;">arXiv:2601.18923 →</a>
+                    </div>
+                    <div class="paper-item">
+                        <h4 style="color: #0d47a1; font-size: 0.95rem; margin-bottom: 0.5rem;">10. CompliantVLA-adaptor</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">VLM引导的变阻抗控制</p>
+                        <a href="https://arxiv.org/abs/2601.15541" target="_blank" style="font-size: 0.8rem; color: #1976d2;">arXiv:2601.15541 →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="platform-grid" style="margin-top: 1.5rem;">
+            <div class="platform-card" style="border: 2px solid #ff9800;">
+                <div class="platform-header" style="background: linear-gradient(135deg, #ff9800, #f57c00);">
+                    <div class="platform-name">其他仿真平台</div>
+                </div>
+                <div style="padding: 1.5rem;">
+                    <div class="paper-item" style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                        <h4 style="color: #e65100; font-size: 0.95rem; margin-bottom: 0.5rem;">11. ROScopter: ROSflight 2.0</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">基于ROS2的多旋翼自动驾驶仪</p>
+                        <a href="https://arxiv.org/abs/2603.05404" target="_blank" style="font-size: 0.8rem; color: #1976d2;">arXiv:2603.05404 →</a>
+                    </div>
+                    <div class="paper-item" style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                        <h4 style="color: #e65100; font-size: 0.95rem; margin-bottom: 0.5rem;">12. Smoothly Differentiable Contact</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">可微分接触流形生成框架</p>
+                        <a href="https://arxiv.org/abs/2602.20304" target="_blank" style="font-size: 0.8rem; color: #1976d2;">arXiv:2602.20304 →</a>
+                    </div>
+                    <div class="paper-item" style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                        <h4 style="color: #e65100; font-size: 0.95rem; margin-bottom: 0.5rem;">13. A Perspective on DOM Challenges</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">可变形物体操作综述</p>
+                        <a href="https://arxiv.org/abs/2602.22998" target="_blank" style="font-size: 0.8rem; color: #1976d2;">arXiv:2602.22998 →</a>
+                    </div>
+                    <div class="paper-item" style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                        <h4 style="color: #e65100; font-size: 0.95rem; margin-bottom: 0.5rem;">14. Data Analogies Cross-Embodiment</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">跨具身迁移的数据类比方法</p>
+                        <a href="https://arxiv.org/abs/2603.06450" target="_blank" style="font-size: 0.8rem; color: #1976d2;">arXiv:2603.06450 →</a>
+                    </div>
+                    <div class="paper-item">
+                        <h4 style="color: #e65100; font-size: 0.95rem; margin-bottom: 0.5rem;">15. XR in Social Robotics Review</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">扩展现实在人机交互中的十年回顾</p>
+                        <a href="https://arxiv.org/abs/2602.15840" target="_blank" style="font-size: 0.8rem; color: #1976d2;">arXiv:2602.15840 →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="platform-card" style="border: 2px solid #9c27b0;">
+                <div class="platform-header" style="background: linear-gradient(135deg, #9c27b0, #7b1fa2);">
+                    <div class="platform-name">新兴趋势与洞察</div>
+                </div>
+                <div style="padding: 1.5rem;">
+                    <div class="trend-item" style="margin-bottom: 1.2rem;">
+                        <h4 style="color: #7b1fa2; font-size: 0.95rem; margin-bottom: 0.5rem;">🔥 可微分仿真</h4>
+                        <p style="font-size: 0.85rem; color: #666;">Differentiable Sim成为热点，支持梯度优化和策略学习</p>
+                    </div>
+                    <div class="trend-item" style="margin-bottom: 1.2rem;">
+                        <h4 style="color: #7b1fa2; font-size: 0.95rem; margin-bottom: 0.5rem;">🤖 Sim-to-Real</h4>
+                        <p style="font-size: 0.85rem; color: #666;">域随机化 + 系统辨识 + 高保真物理成为标准做法</p>
+                    </div>
+                    <div class="trend-item" style="margin-bottom: 1.2rem;">
+                        <h4 style="color: #7b1fa2; font-size: 0.95rem; margin-bottom: 0.5rem;">👁️ 视觉-语言-动作 (VLA)</h4>
+                        <p style="font-size: 0.85rem; color: #666;">多模态大模型与仿真平台深度结合</p>
+                    </div>
+                    <div class="trend-item" style="margin-bottom: 1.2rem;">
+                        <h4 style="color: #7b1fa2; font-size: 0.95rem; margin-bottom: 0.5rem;">⚡ 实时性能</h4>
+                        <p style="font-size: 0.85rem; color: #666;">GPU并行加速成为大规模训练标配</p>
+                    </div>
+                    <div class="trend-item">
+                        <h4 style="color: #7b1fa2; font-size: 0.95rem; margin-bottom: 0.5rem;">🎯 专用仿真器</h4>
+                        <p style="font-size: 0.85rem; color: #666;">针对特定任务(磁导航、软体机器人)的专用平台涌现</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-subtitle">📈 平台选择建议更新</h3>
+        <div class="card">
+            <div class="conclusion" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <h2 style="color: white;">💡 基于最新研究的建议</h2>
+                <div class="conclusion-grid" style="margin-top: 1.5rem;">
+                    <div class="conclusion-item" style="background: rgba(255,255,255,0.15);">
+                        <h4 style="color: #fff;">MuJoCo 仍是首选</h4>
+                        <p style="color: rgba(255,255,255,0.9);">在最新论文中出现频率最高，特别适合控制算法和RL研究</p>
+                    </div>
+                    <div class="conclusion-item" style="background: rgba(255,255,255,0.15);">
+                        <h4 style="color: #fff;">关注可微分仿真</h4>
+                        <p style="color: rgba(255,255,255,0.9);">Differentiable Physics成为新趋势，MuJoCo XLA等框架值得关注</p>
+                    </div>
+                    <div class="conclusion-item" style="background: rgba(255,255,255,0.15);">
+                        <h4 style="color: #fff;">Isaac Sim 增长迅速</h4>
+                        <p style="color: rgba(255,255,255,0.9);">在视觉任务和大规模并行训练中采用率快速上升</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- 决策建议 -->
     <section class="section" id="decision">
-        <h2 class="section-title">04 决策建议与实施路径</h2>
+        <h2 class="section-title">05 决策建议与实施路径</h2>
 
         <div class="conclusion">
             <h2>🎯 核心结论</h2>
