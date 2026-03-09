@@ -4,22 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wの极客论坛</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>W的极客论坛</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: {
-                        primary: '#3b82f6',
-                        secondary: '#10b981',
-                        dark: '#0f172a',
-                        surface: '#ffffff',
-                        background: '#f1f5f9',
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                        }
                     }
                 }
             }
@@ -28,335 +30,204 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f1f5f9;
-            color: #334155;
-            scroll-behavior: smooth;
+            background-color: #fafafa;
+            color: #171717;
         }
 
-        .forum-header {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        .glass-header {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
-        .glass-nav {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+        .gradient-text {
+            background: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .post-card {
-            transition: all 0.2s ease-in-out;
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            border-radius: 16px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .post-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
-            border-color: #cbd5e1;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+            border-color: rgba(14, 165, 233, 0.3);
         }
 
-        .tag {
-            padding: 0.125rem 0.5rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 500;
+        .hero-bg {
+            background: radial-gradient(circle at top, rgba(14, 165, 233, 0.08) 0%, rgba(250, 250, 250, 0) 50%);
         }
 
-        .tag-tech {
-            background: #e0f2fe;
-            color: #0284c7;
+        .animated-badge {
+            background: linear-gradient(90deg, #e0f2fe, #f0f9ff, #e0f2fe);
+            background-size: 200% 100%;
+            animation: moveGradient 3s linear infinite;
         }
 
-        .tag-robot {
-            background: #dcfce7;
-            color: #16a34a;
+        @keyframes moveGradient {
+            0% {
+                background-position: 100% 0;
+            }
+
+            100% {
+                background-position: -100% 0;
+            }
         }
 
-        .tag-discuss {
-            background: #fef08a;
-            color: #ca8a04;
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 </head>
 
-<body class="antialiased selection:bg-primary selection:text-white pb-20">
+<body class="antialiased min-h-screen flex flex-col relative">
 
-    <!-- Navigation -->
-    <nav class="sticky top-0 w-full z-50 glass-nav transition-all duration-300">
+    <div class="fixed inset-0 pointer-events-none hero-bg z-0"></div>
+
+    <nav class="sticky top-0 z-50 glass-header w-full">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
+            <div class="flex items-center justify-between h-16">
                 <!-- Logo -->
                 <div class="flex items-center gap-3">
                     <div
-                        class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white font-bold shadow-md">
-                        W
+                        class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-brand-500 flex items-center justify-center shadow-lg shadow-brand-500/30">
+                        <span class="text-white font-bold text-lg leading-none">W</span>
                     </div>
-                    <span class="font-bold text-lg tracking-tight text-gray-900">Geek Forum</span>
+                    <span class="font-bold text-lg tracking-tight text-gray-900">极客论坛</span>
                 </div>
-
-                <!-- Search (Mock) -->
-                <div class="hidden md:flex flex-1 max-w-md mx-8 relative">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
-                    </span>
-                    <input type="text" placeholder="搜索帖子、知识库..."
-                        class="w-full bg-slate-100 border border-transparent text-sm rounded-full py-2 pl-10 pr-4 focus:outline-none focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary transition-all">
-                </div>
-
                 <!-- Actions -->
-                <div class="flex items-center space-x-4">
+                <div>
                     <a href="editor.html"
-                        class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-full text-white bg-primary hover:bg-blue-600 shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                        class="inline-flex items-center justify-center px-5 py-2 text-sm font-medium rounded-full text-white bg-gray-900 hover:bg-gray-800 shadow-md transition-all focus:ring-2 focus:ring-offset-2 focus:ring-gray-900">
                         <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4">
                             </path>
                         </svg>
-                        发新帖
+                        发布新帖
                     </a>
-
-                    <button
-                        class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-gray-500 hover:bg-slate-300 transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
-                            </path>
-                        </svg>
-                    </button>
-
-                    <!-- Avatar -->
-                    <div
-                        class="w-8 h-8 rounded-full border-2 border-white shadow-sm overflow-hidden bg-gray-100 flex items-center justify-center">
-                        <img src="https://ui-avatars.com/api/?name=Admin+W&background=0D8ABC&color=fff"
-                            alt="User Avatar" class="w-full h-full object-cover">
-                    </div>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Header / Banner -->
-    <header class="forum-header text-white pb-8 pt-10">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="text-3xl font-bold tracking-tight mb-2">欢迎来到 W 的讨论区</h1>
-            <p class="text-blue-100 text-sm max-w-2xl">
-                在这里分享最新技术探索、算法验证进展、以及开发日常。纯静态构建，基于 GitHub Pages 持久部署。
-            </p>
+    <main class="flex-grow max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 pt-12 pb-24">
 
-            <!-- Quick Stats -->
-            <div class="flex gap-6 mt-6">
-                <div class="text-center">
-                    <div class="text-2xl font-bold">128</div>
-                    <div class="text-xs text-blue-200">主题数</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-2xl font-bold">1,024</div>
-                    <div class="text-xs text-blue-200">总回复</div>
-                </div>
+        <header class="mb-12">
+            <div
+                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium text-brand-600 animated-badge border border-brand-100 mb-6">
+                <span class="relative flex h-2 w-2 mr-2">
+                    <span
+                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
+                </span>
+                纯静态构建论坛
             </div>
-        </div>
-    </header>
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-gray-900">
+                记录与讨论 <br /><span class="gradient-text">核心技术沉淀</span>
+            </h1>
+            <p class="text-lg text-gray-500 max-w-2xl">
+                欢迎来到 W 的讨论区。这里不仅是技术心得的汇聚地，更是经验与灵感的记录点。
+            </p>
+        </header>
 
-    <!-- Main Content -->
-    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-4 relative z-10">
-
-        <!-- Category Navigation -->
-        <div class="bg-white rounded-t-xl shadow-sm border border-slate-200 p-2 flex overflow-x-auto gap-2">
-            <button class="px-4 py-2 rounded-lg bg-slate-100 text-sm font-medium text-slate-800 flex-shrink-0">🚀
-                最新动态</button>
-            <button class="px-4 py-2 rounded-lg hover:bg-slate-50 text-sm font-medium text-slate-600 flex-shrink-0">🔥
-                热门讨论</button>
-            <button class="px-4 py-2 rounded-lg hover:bg-slate-50 text-sm font-medium text-slate-600 flex-shrink-0">🤖
-                机器人仿真</button>
-            <button class="px-4 py-2 rounded-lg hover:bg-slate-50 text-sm font-medium text-slate-600 flex-shrink-0">💻
-                算法技术</button>
-            <button class="px-4 py-2 rounded-lg hover:bg-slate-50 text-sm font-medium text-slate-600 flex-shrink-0">☕
-                灌水日常</button>
+        <!-- Topic Tabs -->
+        <div class="flex items-center gap-3 mb-8 border-b border-gray-100 pb-4 overflow-x-auto hide-scrollbar">
+            <button
+                class="px-5 py-2 rounded-full bg-gray-900 text-white text-sm font-medium shadow-md whitespace-nowrap">全部主题</button>
+            <button
+                class="px-5 py-2 rounded-full bg-white border border-gray-200 text-gray-600 hover:text-gray-900 hover:border-gray-300 text-sm font-medium transition-colors whitespace-nowrap">机器人仿真</button>
+            <button
+                class="px-5 py-2 rounded-full bg-white border border-gray-200 text-gray-600 hover:text-gray-900 hover:border-gray-300 text-sm font-medium transition-colors whitespace-nowrap">算法与架构</button>
         </div>
 
         <!-- Post List -->
-        <div class="bg-white shadow-sm border-x border-b border-slate-200 rounded-b-xl divide-y divide-slate-100">
+        <div class="space-y-5">
 
-            <!-- Pinned Post: Tech Selection (From user's file) -->
-            <div class="post-card p-5 hover:bg-slate-50 bg-blue-50/30 flex gap-4">
-                <!-- Avatar Column -->
-                <div class="shrink-0 flex flex-col items-center">
-                    <img src="https://ui-avatars.com/api/?name=W&background=3b82f6&color=fff"
-                        class="w-10 h-10 rounded-full" alt="W">
-                </div>
+            <!-- Real Post -->
+            <a href="tech_selection.html" class="block group">
+                <article class="post-card p-6 flex flex-col sm:flex-row gap-6 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-brand-500"></div>
 
-                <!-- Content Column -->
-                <div class="flex-1 min-w-0">
-                    <div class="flex items-center gap-2 mb-1 flex-wrap">
-                        <span
-                            class="bg-red-100 text-red-600 text-[10px] font-bold px-1.5 py-0.5 rounded leading-none">置顶</span>
-                        <span class="tag tag-robot">机器人仿真</span>
-                        <a href="tech_selection.html"
-                            class="text-base font-bold text-slate-900 hover:text-primary hover:underline break-words">
-                            机器人仿真平台技术选型深度分析 (MuJoCo/Isaac Sim/Unity)
-                        </a>
-                    </div>
-
-                    <p class="text-sm text-slate-500 mb-3 line-clamp-2">
-                        大家好，最近我们团队正在密集调研机器人仿真训练基建。评估了现有的代码基础，以及我们最终 Sim-to-Real
-                        的核心诉求，我整理了一份详尽的对比报告，分析了各平台的物理精度、并行能力以及渲染开销。欢迎大家讨论！
-                    </p>
-
-                    <!-- Metadata / Actions -->
-                    <div class="flex items-center text-xs text-slate-400 gap-4">
-                        <span class="font-medium text-slate-600">W</span>
-                        <span>发布于 2026-03-09</span>
-
-                        <div class="flex-1"></div>
-
-                        <div class="flex items-center gap-1 hover:text-primary cursor-pointer transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
-                                </path>
-                            </svg>
-                            <span>2.4k 阅读</span>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span
+                                class="px-2.5 py-0.5 rounded-md bg-brand-50 text-brand-600 text-xs font-semibold tracking-wide border border-brand-100">置顶精华</span>
+                            <span class="text-xs text-gray-400 font-medium">机器人仿真</span>
                         </div>
-                        <div class="flex items-center gap-1 hover:text-primary cursor-pointer transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
-                                </path>
-                            </svg>
-                            <span>45 回复</span>
+
+                        <h2
+                            class="text-xl sm:text-2xl font-bold text-gray-900 mb-2 group-hover:text-brand-600 transition-colors break-words">
+                            机器人仿真平台技术选型深度分析 (MuJoCo / Isaac Sim / Unity)
+                        </h2>
+
+                        <p class="text-gray-500 text-sm leading-relaxed mb-4 line-clamp-2">
+                            最近团队正在密集调研仿真训练基建。评估了现有的代码基础以及 Sim-to-Real 的核心诉求，整理了这份详尽的对比报告，分析了各平台的物理精度、并行能力及渲染开销，供大家讨论参考。
+                        </p>
+
+                        <div class="flex items-center gap-4 text-sm">
+                            <div class="flex items-center gap-2">
+                                <div
+                                    class="w-6 h-6 rounded-full bg-gradient-to-tr from-brand-600 to-brand-400 flex items-center justify-center">
+                                    <span class="text-white text-[10px] font-bold">W</span>
+                                </div>
+                                <span class="font-medium text-gray-900">W</span>
+                            </div>
+                            <span class="text-gray-300">•</span>
+                            <span class="text-gray-500">今日发布</span>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Normal Post Example 1 -->
-            <div class="post-card p-5 hover:bg-slate-50 flex gap-4">
-                <div class="shrink-0 flex flex-col items-center">
-                    <img src="https://ui-avatars.com/api/?name=AI&background=10b981&color=fff"
-                        class="w-10 h-10 rounded-full" alt="AI Bot">
-                </div>
-
-                <div class="flex-1 min-w-0">
-                    <div class="flex items-center gap-2 mb-1 flex-wrap">
-                        <span class="tag tag-tech">开发日常</span>
-                        <a href="#"
-                            class="text-base font-medium text-slate-800 hover:text-primary hover:underline break-words">
-                            如何优雅地在 GitHub Pages 上部署全静态论坛？
-                        </a>
-                    </div>
-
-                    <!-- Metadata / Actions -->
-                    <div class="flex items-center text-xs text-slate-400 gap-4 mt-2">
-                        <span class="font-medium text-slate-600">Site_Bot</span>
-                        <span>发布于 2026-03-08</span>
-
-                        <div class="flex-1"></div>
-
-                        <div class="flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                    <div class="hidden sm:flex flex-col items-center justify-center px-4">
+                        <div
+                            class="w-12 h-12 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-400 group-hover:bg-brand-50 group-hover:text-brand-600 group-hover:border-brand-200 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
                                 </path>
                             </svg>
-                            <span>12 回复</span>
                         </div>
                     </div>
+                </article>
+            </a>
+
+            <!-- End of posts message -->
+            <div class="py-16 flex flex-col items-center justify-center text-center opacity-60">
+                <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
+                        </path>
+                    </svg>
                 </div>
-            </div>
-
-            <!-- Normal Post Example 2 -->
-            <div class="post-card p-5 hover:bg-slate-50 flex gap-4">
-                <div class="shrink-0 flex flex-col items-center">
-                    <img src="https://ui-avatars.com/api/?name=Bob&background=f59e0b&color=fff"
-                        class="w-10 h-10 rounded-full" alt="Bob">
-                </div>
-
-                <div class="flex-1 min-w-0">
-                    <div class="flex items-center gap-2 mb-1 flex-wrap">
-                        <span class="tag tag-discuss">闲聊</span>
-                        <a href="#"
-                            class="text-base font-medium text-slate-800 hover:text-primary hover:underline break-words">
-                            周五晚上了，这周的 bug 大家都修完了吗？
-                        </a>
-                    </div>
-
-                    <!-- Metadata / Actions -->
-                    <div class="flex items-center text-xs text-slate-400 gap-4 mt-2">
-                        <span class="font-medium text-slate-600">Bob_Dev</span>
-                        <span>发布于 2026-03-06</span>
-
-                        <div class="flex-1"></div>
-
-                        <div class="flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
-                                </path>
-                            </svg>
-                            <span>28 回复</span>
-                        </div>
-                    </div>
-                </div>
+                <p class="text-gray-500 font-medium">只有这么多内容啦</p>
+                <p class="text-gray-400 text-sm mt-1">您可以点击右上角按钮发布新贴记录</p>
             </div>
 
         </div>
-
-        <!-- Pagination -->
-        <div
-            class="flex items-center justify-between mt-6 bg-white px-4 py-3 border border-slate-200 shadow-sm rounded-lg sm:px-6">
-            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                <div>
-                    <p class="text-sm text-gray-700">
-                        正在显示第 <span class="font-medium">1</span> 到 <span class="font-medium">10</span> 帖，共计 <span
-                            class="font-medium">128</span> 帖
-                    </p>
-                </div>
-                <div>
-                    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                        <a href="#"
-                            class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                            <span class="sr-only">上一页</span>
-                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                fill="currentColor" aria-hidden="true">
-                                <path fill-rule="evenodd"
-                                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </a>
-                        <a href="#" aria-current="page"
-                            class="z-10 bg-blue-50 border-blue-500 text-blue-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                            1 </a>
-                        <a href="#"
-                            class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                            2 </a>
-                        <a href="#"
-                            class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 hidden md:inline-flex relative items-center px-4 py-2 border text-sm font-medium">
-                            3 </a>
-                        <span
-                            class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
-                            ... </span>
-                        <a href="#"
-                            class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                            13 </a>
-                        <a href="#"
-                            class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                            <span class="sr-only">下一页</span>
-                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                fill="currentColor" aria-hidden="true">
-                                <path fill-rule="evenodd"
-                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </a>
-                    </nav>
-                </div>
-            </div>
-        </div>
-
     </main>
 
+    <footer class="mt-auto py-8 border-t border-gray-100 bg-white shadow-[0_-1px_10px_rgba(0,0,0,0.02)]">
+        <div class="max-w-5xl mx-auto px-4 text-center flex flex-col items-center gap-2">
+            <p class="text-sm text-gray-400 font-medium tracking-wide">
+                &copy; 2026 W's 极客论坛.
+            </p>
+            <p class="text-xs text-gray-300">
+                Powered by Static HTML + Tailwind CSS.
+            </p>
+        </div>
+    </footer>
 </body>
 
 </html>
