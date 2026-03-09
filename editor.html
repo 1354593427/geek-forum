@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML 在线排版编辑器</title>
+    <title>Wの极客论坛 - 发新帖</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -17,7 +17,7 @@
             theme: {
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: { primary: '#0d47a1', secondary: '#00acc1' }
+                    colors: { primary: '#3b82f6', secondary: '#10b981' }
                 }
             }
         }
@@ -25,7 +25,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
+            background-color: #f1f5f9;
         }
 
         #editor-container {
@@ -38,12 +38,12 @@
         .ql-toolbar.ql-snow {
             border-top-left-radius: 0.5rem;
             border-top-right-radius: 0.5rem;
-            background: #f1f5f9;
-            border-color: #e2e8f0;
+            background: #f8fafc;
+            border-color: #cbd5e1;
         }
 
         .ql-container.ql-snow {
-            border-color: #e2e8f0;
+            border-color: #cbd5e1;
         }
 
         .output-box {
@@ -67,7 +67,7 @@
                                 d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                         </svg>
                     </a>
-                    <span class="font-bold text-gray-900 text-lg">内容排版工作室</span>
+                    <span class="font-bold text-gray-900 text-lg">新发帖子编辑中心</span>
                 </div>
                 <div class="flex space-x-4">
                     <button onclick="copyHtml()"
@@ -75,8 +75,8 @@
                         复制 HTML 源码
                     </button>
                     <button onclick="downloadHtml()"
-                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-primary shadow-sm hover:bg-blue-800 focus:outline-none transition-colors">
-                        下载页面文件
+                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-primary shadow-sm hover:bg-blue-600 focus:outline-none transition-colors">
+                        下载帖子文件
                     </button>
                 </div>
             </div>
