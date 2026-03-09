@@ -3,21 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2025 VLA 研究前沿 | Geek Forum</title>
+    <title>2025 VLA 研究前沿深度解析 | Geek Forum</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .code { font-family: 'JetBrains Mono', monospace; }
-        .paper-card {
-            transition: all 0.3s ease;
-            border-left: 4px solid transparent;
-        }
-        .paper-card:hover {
-            border-left-color: #667eea;
-            transform: translateX(4px);
-        }
+        .paper-card { transition: all 0.3s ease; border-left: 4px solid transparent; }
+        .paper-card:hover { border-left-color: #667eea; transform: translateX(4px); }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -33,183 +25,218 @@
     <main class="max-w-4xl mx-auto px-4 py-8">
         <header class="mb-10">
             <div class="flex flex-wrap gap-2 mb-4">
-                <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium">机器人学习</span>
+                <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium">深度解析</span>
                 <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">VLA</span>
                 <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">2025前沿</span>
             </div>
-            <h1 class="text-3xl md:text-4xl font-bold mb-4">2025 VLA 研究前沿：从机器人操控到自动驾驶的全面突破</h1>
+            <h1 class="text-3xl md:text-4xl font-bold mb-4">2025 VLA 研究前沿深度解析</h1>
             <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-6">
                 <span class="font-medium text-gray-900">W_Engineer</span>
                 <span>•</span>
                 <span>2025年3月9日</span>
                 <span>•</span>
-                <span>阅读时间 25 分钟</span>
+                <span>深度阅读 40 分钟</span>
             </div>
             <p class="text-lg text-gray-600 leading-relaxed border-l-4 border-purple-500 pl-4">
-                Vision-Language-Action (VLA) 模型正在重塑机器人学和具身智能的边界。本文系统梳理2025年至今的15+篇核心论文，涵盖从NVIDIA GR00T N1到Physical Intelligence的π0系列，从双手机器人操控到端到端自动驾驶的完整技术图谱。
+                Vision-Language-Action (VLA) 模型正经历从"直接映射"到"推理规划"、从"单一架构"到"混合范式"的范式转变。本文深度解析2025年代表性工作，每篇论文包含完整的研究背景、方法细节、实验分析和局限讨论。
             </p>
         </header>
 
-        <section class="mb-12">
-            <h2 class="text-2xl font-bold mb-6">01 VLA技术概览与发展脉络</h2>
-            <p class="text-gray-700 mb-4">Vision-Language-Action (VLA) 模型代表了具身智能领域最重要的范式转变。2025年呈现三大趋势：</p>
-            <ul class="space-y-2 text-gray-700 mb-6">
-                <li>• <strong>规模化与通用化</strong>：单模型支持多机器人形态</li>
-                <li>• <strong>架构融合</strong>：扩散模型与自回归模型结合</li>
-                <li>• <strong>效率革命</strong>：FAST等方法实现10倍压缩</li>
-            </ul>
+        <!-- 技术趋势总览 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-8">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="trending-up" class="w-5 h-5 text-purple-600"></i>
+                2025年VLA技术趋势
+            </h2>
+            <div class="grid md:grid-cols-3 gap-4">
+                <div class="bg-purple-50 rounded-lg p-4">
+                    <h3 class="font-semibold text-purple-900 mb-2">推理能力增强</h3>
+                    <p class="text-sm text-purple-800">从直接输入-输出映射转向显式推理，CoT-VLA等模型引入视觉思维链，实现"先想象、再执行"。</p>
+                </div>
+                <div class="bg-blue-50 rounded-lg p-4">
+                    <h3 class="font-semibold text-blue-900 mb-2">架构融合创新</h3>
+                    <p class="text-sm text-blue-800">HybridVLA等模型统一扩散模型（连续动作）和自回归模型（语义推理），取长补短。</p>
+                </div>
+                <div class="bg-green-50 rounded-lg p-4">
+                    <h3 class="font-semibold text-green-900 mb-2">效率大幅提升</h3>
+                    <p class="text-sm text-green-800">FAST等tokenization方法实现10倍动作压缩，使自回归VLA可处理高频灵巧任务。</p>
+                </div>
+            </div>
         </section>
 
-        <section class="mb-12">
-            <h2 class="text-2xl font-bold mb-6">02 核心论文详解</h2>
+        <!-- 核心论文详解 -->
+        <section class="mb-8">
+            <h2 class="text-2xl font-bold mb-6">核心论文深度解析</h2>
             
-            <div class="paper-card bg-white rounded-xl shadow-sm border p-6 mb-6">
-                <h3 class="text-xl font-bold mb-2">GR00T N1: NVIDIA开源人形机器人基础模型</h3>
-                <p class="text-sm text-gray-500 mb-3">NVIDIA GEAR Team | arXiv:2503.14734</p>
-                <p class="text-gray-700 mb-3">双系统架构：System 2基于Eagle-2 VLM进行高层推理，System 1基于扩散Transformer生成实时动作。在超过10万GPU小时训练。</p>
-                <a href="https://arxiv.org/abs/2503.14734" class="text-blue-600 text-sm">arXiv →</a>
-            </div>
+            <!-- GR00T N1 -->
+            <a href="posts/vla2025/groot-n1.html" class="block paper-card bg-white rounded-xl shadow-sm border p-6 mb-4">
+                <div class="flex items-start justify-between gap-4">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs font-medium">开源</span>
+                            <span class="text-xs text-gray-500">arXiv:2503.14734</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">GR00T N1: NVIDIA人形机器人基础模型</h3>
+                        <p class="text-gray-600 text-sm mb-3">
+                            双系统架构（System 2推理 + System 1动作），基于扩散Transformer生成50Hz实时动作，在Fourier GR-1和1X人形平台上验证。
+                        </p>
+                        <div class="flex flex-wrap gap-2 text-xs">
+                            <span class="px-2 py-1 bg-gray-100 rounded">双系统架构</span>
+                            <span class="px-2 py-1 bg-gray-100 rounded">扩散策略</span>
+                            <span class="px-2 py-1 bg-gray-100 rounded">1024 GPU训练</span>
+                        </div>
+                    </div>
+                    <i data-lucide="arrow-right" class="w-5 h-5 text-gray-400 mt-2"></i>
+                </div>
+            </a>
 
-            <div class="paper-card bg-white rounded-xl shadow-sm border p-6 mb-6">
-                <h3 class="text-xl font-bold mb-2">π0 / π0-FAST: Flow Matching VLA</h3>
-                <p class="text-sm text-gray-500 mb-3">Physical Intelligence | arXiv:2410.24164</p>
-                <p class="text-gray-700 mb-3">首个基于Flow Matching的通用机器人策略。π0-FAST引入DCT+BPE tokenization，实现10倍动作压缩，支持50Hz高频率控制。</p>
-                <a href="https://arxiv.org/abs/2410.24164" class="text-blue-600 text-sm">arXiv →</a>
-            </div>
+            <!-- π0 -->
+            <a href="posts/vla2025/pi0.html" class="block paper-card bg-white rounded-xl shadow-sm border p-6 mb-4">
+                <div class="flex items-start justify-between gap-4">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="px-2 py-0.5 bg-orange-100 text-orange-700 rounded text-xs font-medium">部分开源</span>
+                            <span class="text-xs text-gray-500">arXiv:2410.24164 / 2501.09747</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">π0 / π0-FAST: Flow Matching VLA</h3>
+                        <p class="text-gray-600 text-sm mb-3">
+                            首个基于Flow Matching的通用机器人策略。π0-FAST引入DCT+BPE tokenization，实现10倍动作压缩，训练速度提升5倍，支持50Hz灵巧控制。
+                        </p>
+                        <div class="flex flex-wrap gap-2 text-xs">
+                            <span class="px-2 py-1 bg-gray-100 rounded">Flow Matching</span>
+                            <span class="px-2 py-1 bg-gray-100 rounded">FAST Tokenization</span>
+                            <span class="px-2 py-1 bg-gray-100 rounded">双臂操控</span>
+                        </div>
+                    </div>
+                    <i data-lucide="arrow-right" class="w-5 h-5 text-gray-400 mt-2"></i>
+                </div>
+            </a>
 
-            <div class="paper-card bg-white rounded-xl shadow-sm border p-6 mb-6">
-                <h3 class="text-xl font-bold mb-2">OpenVLA: 开源VLA里程碑</h3>
-                <p class="text-sm text-gray-500 mb-3">Stanford, Berkeley | arXiv:2406.09246</p>
-                <p class="text-gray-700 mb-3">首个真正开源的7B参数VLA模型。相比RT-2-X (55B)在29个任务上提升16.5%成功率，参数量仅为其1/7。</p>
-                <a href="https://arxiv.org/abs/2406.09246" class="text-blue-600 text-sm">arXiv →</a>
-            </div>
+            <!-- OpenVLA -->
+            <a href="posts/vla2025/openvla.html" class="block paper-card bg-white rounded-xl shadow-sm border p-6 mb-4">
+                <div class="flex items-start justify-between gap-4">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs font-medium">全开源</span>
+                            <span class="text-xs text-gray-500">arXiv:2406.09246</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">OpenVLA: 开源VLA里程碑</h3>
+                        <p class="text-gray-600 text-sm mb-3">
+                            首个真正开源的7B参数VLA模型。相比RT-2-X (55B)在29个任务上提升16.5%成功率，参数量仅1/7。支持LoRA微调和消费级GPU部署。
+                        </p>
+                        <div class="flex flex-wrap gap-2 text-xs">
+                            <span class="px-2 py-1 bg-gray-100 rounded">7B参数</span>
+                            <span class="px-2 py-1 bg-gray-100 rounded">Llama 2</span>
+                            <span class="px-2 py-1 bg-gray-100 rounded">LoRA微调</span>
+                        </div>
+                    </div>
+                    <i data-lucide="arrow-right" class="w-5 h-5 text-gray-400 mt-2"></i>
+                </div>
+            </a>
 
-            <div class="paper-card bg-white rounded-xl shadow-sm border p-6 mb-6">
-                <h3 class="text-xl font-bold mb-2">RDT-1B: 双臂操控扩散Transformer</h3>
-                <p class="text-sm text-gray-500 mb-3">Tsinghua | arXiv:2410.07864</p>
-                <p class="text-gray-700 mb-3">12亿参数扩散Transformer，在100万+多机器人片段上预训练，支持单臂/双臂、关节/末端执行器等多种控制模式。</p>
-                <a href="https://arxiv.org/abs/2410.07864" class="text-blue-600 text-sm">arXiv →</a>
-            </div>
-
-            <div class="paper-card bg-white rounded-xl shadow-sm border p-6 mb-6">
-                <h3 class="text-xl font-bold mb-2">CoT-VLA: 视觉思维链推理</h3>
-                <p class="text-sm text-gray-500 mb-3">NVIDIA, Stanford, MIT | CVPR 2025 | arXiv:2503.22020</p>
-                <p class="text-gray-700 mb-3">通过自回归预测未来图像帧作为视觉子目标，再生成动作序列。在真实操控任务上超越SOTA VLA 17%。</p>
-                <a href="https://arxiv.org/abs/2503.22020" class="text-blue-600 text-sm">arXiv →</a>
-            </div>
-
-            <div class="paper-card bg-white rounded-xl shadow-sm border p-6 mb-6">
-                <h3 class="text-xl font-bold mb-2">HybridVLA: 扩散与自回归协同</h3>
-                <p class="text-sm text-gray-500 mb-3">PKU | ICLR 2026 | arXiv:2503.10631</p>
-                <p class="text-gray-700 mb-3">统一扩散模型（连续动作）和自回归模型（语义推理）优势，通过协同训练相互强化，超越SOTA 14%。</p>
-                <a href="https://arxiv.org/abs/2503.10631" class="text-blue-600 text-sm">arXiv →</a>
-            </div>
-
-            <div class="paper-card bg-white rounded-xl shadow-sm border p-6 mb-6">
-                <h3 class="text-xl font-bold mb-2">CogACT: 认知与动作分离</h3>
-                <p class="text-sm text-gray-500 mb-3">MSRA | arXiv:2411.19650</p>
-                <p class="text-gray-700 mb-3">组件化架构，VLM认知能力与扩散Transformer动作建模分离。超越OpenVLA 35%，超越RT-2-X (55B) 18%。</p>
-                <a href="https://arxiv.org/abs/2411.19650" class="text-blue-600 text-sm">arXiv →</a>
-            </div>
-
-            <div class="paper-card bg-white rounded-xl shadow-sm border p-6 mb-6">
-                <h3 class="text-xl font-bold mb-2">UniVLA: 任务中心潜动作</h3>
-                <p class="text-sm text-gray-500 mb-3">OpenDriveLab | RSS 2025 | arXiv:2505.06111</p>
-                <p class="text-gray-700 mb-3">使用VQ-VAE从逆动力学提取潜动作，预训练成本仅为OpenVLA的1/20，支持跨机器人形态学习。</p>
-                <a href="https://arxiv.org/abs/2505.06111" class="text-blue-600 text-sm">arXiv →</a>
-            </div>
-
-            <div class="paper-card bg-white rounded-xl shadow-sm border p-6 mb-6">
-                <h3 class="text-xl font-bold mb-2">DexGraspVLA: 通用灵巧抓取</h3>
-                <p class="text-sm text-gray-500 mb-3">PKU, BIGAI | arXiv:2502.20900</p>
-                <p class="text-gray-700 mb-3">分层VLA框架，在1287种未见物体、光照、背景组合中实现90.8%零样本抓取成功率。</p>
-                <a href="https://arxiv.org/abs/2502.20900" class="text-blue-600 text-sm">arXiv →</a>
-            </div>
-
-            <div class="paper-card bg-white rounded-xl shadow-sm border p-6 mb-6">
-                <h3 class="text-xl font-bold mb-2">MoManipVLA: 移动操作迁移</h3>
-                <p class="text-sm text-gray-500 mb-3">CVPR 2025 | arXiv:2503.13446</p>
-                <p class="text-gray-700 mb-3">将VLA模型迁移到通用移动操作任务，实现跨场景泛化。</p>
-                <a href="https://arxiv.org/abs/2503.13446" class="text-blue-600 text-sm">arXiv →</a>
-            </div>
-
-            <div class="paper-card bg-white rounded-xl shadow-sm border p-6 mb-6">
-                <h3 class="text-xl font-bold mb-2">OpenDriveVLA: 端到端自动驾驶</h3>
-                <p class="text-sm text-gray-500 mb-3">AAAI 2026 | arXiv:2503.23463</p>
-                <p class="text-gray-700 mb-3">基于预训练VLM生成3D空间感知的驾驶轨迹，在nuScenes数据集上达到SOTA规划性能。</p>
-                <a href="https://arxiv.org/abs/2503.23463" class="text-blue-600 text-sm">arXiv →</a>
-            </div>
-
-            <div class="paper-card bg-white rounded-xl shadow-sm border p-6 mb-6">
-                <h3 class="text-xl font-bold mb-2">SpatialVLA: 空间表征探索</h3>
-                <p class="text-sm text-gray-500 mb-3">RSS 2025 | arXiv:2501.15830</p>
-                <p class="text-gray-700 mb-3">探索VLA模型中的空间表征，提升3D场景理解能力。</p>
-                <a href="https://arxiv.org/abs/2501.15830" class="text-blue-600 text-sm">arXiv →</a>
-            </div>
-
-            <div class="paper-card bg-white rounded-xl shadow-sm border p-6 mb-6">
-                <h3 class="text-xl font-bold mb-2">Octo: 开源通用机器人策略</h3>
-                <p class="text-sm text-gray-500 mb-3">RSS 2024 | arXiv:2405.12213</p>
-                <p class="text-gray-700 mb-3">基于Transformer的策略，在80万条轨迹上预训练，支持多种观察和动作空间的微调。</p>
-                <a href="https://arxiv.org/abs/2405.12213" class="text-blue-600 text-sm">arXiv →</a>
-            </div>
-
-            <div class="paper-card bg-white rounded-xl shadow-sm border p-6 mb-6">
-                <h3 class="text-xl font-bold mb-2">FAST: 高效动作Tokenization</h3>
-                <p class="text-sm text-gray-500 mb-3">RSS 2025 | arXiv:2501.09747</p>
-                <p class="text-gray-700 mb-3">使用DCT+BPE将动作块压缩为30-60个token，实现10倍压缩，训练速度提升5倍。</p>
-                <a href="https://arxiv.org/abs/2501.09747" class="text-blue-600 text-sm">arXiv →</a>
-            </div>
+            <!-- CoT-VLA -->
+            <a href="posts/vla2025/cot-vla.html" class="block paper-card bg-white rounded-xl shadow-sm border p-6 mb-4">
+                <div class="flex items-start justify-between gap-4">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="px-2 py-0.5 bg-purple-100 text-purple-700 rounded text-xs font-medium">CVPR 2025</span>
+                            <span class="text-xs text-gray-500">arXiv:2503.22020</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">CoT-VLA: 视觉思维链推理</h3>
+                        <p class="text-gray-600 text-sm mb-3">
+                            首次将显式视觉思维链引入VLA。通过自回归生成未来图像帧作为视觉子目标，再生成动作序列。真实任务超越SOTA 17%，仿真基准提升6%。
+                        </p>
+                        <div class="flex flex-wrap gap-2 text-xs">
+                            <span class="px-2 py-1 bg-gray-100 rounded">视觉CoT</span>
+                            <span class="px-2 py-1 bg-gray-100 rounded">子目标生成</span>
+                            <span class="px-2 py-1 bg-gray-100 rounded">推理增强</span>
+                        </div>
+                    </div>
+                    <i data-lucide="arrow-right" class="w-5 h-5 text-gray-400 mt-2"></i>
+                </div>
+            </a>
         </section>
 
-        <section class="mb-12">
-            <h2 class="text-2xl font-bold mb-6">03 技术趋势总结</h2>
-            <div class="bg-white rounded-xl shadow-sm border p-6">
-                <h3 class="font-bold mb-3">架构演进方向</h3>
-                <ul class="space-y-2 text-gray-700 text-sm">
-                    <li>• <strong>扩散+自回归混合</strong>：HybridVLA等模型证明两种范式可以协同工作</li>
-                    <li>• <strong>视觉推理增强</strong>：CoT-VLA引入视觉思维链，提升长期规划能力</li>
-                    <li>• <strong>动作表征优化</strong>：FAST等tokenization方法大幅提升效率</li>
-                    <li>• <strong>跨形态泛化</strong>：UniVLA等模型实现跨机器人形态的知识迁移</li>
-                </ul>
-            </div>
-        </section>
-
-        <section class="mb-12">
-            <h2 class="text-2xl font-bold mb-6">04 论文清单速查</h2>
-            <div class="bg-white rounded-xl shadow-sm border p-6 overflow-x-auto">
+        <!-- 更多论文列表 -->
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-4">更多重要论文</h2>
+            <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
                 <table class="w-full text-sm">
-                    <thead>
-                        <tr class="border-b">
-                            <th class="text-left py-2">论文</th>
-                            <th class="text-left py-2">机构</th>
-                            <th class="text-left py-2">arXiv</th>
-                            <th class="text-left py-2">开源</th>
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="text-left py-3 px-4 font-semibold">论文</th>
+                            <th class="text-left py-3 px-4 font-semibold">核心创新</th>
+                            <th class="text-left py-3 px-4 font-semibold">arXiv</th>
                         </tr>
                     </thead>
-                    <tbody class="text-gray-700">
-                        <tr class="border-b"><td class="py-2">GR00T N1</td><td>NVIDIA</td><td>2503.14734</td><td>✓</td></tr>
-                        <tr class="border-b"><td class="py-2">π0 / π0-FAST</td><td>Physical Intelligence</td><td>2410.24164</td><td>部分</td></tr>
-                        <tr class="border-b"><td class="py-2">OpenVLA</td><td>Stanford</td><td>2406.09246</td><td>✓</td></tr>
-                        <tr class="border-b"><td class="py-2">RDT-1B</td><td>Tsinghua</td><td>2410.07864</td><td>✓</td></tr>
-                        <tr class="border-b"><td class="py-2">CoT-VLA</td><td>NVIDIA</td><td>2503.22020</td><td>✓</td></tr>
-                        <tr class="border-b"><td class="py-2">HybridVLA</td><td>PKU</td><td>2503.10631</td><td>✓</td></tr>
-                        <tr class="border-b"><td class="py-2">CogACT</td><td>MSRA</td><td>2411.19650</td><td>✓</td></tr>
-                        <tr class="border-b"><td class="py-2">UniVLA</td><td>OpenDriveLab</td><td>2505.06111</td><td>✓</td></tr>
-                        <tr class="border-b"><td class="py-2">DexGraspVLA</td><td>PKU</td><td>2502.20900</td><td>✓</td></tr>
-                        <tr class="border-b"><td class="py-2">MoManipVLA</td><td>-</td><td>2503.13446</td><td>✓</td></tr>
-                        <tr class="border-b"><td class="py-2">OpenDriveVLA</td><td>-</td><td>2503.23463</td><td>✓</td></tr>
-                        <tr class="border-b"><td class="py-2">SpatialVLA</td><td>-</td><td>2501.15830</td><td>✓</td></tr>
-                        <tr class="border-b"><td class="py-2">Octo</td><td>Berkeley</td><td>2405.12213</td><td>✓</td></tr>
-                        <tr class="border-b"><td class="py-2">FAST</td><td>Physical Intelligence</td><td>2501.09747</td><td>✓</td></tr>
+                    <tbody class="divide-y">
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-3 px-4 font-medium">HybridVLA</td>
+                            <td class="py-3 px-4 text-gray-600">扩散+自回归协同训练，动作集成机制</td>
+                            <td class="py-3 px-4"><a href="https://arxiv.org/abs/2503.10631" class="text-blue-600 hover:underline">2503.10631</a></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-3 px-4 font-medium">CogACT</td>
+                            <td class="py-3 px-4 text-gray-600">VLM认知与扩散动作分离的组件化架构</td>
+                            <td class="py-3 px-4"><a href="https://arxiv.org/abs/2411.19650" class="text-blue-600 hover:underline">2411.19650</a></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-3 px-4 font-medium">RDT-1B</td>
+                            <td class="py-3 px-4 text-gray-600">12亿参数扩散Transformer，双臂操控</td>
+                            <td class="py-3 px-4"><a href="https://arxiv.org/abs/2410.07864" class="text-blue-600 hover:underline">2410.07864</a></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-3 px-4 font-medium">UniVLA</td>
+                            <td class="py-3 px-4 text-gray-600">任务中心潜动作，跨机器人形态学习</td>
+                            <td class="py-3 px-4"><a href="https://arxiv.org/abs/2505.06111" class="text-blue-600 hover:underline">2505.06111</a></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-3 px-4 font-medium">DexGraspVLA</td>
+                            <td class="py-3 px-4 text-gray-600">分层VLA框架，90.8%零样本抓取成功率</td>
+                            <td class="py-3 px-4"><a href="https://arxiv.org/abs/2502.20900" class="text-blue-600 hover:underline">2502.20900</a></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-3 px-4 font-medium">OpenDriveVLA</td>
+                            <td class="py-3 px-4 text-gray-600">端到端自动驾驶VLA，nuScenes SOTA</td>
+                            <td class="py-3 px-4"><a href="https://arxiv.org/abs/2503.23463" class="text-blue-600 hover:underline">2503.23463</a></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-3 px-4 font-medium">Octo</td>
+                            <td class="py-3 px-4 text-gray-600">80万轨迹预训练的开源通用策略</td>
+                            <td class="py-3 px-4"><a href="https://arxiv.org/abs/2405.12213" class="text-blue-600 hover:underline">2405.12213</a></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-3 px-4 font-medium">FAST</td>
+                            <td class="py-3 px-4 text-gray-600">DCT+BPE动作tokenization，10倍压缩</td>
+                            <td class="py-3 px-4"><a href="https://arxiv.org/abs/2501.09747" class="text-blue-600 hover:underline">2501.09747</a></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </section>
 
+        <!-- 技术洞察 -->
+        <section class="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-6 mb-8">
+            <h2 class="text-xl font-bold mb-4">技术洞察与未来方向</h2>
+            <div class="space-y-4 text-gray-700">
+                <div>
+                    <h3 class="font-semibold mb-1">从"感知-动作"到"感知-推理-动作"</h3>
+                    <p class="text-sm">CoT-VLA等模型证明，显式推理步骤能显著提升长程任务成功率。未来VLA模型可能整合更复杂的规划模块，如任务分解、子目标生成、失败恢复等。</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-1">架构统一趋势</h3>
+                    <p class="text-sm">HybridVLA探索了扩散和自回归的融合，未来可能出现更灵活的"动作生成路由器"，根据任务类型动态选择生成策略。</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-1">数据效率与可扩展性</h3>
+                    <p class="text-sm">UniVLA的潜动作方法和FAST的tokenization创新，都在解决同一个问题：如何在有限数据下训练更高效的模型。这是VLA从实验室走向工业应用的关键。</p>
+                </div>
+            </div>
+        </section>
+
         <footer class="text-center text-gray-500 text-sm py-8 border-t">
             <p>本文由 AI 辅助整理，数据截至2025年3月</p>
-            <p class="mt-2">如有遗漏或错误，欢迎在评论区指正</p>
+            <p class="mt-2">每篇论文的详细解析包含：研究背景、核心方法、实验解析、局限讨论</p>
         </footer>
     </main>
 

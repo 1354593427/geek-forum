@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenVLA 深度解析 | VLA 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <nav class="bg-white border-b sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="../../vla-2025.html" class="flex items-center gap-2 text-gray-700 hover:text-gray-900">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                <span class="font-medium">返回VLA综述</span>
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-3xl mx-auto px-4 py-8">
+        <header class="mb-8">
+            <div class="flex items-center gap-2 mb-3">
+                <span class="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs font-medium">全开源</span>
+                <span class="text-sm text-gray-500">arXiv:2406.09246</span>
+            </div>
+            <h1 class="text-3xl font-bold mb-2">OpenVLA: 开源VLA的里程碑</h1>
+            <p class="text-gray-600">Stanford, Berkeley, etc. | 2024年6月</p>
+        </header>
+
+        <!-- 研究背景 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="book-open" class="w-5 h-5 text-blue-600"></i>
+                研究背景
+            </h2>
+            <div class="prose text-gray-700">
+                <p class="mb-3">
+                    2023年Google DeepMind发布的RT-2展示了VLA模型的潜力，但<strong>闭源</strong>特性限制了学术界和工业界的进一步研究。社区迫切需要真正开源的VLA基础模型。
+                </p>
+                <p class="mb-3">
+                    OpenVLA团队由Stanford、Berkeley、MIT等机构的学者组成，目标是构建一个<strong>完全开源、可复现、可扩展</strong>的VLA模型，降低机器人学习研究的门槛。
+                </p>
+                <div class="bg-blue-50 rounded-lg p-4 mt-4">
+                    <h4 class="font-semibold text-blue-900 mb-2">开源意义</h4>
+                    <ul class="text-sm text-blue-800 space-y-1">
+                        <li>• 提供完整的训练代码、模型权重、微调工具</li>
+                        <li>• 支持消费级GPU（24GB显存）进行LoRA微调</li>
+                        <li>• 可在多种机器人平台上部署，无需从头训练</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 核心方法 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="cpu" class="w-5 h-5 text-purple-600"></i>
+                核心方法
+            </h2>
+            
+            <div class="space-y-4">
+                <div class="border-l-4 border-purple-500 pl-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">架构设计</h3>
+                    <p class="text-gray-700 text-sm mb-2">
+                        <strong>视觉编码器:</strong> 融合DINOv2（视觉特征）和SigLIP（语义对齐）的双编码器设计，兼顾低级视觉细节和高级语义理解。
+                    </p>
+                    <p class="text-gray-700 text-sm">
+                        <strong>语言模型:</strong> 基于Llama 2 7B，充分利用其强大的语言理解和推理能力。
+                    </p>
+                </div>
+
+                <div class="border-l-4 border-blue-500 pl-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">动作表示</h3>
+                    <p class="text-gray-700 text-sm">
+                        采用<strong>连续动作分箱（continuous action binning）</strong>：将连续动作空间均匀划分为256个离散bin，将动作预测转化为分类问题。这种方法简单有效，但损失了动作的连续性。
+                    </p>
+                </div>
+
+                <div class="border-l-4 border-green-500 pl-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">训练数据</h3>
+                    <p class="text-gray-700 text-sm">
+                        在<strong>Open X-Embodiment</strong>数据集上预训练，这是目前最大的开源机器人数据集，包含来自22个不同机器人平台的100万+条轨迹。
+                    </p>
+                </div>
+
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h4 class="font-semibold text-gray-900 mb-2">高效微调</h4>
+                    <p class="text-gray-700 text-sm">
+                        支持LoRA（Low-Rank Adaptation）微调和量化推理。实验表明，使用LoRA在单张A100上微调1小时，即可在新机器人平台上达到良好性能。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 实验解析 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="bar-chart-2" class="w-5 h-5 text-green-600"></i>
+                实验解析
+            </h2>
+
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="bg-gray-50 rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold text-green-600">+16.5%</div>
+                    <div class="text-xs text-gray-600">相比RT-2-X (55B)</div>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold text-blue-600">7x</div>
+                    <div class="text-xs text-gray-600">参数效率提升</div>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <h4 class="font-semibold text-gray-900">主要对比实验</h4>
+                <p class="text-sm text-gray-700">
+                    在29个真实机器人操控任务上评估，对比对象包括：
+                </p>
+                <ul class="text-sm text-gray-700 space-y-1 ml-4">
+                    <li>• <strong>RT-2-X (55B):</strong> Google闭源大模型</li>
+                    <li>• <strong>Diffusion Policy:</strong> 纯视觉模仿学习基线</li>
+                    <li>• <strong>Octo:</strong> 另一开源通用策略</li>
+                </ul>
+
+                <h4 class="font-semibold text-gray-900 mt-4">关键结果</h4>
+                <ul class="text-sm text-gray-700 space-y-1">
+                    <li>• <strong>绝对成功率提升:</strong> 在29个任务上平均提升16.5%</li>
+                    <li>• <strong>多物体泛化:</strong> 在多物体场景中表现尤为突出，超越Diffusion Policy 20.4%</li>
+                    <li>• <strong>语言跟随:</strong> 对复杂语言指令的理解更准确</li>
+                </ul>
+
+                <div class="bg-green-50 rounded-lg p-4 mt-4">
+                    <h4 class="font-semibold text-green-900 mb-2">微调实验</h4>
+                    <p class="text-sm text-green-800">
+                        在BridgeData V2上微调后，OpenVLA在新环境中的零样本成功率从基线的45%提升到78%，展示了强大的迁移学习能力。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 局限讨论 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="alert-circle" class="w-5 h-5 text-orange-600"></i>
+                局限讨论
+            </h2>
+
+            <div class="space-y-3 text-gray-700">
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>动作离散化损失</strong>
+                        <p class="text-sm text-gray-600">分箱方法将连续动作离散化，对于需要精细控制的任务（如插孔、拧螺丝）精度受限。</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>推理速度</strong>
+                        <p class="text-sm text-gray-600">7B模型在消费级GPU上推理延迟较高（~200ms），难以满足实时控制需求（通常需要50-100Hz）。</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>数据偏差</strong>
+                        <p class="text-sm text-gray-600">Open X-Embodiment数据集以桌面操作任务为主，缺乏移动操作、双臂协调等复杂场景。</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>长程规划</strong>
+                        <p class="text-sm text-gray-600">主要关注单步动作预测，缺乏显式的高层规划和推理机制。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 相关链接 -->
+        <section class="bg-gray-100 rounded-xl p-6">
+            <h3 class="font-semibold mb-3">相关链接</h3>
+            <div class="flex flex-wrap gap-3">
+                <a href="https://arxiv.org/abs/2406.09246" target="_blank" class="px-4 py-2 bg-white rounded-lg text-sm text-blue-600 hover:bg-blue-50 transition-colors">
+                    arXiv论文
+                </a>
+                <a href="https://github.com/openvla/openvla" target="_blank" class="px-4 py-2 bg-white rounded-lg text-sm text-gray-700 hover:bg-gray-200 transition-colors">
+                    GitHub代码
+                </a>
+                <a href="https://openvla.github.io/" target="_blank" class="px-4 py-2 bg-white rounded-lg text-sm text-gray-700 hover:bg-gray-200 transition-colors">
+                    项目主页
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script>lucide.createIcons();</script>
+</body>
+</html>
