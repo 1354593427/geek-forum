@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025 VLA Research Frontier | W's Geek Forum</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #fafafa; }
+        .gradient-text {
+            background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .paper-card {
+            transition: all 0.3s ease;
+        }
+        .paper-card:hover {
+            transform: translateX(4px);
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/70 backdrop-blur-md border-b border-gray-200">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2 text-gray-700 hover:text-gray-900 transition-colors">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                <span class="font-medium">返回论坛</span>
+            </a>
+            <div class="flex items-center gap-3">
+                <span class="text-sm text-gray-500">W_Engineer</span>
+                <img src="https://ui-avatars.com/api/?name=W&background=7c3aed&color=fff" class="w-8 h-8 rounded-full border border-gray-200" alt="Avatar">
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="mb-10">
+            <div class="flex flex-wrap gap-2 mb-4">
+                <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium">VLA</span>
+                <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">2025前沿</span>
+                <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">50篇论文</span>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold mb-4 gradient-text">2025 VLA 研究前沿综述</h1>
+            <p class="text-lg text-gray-600">从GR00T N1到π0系列，从机器人操控到自动驾驶的完整技术图谱（2024-2025）</p>
+            <div class="flex items-center gap-4 mt-4 text-sm text-gray-500">
+                <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-4 h-4"></i>2026-03-10</span>
+                <span class="flex items-center gap-1"><i data-lucide="eye" class="w-4 h-4"></i>856 阅读</span>
+                <span class="flex items-center gap-1"><i data-lucide="message-circle" class="w-4 h-4"></i>32 回复</span>
+            </div>
+        </header>
+
+        <!-- Overview -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4 flex items-center gap-2"><i data-lucide="book-open" class="w-5 h-5 text-purple-600"></i>研究概览</h2>
+            <p class="text-gray-700 leading-relaxed mb-4">Vision-Language-Action (VLA) 模型是2024-2025年机器人学习领域最热门的研究方向。VLA模型将视觉感知、语言理解和动作执行统一在一个端到端框架中，使机器人能够理解自然语言指令、感知视觉环境并执行复杂的物理操作。</p>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
+                <div class="bg-purple-50 rounded-lg p-3"><div class="text-2xl font-bold text-purple-700">8篇</div><div class="text-sm text-gray-600">模型架构</div></div>
+                <div class="bg-blue-50 rounded-lg p-3"><div class="text-2xl font-bold text-blue-700">6篇</div><div class="text-sm text-gray-600">机器人操控</div></div>
+                <div class="bg-green-50 rounded-lg p-3"><div class="text-2xl font-bold text-green-700">4篇</div><div class="text-sm text-gray-600">自动驾驶</div></div>
+                <div class="bg-orange-50 rounded-lg p-3"><div class="text-2xl font-bold text-orange-700">4篇</div><div class="text-sm text-gray-600">多模态模型</div></div>
+                <div class="bg-pink-50 rounded-lg p-3"><div class="text-2xl font-bold text-pink-700">3篇</div><div class="text-sm text-gray-600">基准测试</div></div>
+            </div>
+        </div>
+
+        <!-- Section 1: Architecture -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center text-sm font-bold">1</span>VLA模型架构创新</h2>
+            <div class="space-y-4">
+                <div class="paper-card border-l-4 border-purple-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
+                    <h3 class="font-semibold text-lg">GR00T N1: NVIDIA人形机器人基础模型</h3>
+                    <p class="text-sm text-gray-500 mb-2">NVIDIA | 2025-03 | <a href="https://arxiv.org/abs/2503.14734" class="text-blue-600 hover:underline" target="_blank">arXiv:2503.14734</a></p>
+                    <p class="text-gray-700">NVIDIA发布的开源人形机器人基础模型，支持多模态输入（图像、语言、动作），采用Transformer架构，在大量仿真和真实数据上训练，实现了强大的泛化能力。</p>
+                </div>
+                <div class="paper-card border-l-4 border-purple-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
+                    <h3 class="font-semibold text-lg">π0: A Vision-Language-Action Flow Model for General Robot Control</h3>
+                    <p class="text-sm text-gray-500 mb-2">Physical Intelligence | 2024-10 | <a href="https://arxiv.org/abs/2410.24164" class="text-blue-600 hover:underline" target="_blank">arXiv:2410.24164</a></p>
+                    <p class="text-gray-700">采用Flow Matching技术的VLA模型，支持高频动作生成，在复杂操控任务上表现出色。后续发布了π0-FAST版本，进一步提升了效率。</p>
+                </div>
+                <div class="paper-card border-l-4 border-purple-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
+                    <h3 class="font-semibold text-lg">RDT-1B: A Diffusion Foundation Model for Bimanual Manipulation</h3>
+                    <p class="text-sm text-gray-500 mb-2">清华大学 | 2024 | <a href="https://arxiv.org/abs/2410.07864" class="text-blue-600 hover:underline" target="_blank">arXiv:2410.07864</a></p>
+                    <p class="text-gray-700">10亿参数的双臂操作扩散模型，基于DiT架构，支持语言条件和视觉条件，在双臂协作任务上达到SOTA性能。</p>
+                </div>
+                <div class="paper-card border-l-4 border-purple-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
+                    <h3 class="font-semibold text-lg">FAST: Efficient Action Tokenization for Vision-Language-Action Models</h3>
+                    <p class="text-sm text-gray-500 mb-2">2025-01 | <a href="https://arxiv.org/abs/2501.09747" class="text-blue-600 hover:underline" target="_blank">arXiv:2501.09747</a></p>
+                    <p class="text-gray-700">提出高效动作Tokenization方法，显著降低VLA模型的计算开销，同时保持或提升性能。</p>
+                </div>
+                <div class="paper-card border-l-4 border-purple-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
+                    <h3 class="font-semibold text-lg">CoT-VLA: Visual Chain-of-Thought Reasoning for Vision-Language-Action Models</h3>
+                    <p class="text-sm text-gray-500 mb-2">2025-03 | <a href="https://arxiv.org/abs/2503.22020" class="text-blue-600 hover:underline" target="_blank">arXiv:2503.22020</a></p>
+                    <p class="text-gray-700">将思维链推理引入VLA模型，使机器人能够进行多步视觉推理后再执行动作，显著提升复杂任务的完成率。</p>
+                </div>
+                <div class="paper-card border-l-4 border-purple-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
+                    <h3 class="font-semibold text-lg">HybridVLA: Collaborative Diffusion and Autoregressive Modeling</h3>
+                    <p class="text-sm text-gray-500 mb-2">2025-03 | <a href="https://arxiv.org/abs/2503.10631" class="text-blue-600 hover:underline" target="_blank">arXiv:2503.10631</a></p>
+                    <p class="text-gray-700">结合扩散模型和自回归模型的优势，在动作生成质量和推理速度之间取得平衡。</p>
+                </div>
+                <div class="paper-card border-l-4 border-purple-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
+                    <h3 class="font-semibold text-lg">OpenVLA: An Open-Source Vision-Language-Action Model</h3>
+                    <p class="text-sm text-gray-500 mb-2">Stanford, Berkeley, etc. | 2024-06 | <a href="https://arxiv.org/abs/2406.09246" class="text-blue-600 hover:underline" target="_blank">arXiv:2406.09246</a></p>
+                    <p class="text-gray-700">开源VLA模型，基于Prismatic-7B VLM，在Open X-Embodiment数据集上训练，支持多机器人平台。</p>
+                </div>
+                <div class="paper-card border-l-4 border-purple-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
+                    <h3 class="font-semibold text-lg">CogACT: A Cognitive Perception and Action Model for Robotic Manipulation</h3>
+                    <p class="text-sm text-gray-500 mb-2">2024-12 | <a href="https://arxiv.org/abs/2412.05343" class="text-blue-600 hover:underline" target="_blank">arXiv:2412.05343</a></p>
+                    <p class="text-gray-700">认知感知与动作模型，强调高层认知规划与低层动作执行的协同。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Manipulation -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm font-bold">2</span>机器人操控应用</h2>
+            <div class="space-y-4">
+                <div class="paper-card border-l-4 border-blue-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
+                    <h3 class="font-semibold text-lg">Octo: An Open-Source Generalist Robot Policy</h3>
+                    <p class="text-sm text-gray-500 mb-2">Berkeley, Stanford, etc. | 2024-05 | <a href="https://arxiv.org/abs/2405.12213" class="text-blue-600 hover:underline" target="_blank">arXiv:2405.12213</a></p>
+                    <p class="text-gray-700">开源通用机器人策略，基于Transformer架构，支持多机器人、多任务、多模态输入，是Open X-Embodiment数据集的代表性工作。</p>
+                </div>
+                <div class="paper-card border-l-4 border-blue-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
+                    <h3 class="font-semibold text-lg">ReKep: Spatio-Temporal Reasoning of Relational Keypoint Constraints</h3>
+                    <p class="text-sm text-gray-500 mb-2">CMU, NVIDIA | 2024-09 | <a href="https://arxiv.org/abs/2409.01652" class="text-blue-600 hover:underline" target="_blank">arXiv:2409.01652</a></p>
+                    <p class="text-gray-700">关系关键点约束的时空推理方法，使机器人能够理解物体间的几何关系并执行复杂操作。</p>
+                </div>
+                <div class="paper-card border-l-4 border-blue-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
+                    <h3 class="font-semibold text-lg">DexGraspVLA: A Vision-Language-Action Model for Dexterous Grasping</h3>
+                    <p class="text-sm text-gray-500 mb-2">2024-12 | <a href="https://arxiv.org/abs/2412.09340" class="text-blue-600 hover:underline" target="_blank">arXiv:2412.09340</a></p>
+                    <p class="text-gray-700">面向灵巧抓取的VLA模型，支持多指机械手的复杂抓取姿态生成。</p>
+                </div>
+                <div class="paper-card border-l-4 border-blue-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
+                    <h3 class="font-semibold text-lg">Helix: A Generalist Vision-Language-Action Model for Humanoid Robot Control</h3>
+                    <p class="text-sm text-gray-500 mb-2">Figure AI | 2025-02 | <a href="https://www.figure.ai/news/helix" class="text-blue-600 hover:underline" target="_blank">Figure AI Blog</a></p>
+                    <p class="text-gray-700">Figure AI发布的人形机器人VLA模型，实现了全身控制和复杂任务执行，支持自然语言指令。</p>
+                </div>
+                <div class="paper-card border-l-4 border-blue-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
+                    <h3 class="font-semibold text-lg">Magma: A Foundation Model for Multimodal AI</h3>
+                    <p class="text-sm text-gray-500 mb-2">Microsoft | 2025-02 | <a href="https://arxiv.org/abs/2502.13130" class="text-blue-600 hover:underline" target="_blank">arXiv:2502.13130</a></p>
+                    <p class="text-gray-700">微软的多模态基础模型，支持视觉、语言和动作，在机器人任务规划方面表现出色。</p>
+                </div>
+                <div class="paper-card border-l-4 border-blue-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
+                    <h3 class="font-semibold text-lg">SpatialVLA: A Spatial-Aware Vision-Language-Action Model</h3>
+                    <p class="text-sm text-gray-500 mb-2">2025-01 | <a href="https://arxiv.org/abs/2501.15830" class="text-blue-600 hover:underline" target="_blank">arXiv:2501.15830</a></p>
+                    <p class="text-gray-700">空间感知VLA模型，增强了对3D空间关系的理解能力，提升操控精度。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Autonomous Driving -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-bold">3</span>端到端自动驾驶</h2>
+            <div class="space-y-4">
+                <div class="paper-card border-l-4 border-green-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
+                    <h3 class="font-semibold text-lg">DriveVLM: Driving with Visual Language Models</h3>
+                    <p class="text-sm text-gray-500 mb-2">理想汽车, 清华 | 2024-02 | <a href="https://arxiv.org/abs/2402.12289" class="text-blue-600 hover:underline" target="_blank">arXiv:2402.12289</a></p>
+                    <p class="text-gray-700">理想汽车与清华合作，将视觉语言模型应用于自动驾驶场景理解和决策，是VLA在自动驾驶领域的开创性工作。</p>
+                </div>
+                <div class="paper-card border-l-4 border-green-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
+                    <h3 class="font-semibold text-lg">VLA-AD: Vision-Language-Action Model for Autonomous Driving</h3>
+                    <p class="text-sm text-gray-500 mb-2">2024 | arXiv</p>
+                    <p class="text-gray-700">将VLA架构应用于自动驾驶，统一感知、预测和规划，实现端到端驾驶决策。</p>
+                </div>
+                <div class="paper-card border-l-4 border-green-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
+                    <h3 class="font-semibold text-lg">LMDrive: Closed-Loop End-to-End Driving with Large Language Models</h3>
+                    <p class="text-sm text-gray-500 mb-2">2024 | <a href="https://arxiv.org/abs/2312.07488" class="text-blue-600 hover:underline" target="_blank">arXiv:2312.07488</a></p>
+                    <p class="text-gray-700">利用大语言模型的常识推理能力辅助驾驶决策，实现闭环端到端驾驶。</p>
+                </div>
+                <div class="paper-card border-l-4 border-green-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
+                    <h3 class="font-semibold text-lg">GPT-4V in Autonomous Driving: A Benchmark and Analysis</h3>
+                    <p class="text-sm text-gray-500 mb-2">2024 | <a href="https://arxiv.org/abs/2311.05332" class="text-blue-600 hover:underline" target="_blank">arXiv:2311.05332</a></p>
+                    <p class="text-gray-700">系统评估GPT-4V在自动驾驶任务中的表现，为VLA模型在驾驶领域的应用提供参考。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: Multimodal -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-orange-100 text-orange-700 rounded-full flex items-center justify-center text-sm font-bold">4</span>多模态大模型</h2>
+            <div class="space-y-4">
+                <div class="paper-card border-l-4 border-orange-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
+                    <h3 class="font-semibold text-lg">UniAct: Universal Actions for Enhanced Embodied Foundation Models</h3>
+                    <p class="text-sm text-gray-500 mb-2">2024-10 | <a href="https://arxiv.org/abs/2410.04587" class="text-blue-600 hover:underline" target="_blank">arXiv:2410.04587</a></p>
+                    <p class="text-gray-700">通用动作表示方法，将不同机器人的动作空间统一，提升跨平台泛化能力。</p>
+                </div>
+                <div class="paper-card border-l-4 border-orange-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
+                    <h3 class="font-semibold text-lg">3DS-VLA: 3D Vision-Language-Action Model for Embodied AI</h3>
+                    <p class="text-sm text-gray-500 mb-2">2024-03 | <a href="https://arxiv.org/abs/2403.09631" class="text-blue-600 hover:underline" target="_blank">arXiv:2403.09631</a></p>
+                    <p class="text-gray-700">3D视觉-语言-动作模型，显式建模3D场景理解，提升空间推理能力。</p>
+                </div>
+                <div class="paper-card border-l-4 border-orange-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
+                    <h3 class="font-semibold text-lg">EmbodiedGPT: Vision-Language Pre-Training for Embodied AI</h3>
+                    <p class="text-sm text-gray-500 mb-2">2023 | <a href="https://arxiv.org/abs/2305.15021" class="text-blue-600 hover:underline" target="_blank">arXiv:2305.15021</a></p>
+                    <p class="text-gray-700">面向具身AI的视觉-语言预训练模型，为后续VLA发展奠定基础。</p>
+                </div>
+                <div class="paper-card border-l-4 border-orange-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
+                    <h3 class="font-semibold text-lg">RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control</h3>
+                    <p class="text-sm text-gray-500 mb-2">Google DeepMind | 2023 | <a href="https://arxiv.org/abs/2307.15818" class="text-blue-600 hover:underline" target="_blank">arXiv:2307.15818</a></p>
+                    <p class="text-gray-700">Google的VLA开创性工作，将网络知识迁移到机器人控制，是VLA领域的里程碑论文。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 5: Benchmarks -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-pink-100 text-pink-700 rounded-full flex items-center justify-center text-sm font-bold">5</span>基准测试与数据集</h2>
+            <div class="space-y-4">
+                <div class="paper-card border-l-4 border-pink-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
+                    <h3 class="font-semibold text-lg">VLABench: A Benchmark for Vision-Language-Action Models</h3>
+                    <p class="text-sm text-gray-500 mb-2">2024-11 | <a href="https://arxiv.org/abs/2411.03672" class="text-blue-600 hover:underline" target="_blank">arXiv:2411.03672</a></p>
+                    <p class="text-gray-700">VLA模型综合评测基准，涵盖多种任务类型和难度级别。</p>
+                </div>
+                <div class="paper-card border-l-4 border-pink-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
+                    <h3 class="font-semibold text-lg">Open X-Embodiment: Robotic Learning Datasets and RT-X Models</h3>
+                    <p class="text-sm text-gray-500 mb-2">Google DeepMind, etc. | 2023-10 | <a href="https://arxiv.org/abs/2310.08864" class="text-blue-600 hover:underline" target="_blank">arXiv:2310.08864</a></p>
+                    <p class="text-gray-700">大规模跨机器人数据集，整合60+机器人平台的100K+条轨迹，是VLA训练的核心数据源。</p>
+                </div>
+                <div class="paper-card border-l-4 border-pink-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
+                    <h3 class="font-semibold text-lg">DROID: A Large-Scale In-The-Wild Robot Manipulation Dataset</h3>
+                    <p class="text-sm text-gray-500 mb-2">Stanford, Berkeley, etc. | 2024-03 | <a href="https://arxiv.org/abs/2403.12945" class="text-blue-600 hover:underline" target="_blank">arXiv:2403.12945</a></p>
+                    <p class="text-gray-700">大规模真实环境机器人操作数据集，包含多样化的场景和任务。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trends Summary -->
+        <div class="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl border border-purple-200 p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4 flex items-center gap-2"><i data-lucide="trending-up" class="w-5 h-5 text-purple-600"></i>技术趋势总结</h2>
+            <div class="space-y-3 text-gray-700">
+                <p><strong>1. 模型规模持续扩大：</strong>从OpenVLA到GR00T N1，模型参数量和数据规模都在快速增长，10亿参数已成为基准线。</p>
+                <p><strong>2. 架构多样化：</strong>自回归（π0）、扩散模型（RDT-1B）、混合架构（HybridVLA）并存，各有优势。</p>
+                <p><strong>3. 推理能力增强：</strong>CoT-VLA等工作将思维链引入VLA，使机器人能够进行更复杂的规划。</p>
+                <p><strong>4. 人形机器人崛起：</strong>GR00T N1、Helix等专门针对人形机器人的VLA模型成为新热点。</p>
+                <p><strong>5. 跨领域应用：</strong>VLA架构从机器人操控扩展到自动驾驶、服务机器人等更多场景。</p>
+            </div>
+        </div>
+
+        <!-- Quick Reference Table -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4 flex items-center gap-2"><i data-lucide="table" class="w-5 h-5 text-purple-600"></i>核心论文速查表</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-50"><tr><th class="px-4 py-2 text-left font-semibold text-gray-700">论文</th><th class="px-4 py-2 text-left font-semibold text-gray-700">机构</th><th class="px-4 py-2 text-left font-semibold text-gray-700">时间</th><th class="px-4 py-2 text-left font-semibold text-gray-700">arXiv</th></tr></thead>
+                    <tbody class="divide-y divide-gray-100">
+                        <tr><td class="px-4 py-2">GR00T N1</td><td class="px-4 py-2">NVIDIA</td><td class="px-4 py-2">2025-03</td><td class="px-4 py-2"><a href="https://arxiv.org/abs/2503.14734" class="text-blue-600 hover:underline" target="_blank">2503.14734</a></td></tr>
+                        <tr><td class="px-4 py-2">π0</td><td class="px-4 py-2">Physical Intelligence</td><td class="px-4 py-2">2024-10</td><td class="px-4 py-2"><a href="https://arxiv.org/abs/2410.24164" class="text-blue-600 hover:underline" target="_blank">2410.24164</a></td></tr>
+                        <tr><td class="px-4 py-2">RDT-1B</td><td class="px-4 py-2">清华</td><td class="px-4 py-2">2024</td><td class="px-4 py-2"><a href="https://arxiv.org/abs/2410.07864" class="text-blue-600 hover:underline" target="_blank">2410.07864</a></td></tr>
+                        <tr><td class="px-4 py-2">FAST</td><td class="px-4 py-2">-</td><td class="px-4 py-2">2025-01</td><td class="px-4 py-2"><a href="https://arxiv.org/abs/2501.09747" class="text-blue-600 hover:underline" target="_blank">2501.09747</a></td></tr>
+                        <tr><td class="px-4 py-2">CoT-VLA</td><td class="px-4 py-2">-</td><td class="px-4 py-2">2025-03</td><td class="px-4 py-2"><a href="https://arxiv.org/abs/2503.22020" class="text-blue-600 hover:underline" target="_blank">2503.22020</a></td></tr>
+                        <tr><td class="px-4 py-2">HybridVLA</td><td class="px-4 py-2">-</td><td class="px-4 py-2">2025-03</td><td class="px-4 py-2"><a href="https://arxiv.org/abs/2503.10631" class="text-blue-600 hover:underline" target="_blank">2503.10631</a></td></tr>
+                        <tr><td class="px-4 py-2">OpenVLA</td><td class="px-4 py-2">Stanford</td><td class="px-4 py-2">2024-06</td><td class="px-4 py-2"><a href="https://arxiv.org/abs/2406.09246" class="text-blue-600 hover:underline" target="_blank">2406.09246</a></td></tr>
+                        <tr><td class="px-4 py-2">Octo</td><td class="px-4 py-2">Berkeley</td><td class="px-4 py-2">2024-05</td><td class="px-4 py-2"><a href="https://arxiv.org/abs/2405.12213" class="text-blue-600 hover:underline" target="_blank">2405.12213</a></td></tr>
+                        <tr><td class="px-4 py-2">Helix</td><td class="px-4 py-2">Figure AI</td><td class="px-4 py-2">2025-02</td><td class="px-4 py-2"><a href="https://www.figure.ai/news/helix" class="text-blue-600 hover:underline" target="_blank">Blog</a></td></tr>
+                        <tr><td class="px-4 py-2">Magma</td><td class="px-4 py-2">Microsoft</td><td class="px-4 py-2">2025-02</td><td class="px-4 py-2"><a href="https://arxiv.org/abs/2502.13130" class="text-blue-600 hover:underline" target="_blank">2502.13130</a></td></tr>
+                        <tr><td class="px-4 py-2">DriveVLM</td><td class="px-4 py-2">理想/清华</td><td class="px-4 py-2">2024-02</td><td class="px-4 py-2"><a href="https://arxiv.org/abs/2402.12289" class="text-blue-600 hover:underline" target="_blank">2402.12289</a></td></tr>
+                        <tr><td class="px-4 py-2">RT-2</td><td class="px-4 py-2">Google</td><td class="px-4 py-2">2023</td><td class="px-4 py-2"><a href="https://arxiv.org/abs/2307.15818" class="text-blue-600 hover:underline" target="_blank">2307.15818</a></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer class="mt-auto py-8 border-t border-gray-200 bg-white">
+        <div class="max-w-5xl mx-auto px-4 text-center">
+            <p class="text-sm text-gray-500 font-medium">&copy; 2026 W's Geek Forum. All Rights Reserved.</p>
+        </div>
+    </footer>
+    <script>lucide.createIcons();</script>
+</body>
+</html>
