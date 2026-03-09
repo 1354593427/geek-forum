@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniVLA 深度解析 | VLA 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <nav class="bg-white border-b sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="../../vla-2025.html" class="flex items-center gap-2 text-gray-700 hover:text-gray-900">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                <span class="font-medium">返回VLA综述</span>
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-3xl mx-auto px-4 py-8">
+        <header class="mb-8">
+            <div class="flex items-center gap-2 mb-3">
+                <span class="px-2 py-0.5 bg-teal-100 text-teal-700 rounded text-xs font-medium">RSS 2025</span>
+                <span class="text-sm text-gray-500">arXiv:2505.06111</span>
+            </div>
+            <h1 class="text-3xl font-bold mb-2">UniVLA: 任务中心潜动作</h1>
+            <p class="text-gray-600">OpenDriveLab | 2025年5月</p>
+        </header>
+
+        <!-- 研究背景 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="book-open" class="w-5 h-5 text-blue-600"></i>
+                研究背景
+            </h2>
+            <div class="prose text-gray-700">
+                <p class="mb-3">
+                    VLA模型的训练需要大量跨机器人平台的数据，但不同机器人的动作空间差异巨大（关节数、末端执行器类型、控制频率等）。如何学习一个<strong>跨embodiment的统一动作表示</strong>是核心挑战。
+                </p>
+                <p class="mb-3">
+                    现有方法通常针对特定机器人训练，或简单地将不同数据混合训练，未能充分利用跨平台数据的互补性。UniVLA提出：<strong>能否学习一个与具体机器人形态无关的"任务中心"动作表示？</strong>
+                </p>
+                <div class="bg-teal-50 rounded-lg p-4 mt-4">
+                    <h4 class="font-semibold text-teal-900 mb-2">核心动机</h4>
+                    <ul class="text-sm text-teal-800 space-y-1">
+                        <li>• 任务的本质是改变环境状态，与执行者的形态无关</li>
+                        <li>• 潜动作空间可以解耦任务相关和形态相关的信息</li>
+                        <li>• 降低预训练成本，提高数据效率</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 核心方法 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="cpu" class="w-5 h-5 text-purple-600"></i>
+                核心方法
+            </h2>
+            
+            <div class="space-y-4">
+                <div class="border-l-4 border-purple-500 pl-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">任务中心潜动作学习</h3>
+                    <p class="text-gray-700 text-sm mb-2">
+                        使用<strong>VQ-VAE（向量量化变分自编码器）</strong>学习潜动作：
+                    </p>
+                    <ul class="text-sm text-gray-700 space-y-1 ml-4">
+                        <li>• <strong>编码器：</strong>从视觉观察变化中提取潜动作</li>
+                        <li>• <strong>码本：</strong>离散潜动作空间，支持跨数据共享</li>
+                        <li>• <strong>解码器：</strong>将潜动作映射为具体机器人的执行动作</li>
+                    </ul>
+                </div>
+
+                <div class="border-l-4 border-blue-500 pl-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">逆动力学建模</h3>
+                    <p class="text-gray-700 text-sm">
+                        从连续两帧视觉观察预测导致状态变化的动作，而非直接从机器人状态预测。这使得潜动作与具体机器人形态解耦，只捕捉任务相关的动态信息。
+                    </p>
+                </div>
+
+                <div class="border-l-4 border-green-500 pl-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">两阶段训练</h3>
+                    <p class="text-gray-700 text-sm">
+                        第一阶段在Open X-Embodiment和Ego4D数据上训练潜动作模型；第二阶段使用潜动作作为监督信号，训练自回归VLA策略。
+                    </p>
+                </div>
+
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h4 class="font-semibold text-gray-900 mb-2">轻量级解码器</h4>
+                    <p class="text-gray-700 text-sm">
+                        解码器仅10.8M参数，适应新机器人时只需微调解码器，大幅降低下游适配成本。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 实验解析 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="bar-chart-2" class="w-5 h-5 text-green-600"></i>
+                实验解析
+            </h2>
+
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="bg-gray-50 rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold text-green-600">1/20</div>
+                    <div class="text-xs text-gray-600">预训练成本</div>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold text-blue-600">SOTA</div>
+                    <div class="text-xs text-gray-600">跨形态泛化</div>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <h4 class="font-semibold text-gray-900">评估设置</h4>
+                <ul class="text-sm text-gray-700 space-y-1">
+                    <li>• <strong>操作任务：</strong>BridgeData, RLBench等</li>
+                    <li>• <strong>导航任务：</strong>验证跨任务类型能力</li>
+                    <li>• <strong>对比基线：</strong>OpenVLA, 纯视频预训练等</li>
+                </ul>
+
+                <h4 class="font-semibold text-gray-900 mt-4">关键结果</h4>
+                <ul class="text-sm text-gray-700 space-y-1">
+                    <li>• <strong>成本效率：</strong>预训练成本仅为OpenVLA的1/20</li>
+                    <li>• <strong>性能领先：</strong>在操作和导航任务上达到SOTA</li>
+                    <li>• <strong>数据扩展性：</strong>随着数据量增加，性能持续提升</li>
+                </ul>
+
+                <div class="bg-green-50 rounded-lg p-4 mt-4">
+                    <h4 class="font-semibold text-green-900 mb-2">消融实验</h4>
+                    <p class="text-sm text-green-800">
+                        去掉任务中心设计（直接使用原始动作），跨平台迁移性能下降35%。证明了潜动作表示对跨形态学习的关键作用。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 局限讨论 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="alert-circle" class="w-5 h-5 text-orange-600"></i>
+                局限讨论
+            </h2>
+
+            <div class="space-y-3 text-gray-700">
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>视觉依赖</strong>
+                        <p class="text-sm text-gray-600">潜动作从视觉变化推断，对于视觉不明显的状态变化（如力交互）建模能力有限。</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>码本大小限制</strong>
+                        <p class="text-sm text-gray-600">VQ-VAE的离散码本大小固定，可能限制复杂动作的表达能力。</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>解码器适配</strong>
+                        <p class="text-sm text-gray-600">虽然解码器轻量，但新机器人平台仍需收集数据微调，零样本迁移能力有限。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 相关链接 -->
+        <section class="bg-gray-100 rounded-xl p-6">
+            <h3 class="font-semibold mb-3">相关链接</h3>
+            <div class="flex flex-wrap gap-3">
+                <a href="https://arxiv.org/abs/2505.06111" target="_blank" class="px-4 py-2 bg-white rounded-lg text-sm text-blue-600 hover:bg-blue-50 transition-colors">
+                    arXiv论文
+                </a>
+                <a href="https://github.com/OpenDriveLab/UniVLA" target="_blank" class="px-4 py-2 bg-white rounded-lg text-sm text-gray-700 hover:bg-gray-200 transition-colors">
+                    GitHub代码
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script>lucide.createIcons();</script>
+</body>
+</html>

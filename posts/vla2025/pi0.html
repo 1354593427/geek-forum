@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>π0 / π0-FAST 深度解析 | VLA 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <nav class="bg-white border-b sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="../../vla-2025.html" class="flex items-center gap-2 text-gray-700 hover:text-gray-900">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                <span class="font-medium">返回VLA综述</span>
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-3xl mx-auto px-4 py-8">
+        <header class="mb-8">
+            <div class="flex items-center gap-2 mb-3">
+                <span class="px-2 py-0.5 bg-orange-100 text-orange-700 rounded text-xs font-medium">部分开源</span>
+                <span class="text-sm text-gray-500">arXiv:2410.24164 / 2501.09747</span>
+            </div>
+            <h1 class="text-3xl font-bold mb-2">π0 / π0-FAST: Flow Matching VLA</h1>
+            <p class="text-gray-600">Physical Intelligence | 2024-2025</p>
+        </header>
+
+        <!-- 研究背景 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="book-open" class="w-5 h-5 text-blue-600"></i>
+                研究背景
+            </h2>
+            <div class="prose text-gray-700">
+                <p class="mb-3">
+                    VLA模型通常采用<strong>离散动作token</strong>（如RT-2的分箱方法）或<strong>扩散模型</strong>（如Diffusion Policy）生成动作。前者在高频灵巧任务上表现受限，后者推理速度慢难以实时控制。
+                </p>
+                <p class="mb-3">
+                    Physical Intelligence团队（由前Google DeepMind RT系列核心成员创立）提出一个关键问题：<strong>能否结合VLM的语义理解能力与扩散模型的连续动作生成能力，同时保持实时推理速度？</strong>
+                </p>
+                <div class="bg-orange-50 rounded-lg p-4 mt-4">
+                    <h4 class="font-semibold text-orange-900 mb-2">核心挑战</h4>
+                    <ul class="text-sm text-orange-800 space-y-1">
+                        <li>• 自回归VLA难以处理高频灵巧任务（如折叠衣物、摆餐具）</li>
+                        <li>• 扩散模型推理需要多步去噪，实时性差</li>
+                        <li>• 跨机器人形态（单臂/双臂/移动底座）的动作空间差异大</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 核心方法 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="cpu" class="w-5 h-5 text-purple-600"></i>
+                核心方法
+            </h2>
+            
+            <div class="space-y-4">
+                <div class="border-l-4 border-purple-500 pl-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">π0: Flow Matching动作专家</h3>
+                    <p class="text-gray-700 text-sm mb-2">
+                        采用<strong>PaliGemma (3B) + Action Expert (300M)</strong>架构。Action Expert使用Flow Matching（流匹配）而非扩散，实现更快的单步推理。
+                    </p>
+                    <p class="text-gray-700 text-sm">
+                        Flow Matching直接学习从噪声到数据分布的向量场，相比扩散模型减少了推理步骤，同时保持连续动作生成的表达能力。
+                    </p>
+                </div>
+
+                <div class="border-l-4 border-blue-500 pl-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">π0-FAST: 频率空间动作Tokenization</h3>
+                    <p class="text-gray-700 text-sm mb-2">
+                        核心创新是<strong>FAST (Frequency-space Action Sequence Tokenization)</strong>：
+                    </p>
+                    <ul class="text-sm text-gray-700 space-y-1 ml-4">
+                        <li>• 使用<strong>离散余弦变换(DCT)</strong>将动作块压缩到频域</li>
+                        <li>• 应用<strong>BPE (Byte Pair Encoding)</strong>进一步压缩</li>
+                        <li>• 将动作块表示为30-60个离散token（传统方法需要300-600个）</li>
+                    </ul>
+                    <p class="text-gray-700 text-sm mt-2">
+                        这使得自回归VLA首次能够处理<strong>50Hz高频率灵巧任务</strong>，训练速度提升5倍。
+                    </p>
+                </div>
+
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h4 class="font-semibold text-gray-900 mb-2">统一动作空间</h4>
+                    <p class="text-gray-700 text-sm">
+                        设计统一的动作向量表示，涵盖：关节位置/速度、末端执行器位姿、夹爪开合、移动底座速度。通过填充和掩码机制，同一模型可控制不同自由度的机器人。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 实验解析 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="bar-chart-2" class="w-5 h-5 text-green-600"></i>
+                实验解析
+            </h2>
+
+            <div class="grid grid-cols-3 gap-3 mb-4">
+                <div class="bg-gray-50 rounded-lg p-3 text-center">
+                    <div class="text-xl font-bold text-green-600">7</div>
+                    <div class="text-xs text-gray-600">机器人平台</div>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-3 text-center">
+                    <div class="text-xl font-bold text-blue-600">68</div>
+                    <div class="text-xs text-gray-600">训练任务</div>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-3 text-center">
+                    <div class="text-xl font-bold text-purple-600">10x</div>
+                    <div class="text-xs text-gray-600">动作压缩比</div>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <h4 class="font-semibold text-gray-900">训练数据</h4>
+                <p class="text-sm text-gray-700">
+                    在7个不同机器人平台上收集数据，包括：单臂机械臂、双臂ALOHA、带移动底座的机器人等。任务涵盖：折叠衣物、清理餐桌、打包购物袋、组装盒子等复杂操作。
+                </p>
+
+                <h4 class="font-semibold text-gray-900 mt-4">关键能力展示</h4>
+                <ul class="text-sm text-gray-700 space-y-1">
+                    <li>• <strong>零样本泛化：</strong>在新环境中通过自然语言指令执行任务</li>
+                    <li>• <strong>语言跟随：</strong>FAST的离散表示改善了从互联网预训练的迁移</li>
+                    <li>• <strong>微调效率：</strong>少量领域数据即可适应新机器人平台</li>
+                </ul>
+
+                <div class="bg-green-50 rounded-lg p-4 mt-4">
+                    <h4 class="font-semibold text-green-900 mb-2">π0 vs π0-FAST对比</h4>
+                    <table class="text-sm w-full">
+                        <tr class="border-b border-green-200">
+                            <td class="py-1">方法</td>
+                            <td class="py-1">动作生成</td>
+                            <td class="py-1">训练速度</td>
+                            <td class="py-1">推理速度</td>
+                        </tr>
+                        <tr class="border-b border-green-200">
+                            <td class="py-1">π0</td>
+                            <td class="py-1">Flow Matching</td>
+                            <td class="py-1">基准</td>
+                            <td class="py-1">50Hz</td>
+                        </tr>
+                        <tr>
+                            <td class="py-1">π0-FAST</td>
+                            <td class="py-1">自回归+Token</td>
+                            <td class="py-1 text-green-600">5x faster</td>
+                            <td class="py-1">50Hz</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 局限讨论 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="alert-circle" class="w-5 h-5 text-orange-600"></i>
+                局限讨论
+            </h2>
+
+            <div class="space-y-3 text-gray-700">
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>数据收集瓶颈</strong>
+                        <p class="text-sm text-gray-600">高质量遥操作数据收集成本高，难以规模化。论文未披露具体数据量和收集时间。</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>长程任务规划</strong>
+                        <p class="text-sm text-gray-600">当前主要关注短程动作生成，对于需要多步骤推理的复杂任务（如"做一顿饭"），高层规划能力有限。</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>部分开源限制</strong>
+                        <p class="text-sm text-gray-600">仅发布模型权重和推理代码，训练数据、完整训练流程未公开，难以完全复现。</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>触觉和力反馈缺失</strong>
+                        <p class="text-sm text-gray-600">当前主要依赖视觉和本体感觉，缺乏触觉传感器融合，精细操作（如插孔、拧螺丝）受限。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 相关链接 -->
+        <section class="bg-gray-100 rounded-xl p-6">
+            <h3 class="font-semibold mb-3">相关链接</h3>
+            <div class="flex flex-wrap gap-3">
+                <a href="https://arxiv.org/abs/2410.24164" target="_blank" class="px-4 py-2 bg-white rounded-lg text-sm text-blue-600 hover:bg-blue-50 transition-colors">
+                    π0 Paper
+                </a>
+                <a href="https://arxiv.org/abs/2501.09747" target="_blank" class="px-4 py-2 bg-white rounded-lg text-sm text-blue-600 hover:bg-blue-50 transition-colors">
+                    FAST Paper
+                </a>
+                <a href="https://www.pi.website/" target="_blank" class="px-4 py-2 bg-white rounded-lg text-sm text-gray-700 hover:bg-gray-200 transition-colors">
+                    Physical Intelligence
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script>lucide.createIcons();</script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoT-VLA 深度解析 | VLA 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <nav class="bg-white border-b sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="../../vla-2025.html" class="flex items-center gap-2 text-gray-700 hover:text-gray-900">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                <span class="font-medium">返回VLA综述</span>
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-3xl mx-auto px-4 py-8">
+        <header class="mb-8">
+            <div class="flex items-center gap-2 mb-3">
+                <span class="px-2 py-0.5 bg-purple-100 text-purple-700 rounded text-xs font-medium">CVPR 2025</span>
+                <span class="text-sm text-gray-500">arXiv:2503.22020</span>
+            </div>
+            <h1 class="text-3xl font-bold mb-2">CoT-VLA: 视觉思维链推理</h1>
+            <p class="text-gray-600">NVIDIA, Stanford, MIT | 2025年3月</p>
+        </header>
+
+        <!-- 研究背景 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="book-open" class="w-5 h-5 text-blue-600"></i>
+                研究背景
+            </h2>
+            <div class="prose text-gray-700">
+                <p class="mb-3">
+                    现有VLA模型通常采用<strong>直接输入-输出映射</strong>：给定当前观察和语言指令，直接预测动作。这种"端到端"范式虽然简洁，但缺乏<strong>中间推理步骤</strong>，难以处理需要多步规划的复杂任务。
+                </p>
+                <p class="mb-3">
+                    受大语言模型中<strong>Chain-of-Thought (CoT)</strong> prompting的启发，研究者提出：能否让VLA模型也具备"思考"能力，在生成动作之前先进行视觉层面的推理和规划？
+                </p>
+                <div class="bg-purple-50 rounded-lg p-4 mt-4">
+                    <h4 class="font-semibold text-purple-900 mb-2">核心洞察</h4>
+                    <ul class="text-sm text-purple-800 space-y-1">
+                        <li>• 人类执行复杂任务时，会先想象目标状态，再规划动作</li>
+                        <li>• 视觉子目标可以作为动作的"锚点"，提高长程任务成功率</li>
+                        <li>• 自回归生成视觉和动作token，统一了推理和执行的范式</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 核心方法 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="cpu" class="w-5 h-5 text-purple-600"></i>
+                核心方法
+            </h2>
+            
+            <div class="space-y-4">
+                <div class="border-l-4 border-purple-500 pl-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">视觉思维链生成</h3>
+                    <p class="text-gray-700 text-sm mb-2">
+                        CoT-VLA的核心创新是<strong>自回归生成视觉子目标</strong>：
+                    </p>
+                    <ol class="text-sm text-gray-700 space-y-1 ml-4">
+                        <li>1. 输入：当前图像观察 + 语言指令</li>
+                        <li>2. 生成：未来图像帧（视觉子目标）</li>
+                        <li>3. 生成：达成子目标的动作序列</li>
+                    </ol>
+                    <p class="text-gray-700 text-sm mt-2">
+                        这种"先想象、再执行"的范式使模型具备了显式的规划能力。
+                    </p>
+                </div>
+
+                <div class="border-l-4 border-blue-500 pl-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">统一生成框架</h3>
+                    <p class="text-gray-700 text-sm">
+                        模型同时生成<strong>视觉token</strong>和<strong>动作token</strong>，使用统一的自回归目标训练。视觉token通过VQ-VAE编码，动作token通过离散化编码，两者共享Transformer backbone。
+                    </p>
+                </div>
+
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h4 class="font-semibold text-gray-900 mb-2">训练策略</h4>
+                    <p class="text-gray-700 text-sm">
+                        采用<strong>教师强制(teacher forcing)</strong>训练：给定真实轨迹，模型学习预测下一个视觉token或动作token。推理时则完全自回归生成。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 实验解析 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="bar-chart-2" class="w-5 h-5 text-green-600"></i>
+                实验解析
+            </h2>
+
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="bg-gray-50 rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold text-green-600">+17%</div>
+                    <div class="text-xs text-gray-600">真实任务提升</div>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold text-blue-600">+6%</div>
+                    <div class="text-xs text-gray-600">仿真基准提升</div>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <h4 class="font-semibold text-gray-900">评估设置</h4>
+                <ul class="text-sm text-gray-700 space-y-1">
+                    <li>• <strong>真实机器人:</strong> Franka机械臂，多种操控任务</li>
+                    <li>• <strong>仿真环境:</strong> SIMPLER, LIBERO等标准基准</li>
+                    <li>• <strong>基线对比:</strong> OpenVLA, RT-2-X等SOTA模型</li>
+                </ul>
+
+                <h4 class="font-semibold text-gray-900 mt-4">关键发现</h4>
+                <ul class="text-sm text-gray-700 space-y-1">
+                    <li>• <strong>长程任务优势:</strong> 在需要多步操作的任务上提升最明显</li>
+                    <li>• <strong>视觉子目标质量:</strong> 生成的子目标图像与真实轨迹高度一致</li>
+                    <li>• <strong>推理可解释性:</strong> 可通过可视化子目标理解模型的"思考过程"</li>
+                </ul>
+
+                <div class="bg-green-50 rounded-lg p-4 mt-4">
+                    <h4 class="font-semibold text-green-900 mb-2">消融实验</h4>
+                    <p class="text-sm text-green-800">
+                        去掉视觉子目标生成（仅预测动作），性能下降12%，证明了视觉推理的重要性。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 局限讨论 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="alert-circle" class="w-5 h-5 text-orange-600"></i>
+                局限讨论
+            </h2>
+
+            <div class="space-y-3 text-gray-700">
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>视觉生成开销</strong>
+                        <p class="text-sm text-gray-600">生成视觉子目标需要额外的计算资源，推理速度比纯动作预测慢约30%。</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>子目标数量固定</strong>
+                        <p class="text-sm text-gray-600">当前方法需要预设子目标数量，对于复杂度差异大的任务不够灵活。</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>视觉编码器限制</strong>
+                        <p class="text-sm text-gray-600">VQ-VAE编码的视觉token可能丢失细节信息，影响精细操作任务。</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>训练数据要求</strong>
+                        <p class="text-sm text-gray-600">需要完整的轨迹视频作为监督信号，数据收集成本高于单帧动作标注。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 相关链接 -->
+        <section class="bg-gray-100 rounded-xl p-6">
+            <h3 class="font-semibold mb-3">相关链接</h3>
+            <div class="flex flex-wrap gap-3">
+                <a href="https://arxiv.org/abs/2503.22020" target="_blank" class="px-4 py-2 bg-white rounded-lg text-sm text-blue-600 hover:bg-blue-50 transition-colors">
+                    arXiv论文
+                </a>
+                <a href="https://cot-vla.github.io/" target="_blank" class="px-4 py-2 bg-white rounded-lg text-sm text-gray-700 hover:bg-gray-200 transition-colors">
+                    项目主页
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script>lucide.createIcons();</script>
+</body>
+</html>
