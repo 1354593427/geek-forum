@@ -204,6 +204,14 @@
             background: linear-gradient(135deg, #ff9800, #f57c00);
         }
 
+        .gazebo .platform-header {
+            background: linear-gradient(135deg, #9c27b0, #7b1fa2);
+        }
+
+        .pybullet .platform-header {
+            background: linear-gradient(135deg, #00bcd4, #0097a7);
+        }
+
         .platform-name {
             font-size: 1.5rem;
             font-weight: 700;
@@ -638,6 +646,74 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Gazebo -->
+            <div class="platform-card gazebo">
+                <div class="platform-header">
+                    <div class="platform-name">Gazebo</div>
+                    <div class="platform-tagline">ROS 官方仿真器 · 机器人标准</div>
+                </div>
+                <div class="platform-body">
+                    <p style="margin-bottom: 1rem; color: #666; font-size: 0.9rem;">
+                        ROS/ROS2 官方支持的机器人仿真平台，工业界和学术界广泛使用的标准工具。
+                    </p>
+                    <div class="pros-cons">
+                        <div class="pros">
+                            <h4>核心优势</h4>
+                            <ul>
+                                <li>ROS 原生集成</li>
+                                <li>传感器模型丰富</li>
+                                <li>开源免费</li>
+                                <li>社区生态成熟</li>
+                                <li>支持多物理引擎</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h4>主要局限</h4>
+                            <ul>
+                                <li>渲染性能较弱</li>
+                                <li>大规模并行差</li>
+                                <li>RL 训练效率低</li>
+                                <li>GPU 加速有限</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PyBullet -->
+            <div class="platform-card pybullet">
+                <div class="platform-header">
+                    <div class="platform-name">PyBullet</div>
+                    <div class="platform-tagline">轻量级物理仿真 · 快速原型</div>
+                </div>
+                <div class="platform-body">
+                    <p style="margin-bottom: 1rem; color: #666; font-size: 0.9rem;">
+                        轻量级开源物理引擎，Python 原生接口，适合快速原型和教学场景。
+                    </p>
+                    <div class="pros-cons">
+                        <div class="pros">
+                            <h4>核心优势</h4>
+                            <ul>
+                                <li>安装简单轻量</li>
+                                <li>Python 原生 API</li>
+                                <li>快速原型开发</li>
+                                <li>支持逆向运动学</li>
+                                <li>VR 支持</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h4>主要局限</h4>
+                            <ul>
+                                <li>物理精度一般</li>
+                                <li>渲染能力弱</li>
+                                <li>大规模场景受限</li>
+                                <li>文档不够完善</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -654,6 +730,8 @@
                         <th>MuJoCo</th>
                         <th>Isaac Sim</th>
                         <th>Unity</th>
+                        <th>Gazebo</th>
+                        <th>PyBullet</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -662,30 +740,48 @@
                         <td class="score-excellent">优秀</td>
                         <td class="score-excellent">优秀</td>
                         <td class="score-good">良好</td>
+                        <td class="score-good">良好</td>
+                        <td class="score-good">良好</td>
                     </tr>
                     <tr>
                         <td>接触/碰撞检测</td>
                         <td class="score-excellent">优秀</td>
                         <td class="score-good">良好</td>
                         <td class="score-poor">一般</td>
+                        <td class="score-good">良好</td>
+                        <td class="score-medium">中等</td>
                     </tr>
                     <tr>
                         <td>摩擦模型</td>
                         <td class="score-excellent">优秀</td>
                         <td class="score-good">良好</td>
                         <td class="score-poor">一般</td>
+                        <td class="score-good">良好</td>
+                        <td class="score-medium">中等</td>
                     </tr>
                     <tr>
                         <td>数值稳定性</td>
                         <td class="score-excellent">优秀</td>
                         <td class="score-good">良好</td>
                         <td class="score-poor">一般</td>
+                        <td class="score-good">良好</td>
+                        <td class="score-medium">中等</td>
                     </tr>
                     <tr>
                         <td>计算精度</td>
                         <td>双精度</td>
                         <td>单精度</td>
                         <td>单精度</td>
+                        <td>双精度</td>
+                        <td>单精度</td>
+                    </tr>
+                    <tr>
+                        <td>软体/可变形体</td>
+                        <td class="score-good">支持</td>
+                        <td class="score-excellent">优秀</td>
+                        <td class="score-poor">有限</td>
+                        <td class="score-medium">插件</td>
+                        <td class="score-medium">有限</td>
                     </tr>
                 </tbody>
             </table>
@@ -700,6 +796,8 @@
                         <th>MuJoCo</th>
                         <th>Isaac Sim</th>
                         <th>Unity</th>
+                        <th>Gazebo</th>
+                        <th>PyBullet</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -708,23 +806,39 @@
                         <td>CPU多线程</td>
                         <td>GPU大规模</td>
                         <td>CPU有限</td>
+                        <td>CPU多进程</td>
+                        <td>CPU多线程</td>
                     </tr>
                     <tr>
                         <td>最大环境数</td>
                         <td>~100</td>
                         <td class="score-excellent">4096+</td>
                         <td>~50</td>
+                        <td>~20</td>
+                        <td>~100</td>
                     </tr>
                     <tr>
                         <td>单环境开销</td>
                         <td class="score-excellent">极低</td>
                         <td class="score-poor">高</td>
                         <td class="score-good">中等</td>
+                        <td class="score-poor">高</td>
+                        <td class="score-excellent">极低</td>
+                    </tr>
+                    <tr>
+                        <td>GPU 加速</td>
+                        <td class="score-medium">有限</td>
+                        <td class="score-excellent">原生支持</td>
+                        <td class="score-good">部分支持</td>
+                        <td class="score-poor">不支持</td>
+                        <td class="score-medium">有限</td>
                     </tr>
                     <tr>
                         <td>多GPU支持</td>
                         <td class="score-poor">无</td>
                         <td class="score-excellent">有</td>
+                        <td class="score-poor">无</td>
+                        <td class="score-poor">无</td>
                         <td class="score-poor">无</td>
                     </tr>
                 </tbody>
@@ -740,6 +854,8 @@
                         <th>MuJoCo</th>
                         <th>Isaac Sim</th>
                         <th>Unity</th>
+                        <th>Gazebo</th>
+                        <th>PyBullet</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -748,27 +864,190 @@
                         <td class="score-excellent">优秀</td>
                         <td class="score-good">良好</td>
                         <td class="score-poor">一般</td>
+                        <td class="score-good">良好</td>
+                        <td class="score-medium">中等</td>
                     </tr>
                     <tr>
                         <td>迁移成功率</td>
                         <td class="score-excellent">高</td>
                         <td class="score-good">中</td>
                         <td class="score-poor">低</td>
+                        <td class="score-good">高</td>
+                        <td class="score-medium">中</td>
                     </tr>
                     <tr>
                         <td>真实部署友好度</td>
                         <td class="score-excellent">友好</td>
                         <td class="score-good">中等</td>
                         <td class="score-poor">困难</td>
+                        <td class="score-excellent">极友好</td>
+                        <td class="score-good">友好</td>
                     </tr>
                     <tr>
                         <td>学术界采用度</td>
                         <td class="score-excellent">广泛</td>
                         <td class="score-good">增长中</td>
                         <td class="score-poor">少</td>
+                        <td class="score-good">广泛</td>
+                        <td class="score-good">较广泛</td>
+                    </tr>
+                    <tr>
+                        <td>ROS 集成</td>
+                        <td class="score-medium">需桥接</td>
+                        <td class="score-excellent">原生支持</td>
+                        <td class="score-poor">需插件</td>
+                        <td class="score-excellent">原生支持</td>
+                        <td class="score-medium">需桥接</td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+
+        <h3 class="section-subtitle">开发体验与生态对比</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>评估维度</th>
+                        <th>MuJoCo</th>
+                        <th>Isaac Sim</th>
+                        <th>Unity</th>
+                        <th>Gazebo</th>
+                        <th>PyBullet</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>学习曲线</td>
+                        <td class="score-good">中等</td>
+                        <td class="score-poor">陡峭</td>
+                        <td class="score-good">平缓</td>
+                        <td class="score-medium">中等</td>
+                        <td class="score-excellent">简单</td>
+                    </tr>
+                    <tr>
+                        <td>文档完善度</td>
+                        <td class="score-excellent">优秀</td>
+                        <td class="score-good">良好</td>
+                        <td class="score-excellent">优秀</td>
+                        <td class="score-good">良好</td>
+                        <td class="score-medium">一般</td>
+                    </tr>
+                    <tr>
+                        <td>社区活跃度</td>
+                        <td class="score-excellent">高</td>
+                        <td class="score-good">中</td>
+                        <td class="score-excellent">高</td>
+                        <td class="score-excellent">高</td>
+                        <td class="score-good">中</td>
+                    </tr>
+                    <tr>
+                        <td>开源程度</td>
+                        <td class="score-excellent">完全开源</td>
+                        <td class="score-poor">闭源</td>
+                        <td class="score-medium">部分开源</td>
+                        <td class="score-excellent">完全开源</td>
+                        <td class="score-excellent">完全开源</td>
+                    </tr>
+                    <tr>
+                        <td>许可证</td>
+                        <td>Apache 2.0</td>
+                        <td>NVIDIA 许可</td>
+                        <td>Unity 许可</td>
+                        <td>Apache 2.0</td>
+                        <td>zlib</td>
+                    </tr>
+                    <tr>
+                        <td>典型用户</td>
+                        <td>研究者、RL</td>
+                        <td>工业、大规模</td>
+                        <td>游戏、原型</td>
+                        <td>ROS用户、教育</td>
+                        <td>教学、快速原型</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="section-subtitle">适用场景推荐</h3>
+        <div class="card">
+            <div class="platform-grid">
+                <div class="platform-card mujoco">
+                    <div class="platform-header">
+                        <div class="platform-name">MuJoCo</div>
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <p style="font-size: 0.9rem; color: #555; margin-bottom: 1rem;"><strong>推荐场景：</strong></p>
+                        <ul style="font-size: 0.85rem; color: #666; padding-left: 1.2rem;">
+                            <li>强化学习算法研究</li>
+                            <li>机器人控制算法开发</li>
+                            <li>Sim-to-Real 迁移</li>
+                            <li>步态生成与优化</li>
+                            <li>接触丰富的操作任务</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="platform-card isaac">
+                    <div class="platform-header">
+                        <div class="platform-name">Isaac Sim</div>
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <p style="font-size: 0.9rem; color: #555; margin-bottom: 1rem;"><strong>推荐场景：</strong></p>
+                        <ul style="font-size: 0.85rem; color: #666; padding-left: 1.2rem;">
+                            <li>大规模并行 RL 训练</li>
+                            <li>视觉感知任务</li>
+                            <li>工业级 ROS2 部署</li>
+                            <li>数字孪生应用</li>
+                            <li>需要 GPU 加速的场景</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="platform-card gazebo">
+                    <div class="platform-header">
+                        <div class="platform-name">Gazebo</div>
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <p style="font-size: 0.9rem; color: #555; margin-bottom: 1rem;"><strong>推荐场景：</strong></p>
+                        <ul style="font-size: 0.85rem; color: #666; padding-left: 1.2rem;">
+                            <li>ROS/ROS2 系统集成</li>
+                            <li>传感器仿真测试</li>
+                            <li>算法到真机迁移</li>
+                            <li>多机器人协作</li>
+                            <li>教育和教学场景</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="platform-card pybullet">
+                    <div class="platform-header">
+                        <div class="platform-name">PyBullet</div>
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <p style="font-size: 0.9rem; color: #555; margin-bottom: 1rem;"><strong>推荐场景：</strong></p>
+                        <ul style="font-size: 0.85rem; color: #666; padding-left: 1.2rem;">
+                            <li>快速原型验证</li>
+                            <li>Python 原生开发</li>
+                            <li>抓取与操作研究</li>
+                            <li>教学与入门学习</li>
+                            <li>轻量级仿真需求</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="platform-card unity">
+                    <div class="platform-header">
+                        <div class="platform-name">Unity ML-Agents</div>
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <p style="font-size: 0.9rem; color: #555; margin-bottom: 1rem;"><strong>推荐场景：</strong></p>
+                        <ul style="font-size: 0.85rem; color: #666; padding-left: 1.2rem;">
+                            <li>游戏 AI 开发</li>
+                            <li>高保真视觉渲染</li>
+                            <li>虚拟现实集成</li>
+                            <li>概念验证原型</li>
+                            <li>非物理精确场景</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
