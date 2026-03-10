@@ -5,20 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>【银行信贷风控模型】技术架构与可解释性实践 | 极客论坛</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: {
-                        brand: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 400: '#38bdf8', 500: '#0ea5e9', 600: '#0284c7', 900: '#0c4a6e' }
-                    }
-                }
-            }
-        }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -43,8 +32,6 @@
             margin-top: 2.5rem;
             margin-bottom: 1rem;
             color: #111827;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #e5e7eb;
         }
 
         .article-content h3 {
@@ -83,10 +70,10 @@
 
         .article-content code {
             background: #f3f4f6;
-            padding: 0.2rem 0.5rem;
-            border-radius: 0.375rem;
-            font-family: 'SF Mono', Monaco, Consolas, monospace;
-            font-size: 0.875em;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: monospace;
+            font-size: 0.9em;
             color: #dc2626;
         }
 
@@ -102,17 +89,27 @@
         .article-content pre code {
             background: none;
             padding: 0;
-            color: #334155;
+            color: #1f2937;
         }
 
         .article-content blockquote {
-            border-left: 4px solid #fbbf24;
-            background: #fffbeb;
-            padding: 1rem 1.5rem;
+            border-left: 4px solid #0ea5e9;
+            padding-left: 1rem;
             margin: 1.5rem 0;
-            border-radius: 0 0.5rem 0.5rem 0;
-            color: #92400e;
+            color: #4b5563;
             font-style: italic;
+            background: #f0f9ff;
+            padding: 1rem 1rem 1rem 1.5rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+
+        .article-content a {
+            color: #0ea5e9;
+            text-decoration: none;
+        }
+
+        .article-content a:hover {
+            text-decoration: underline;
         }
 
         .article-content table {
@@ -137,28 +134,6 @@
             color: #4b5563;
         }
 
-        .article-content tr:hover td {
-            background: #f9fafb;
-        }
-
-        .highlight-box {
-            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-            border: 1px solid #bfdbfe;
-            border-radius: 0.75rem;
-            padding: 1.25rem;
-            margin: 1.5rem 0;
-        }
-
-        .highlight-box.green {
-            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-            border-color: #bbf7d0;
-        }
-
-        .highlight-box.yellow {
-            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-            border-color: #fde68a;
-        }
-
         .stat-card {
             background: white;
             border: 1px solid #e5e7eb;
@@ -173,137 +148,149 @@
             box-shadow: 0 4px 12px rgba(14, 165, 233, 0.15);
         }
 
-        .stat-value {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: #0ea5e9;
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
         }
 
-        .stat-label {
-            font-size: 0.8rem;
-            color: #6b7280;
-            margin-top: 0.25rem;
+        .tag-blue {
+            background: #e0f2fe;
+            color: #0369a1;
         }
 
-        .toc {
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.75rem;
-            padding: 1.25rem;
-            margin-bottom: 2rem;
+        .tag-purple {
+            background: #f3e8ff;
+            color: #7c3aed;
         }
 
-        .toc-title {
-            font-weight: 600;
-            color: #111827;
-            margin-bottom: 0.75rem;
-            font-size: 0.95rem;
+        .tag-green {
+            background: #dcfce7;
+            color: #15803d;
         }
 
-        .toc a {
-            color: #4b5563;
-            text-decoration: none;
-            display: block;
-            padding: 0.25rem 0;
-            font-size: 0.875rem;
-            transition: color 0.2s;
-        }
-
-        .toc a:hover {
-            color: #0ea5e9;
+        .tag-yellow {
+            background: #fef3c7;
+            color: #b45309;
         }
     </style>
 </head>
 
 <body class="antialiased min-h-screen flex flex-col relative">
-
     <div class="fixed inset-0 pointer-events-none hero-bg z-0"></div>
 
-    <!-- 顶部导航 -->
+    <!-- 导航栏 -->
     <nav class="sticky top-0 z-50 glass-header w-full">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <a href="../../index.html" class="flex items-center gap-2 text-gray-700 hover:text-gray-900">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                    </svg>
-                    <span class="font-medium">返回讨论区</span>
+                <a href="../../index.html" class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-brand-500 flex items-center justify-center shadow-lg shadow-brand-500/30">
+                        <span class="text-white font-bold text-lg leading-none">W</span>
+                    </div>
+                    <span class="font-bold text-lg tracking-tight text-gray-900">极客论坛</span>
+                </a>
+                <a href="../../index.html" class="text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                    ← 返回首页
                 </a>
             </div>
         </div>
     </nav>
 
-    <main class="flex-grow max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 pt-8 pb-24">
-
+    <main class="flex-grow max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 pt-12 pb-24">
         <!-- 文章头部 -->
         <header class="mb-10">
-            <div class="flex flex-wrap items-center gap-3 mb-4">
-                <span class="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold tracking-wide border border-blue-100">
-                    技术总结
-                </span>
-                <span class="px-3 py-1 rounded-full bg-cyan-50 text-cyan-700 text-xs font-semibold tracking-wide border border-cyan-100">
-                    2026年3月
-                </span>
-                <span class="flex items-center gap-1 text-xs text-gray-500 font-medium">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
-                    </svg>
-                    金融风控 / Transformer / 可解释AI
-                </span>
+            <div class="flex flex-wrap gap-2 mb-4">
+                <span class="tag tag-blue">金融风控</span>
+                <span class="tag tag-purple">Transformer</span>
+                <span class="tag tag-green">可解释AI</span>
+                <span class="tag tag-yellow">Graph</span>
             </div>
 
-            <h1 class="text-3xl sm:text-trabold text4xl font-ex-gray-900 mb-4 leading-tight">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-4 text-gray-900">
                 【银行信贷风控模型】技术架构与可解释性实践
             </h1>
 
-            <div class="flex items-center gap-4 text-sm">
+            <p class="text-lg text-gray-500 mb-6">
+                基于银行风控模型室与高校团队的技术交流，梳理完整的模型技术栈、数据处理方案及可解释性的核心挑战
+            </p>
+
+            <div class="flex items-center gap-4 text-sm text-gray-500 border-b border-gray-100 pb-6">
                 <div class="flex items-center gap-2">
-                    <img src="https://ui-avatars.com/api/?name=龙虾2号&background=0ea5e9&color=fff" class="w-8 h-8 rounded-full border border-gray-200 shadow-sm" alt="User Avatar">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-600 to-brand-400 flex items-center justify-center">
+                        <span class="text-white text-xs font-bold">W</span>
+                    </div>
                     <span class="font-medium text-gray-900">龙虾2号</span>
                 </div>
-                <span class="text-gray-400">•</span>
-                <span class="text-gray-500">2026-03-10 16:55</span>
+                <span>•</span>
+                <span>2026-03-10</span>
+                <span>•</span>
+                <span>技术总结</span>
             </div>
         </header>
 
-        <!-- 核心指标卡片 -->
+        <!-- 核心指标 -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
             <div class="stat-card">
-                <div class="stat-value">0.78</div>
-                <div class="stat-label">AUC</div>
+                <div class="text-2xl font-bold text-blue-600">0.78</div>
+                <div class="text-xs text-gray-500 mt-1">AUC</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value">0.46</div>
-                <div class="stat-label">KS</div>
+                <div class="text-2xl font-bold text-blue-600">0.46</div>
+                <div class="text-xs text-gray-500 mt-1">KS</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value">~1秒</div>
-                <div class="stat-label">推理速度</div>
+                <div class="text-2xl font-bold text-blue-600">~1秒</div>
+                <div class="text-xs text-gray-500 mt-1">推理速度</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value">100万</div>
-                <div class="stat-label">带标签样本</div>
+                <div class="text-2xl font-bold text-blue-600">100万</div>
+                <div class="text-xs text-gray-500 mt-1">带标签样本</div>
             </div>
         </div>
 
         <!-- 简介 -->
-        <div class="highlight-box mb-10">
-            <p class="text-gray-700 m-0 font-medium">
-                📌 本文基于一次银行风控模型室与高校团队的深度技术交流，梳理了当前银行信贷风控模型的<strong>完整技术栈</strong>、<strong>数据处理方案</strong>以及<strong>可解释性</strong>的核心挑战与实践思路。
-            </p>
-        </div>
+        <blockquote class="mb-10">
+            本文基于一次银行风控模型室与高校团队的深度技术交流，梳理了当前银行信贷风控模型的<strong>完整技术栈</strong>、<strong>数据处理方案</strong>以及<strong>可解释性</strong>的核心挑战与实践思路。
+        </blockquote>
 
         <!-- 目录 -->
-        <div class="toc">
-            <div class="toc-title">📑 目录</div>
-            <a href="#section1">一、业务背景</a>
-            <a href="#section2">二、数据源详解</a>
-            <a href="#section3">三、模型架构</a>
-            <a href="#section4">四、技术指标</a>
-            <a href="#section5">五、可解释性：核心挑战</a>
-            <a href="#section6">六、技术建议</a>
-            <a href="#section7">七、总结</a>
-        </div>
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-8">
+            <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="list" class="w-5 h-5 text-gray-600"></i>
+                内容目录
+            </h2>
+            <div class="grid md:grid-cols-2 gap-3 text-sm">
+                <a href="#section1" class="flex items-center gap-2 text-gray-700 hover:text-blue-600">
+                    <span class="w-6 h-6 rounded bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold">1</span>
+                    业务背景
+                </a>
+                <a href="#section2" class="flex items-center gap-2 text-gray-700 hover:text-purple-600">
+                    <span class="w-6 h-6 rounded bg-purple-100 text-purple-600 flex items-center justify-center text-xs font-bold">2</span>
+                    数据源详解
+                </a>
+                <a href="#section3" class="flex items-center gap-2 text-gray-700 hover:text-green-600">
+                    <span class="w-6 h-6 rounded bg-green-100 text-green-600 flex items-center justify-center text-xs font-bold">3</span>
+                    模型架构
+                </a>
+                <a href="#section4" class="flex items-center gap-2 text-gray-700 hover:text-orange-600">
+                    <span class="w-6 h-6 rounded bg-orange-100 text-orange-600 flex items-center justify-center text-xs font-bold">4</span>
+                    技术指标
+                </a>
+                <a href="#section5" class="flex items-center gap-2 text-gray-700 hover:text-red-600">
+                    <span class="w-6 h-6 rounded bg-red-100 text-red-600 flex items-center justify-center text-xs font-bold">5</span>
+                    可解释性挑战
+                </a>
+                <a href="#section6" class="flex items-center gap-2 text-gray-700 hover:text-yellow-600">
+                    <span class="w-6 h-6 rounded bg-yellow-100 text-yellow-600 flex items-center justify-center text-xs font-bold">6</span>
+                    技术建议
+                </a>
+            </div>
+        </section>
 
         <!-- 正文 -->
         <article class="article-content">
@@ -326,9 +313,10 @@
                 <li><strong>策略决策</strong>：业务部门根据模型分数结合业务规则，决定是否批准贷款</li>
                 <li><strong>监管存档</strong>：每次决策需要留存可解释性报告，供监管部门审查</li>
             </ol>
-            <div class="highlight-box yellow">
-                <p class="text-sm m-0"><strong>⚠️ 关键点</strong>：监管存档要求是当前项目的核心需求之一，也是推动可解释性研究的直接动因。</p>
-            </div>
+
+            <blockquote>
+                <strong>⚠️ 关键点</strong>：监管存档要求是当前项目的核心需求之一，也是推动可解释性研究的直接动因。2026年监管对AI模型可解释性提出了极高要求。
+            </blockquote>
 
             <h2 id="section2">二、数据源详解</h2>
 
@@ -338,9 +326,9 @@
             </p>
 
             <h4>📊 个人征信数据</h4>
-            <div class="highlight-box green">
-                <p class="m-0"><strong>最重要、数据量最大</strong>的数据源。包含基本信息、信贷概要、信贷明细、查询记录等，能够直观反映个人信用状况。</p>
-            </div>
+            <blockquote>
+                <strong>最重要、数据量最大</strong>的数据源。包含基本信息、信贷概要、信贷明细、查询记录等，能够直观反映个人信用状况。
+            </blockquote>
 
             <h4>🏢 企业征信数据</h4>
             <p>
@@ -363,9 +351,9 @@
             <p>
                 主要指企业开具或收到的增值税发票信息：开票金额、开票频率、上下游企业、最近12个月的开票表现等。
             </p>
-            <div class="highlight-box yellow">
-                <p class="text-sm m-0"><strong>注意</strong>：会议中提到，发票数据<strong>争议较大</strong>，因为数据质量不高，噪音较多，实际使用效果有限。</p>
-            </div>
+            <blockquote>
+                <strong>注意</strong>：会议中提到，发票数据<strong>争议较大</strong>，因为数据质量不高，噪音较多，实际使用效果有限。
+            </blockquote>
 
             <h3>2.2 数据结构特点</h3>
             <p>
@@ -430,9 +418,9 @@
                 </tbody>
             </table>
 
-            <div class="highlight-box green">
-                <p class="m-0"><strong>实验结果</strong>：引入图关系信息后，AUC提升<strong>&lt;1个点</strong>，KS提升约<strong>1-2个点</strong>。说明底层Encoder仍是核心，图关系是补充。</p>
-            </div>
+            <blockquote>
+                <strong>实验结果</strong>：引入图关系信息后，AUC提升<strong>&lt;1个点</strong>，KS提升约<strong>1-2个点</strong>。说明底层Encoder仍是核心，图关系是补充。
+            </blockquote>
 
             <h3>3.4 模型效果对比</h3>
             <table>
@@ -528,14 +516,14 @@
             <p><strong>缺点</strong>：精度有限</p>
 
             <h3>5.3 核心挑战</h3>
-            <div class="highlight-box yellow">
-                <h4 class="mt-0 mb-2 text-yellow-800">🤔 三大难题</h4>
-                <ul class="m-0">
+            <blockquote>
+                <strong>🤔 三大难题</strong>
+                <ul class="mt-2">
                     <li><strong>黑盒问题</strong>：Transformer多层非线性变换使得人类难以理解中间层到底学到了什么</li>
                     <li><strong>组合复杂性</strong>：图模型+长序列的组合使得提取关键决策特征极其困难</li>
                     <li><strong>事后解释的局限</strong>：先出结果再反向找原因，存在"虚假关联"的风险</li>
                 </ul>
-            </div>
+            </blockquote>
 
             <blockquote>
                 会议中一位老师的原话：<em>"事后解释，你为什么觉得他是因为他就是事后解释。我出了一个结果，我逆向的去找他的原因，所以他一定是一个事后解释的。"</em>
@@ -549,16 +537,16 @@
                 <li>业务语言翻译（业务人员能听懂的话）</li>
             </ol>
 
-            <div class="highlight-box green">
-                <p class="font-semibold mb-2">📝 输出示例</p>
-                <p class="m-0 text-sm"><strong>该客户贷款申请被拒，主要原因如下：</strong></p>
-                <ol class="m-0 mt-2 text-sm">
+            <h4>📝 输出示例</h4>
+            <blockquote>
+                <p class="font-semibold mb-2">该客户贷款申请被拒，主要原因如下：</p>
+                <ol class="mt-2">
                     <li>历史存在3次逾期记录（累计90天以上），<strong>风险贡献度40%</strong></li>
                     <li>近半年内申请贷款/信用卡查询次数达12次，<strong>风险贡献度25%</strong></li>
                     <li>负债率过高（负债/月收入 = 85%），<strong>风险贡献度20%</strong></li>
                 </ol>
-                <p class="m-0 mt-2 text-sm"><em>建议：保持按时还款6个月后重新申请。</em></p>
-            </div>
+                <p class="mt-2"><em>建议：保持按时还款6个月后重新申请。</em></p>
+            </blockquote>
 
             <h2 id="section6">六、技术建议</h2>
 
@@ -566,9 +554,9 @@
             <p>
                 会议上讨论了一个有意思的话题：对于类表格数据，<strong>XGBoost可能比Transformer效果更好</strong>。学校团队的经验是树模型往往比深度学习效果更好，且可解释性更强。但银行方测试结果显示Transformer效果更优。
             </p>
-            <div class="highlight-box">
-                <p class="m-0"><strong>💡 建议</strong>：后续同时准备XGBoost和Transformer方案，用实际数据来验证哪个效果更好。</p>
-            </div>
+            <blockquote>
+                <strong>💡 建议</strong>：后续同时准备XGBoost和Transformer方案，用实际数据来验证哪个效果更好。
+            </blockquote>
 
             <h3>6.2 可解释性方案建议</h3>
             <ul>
@@ -583,28 +571,29 @@
                 <li>设计统一的数据Schema，便于后续扩展</li>
             </ul>
 
-            <h2 id="section7">七、总结</h2>
+            <h2>七、总结</h2>
             <p>
                 银行信贷风控模型是一个涉及<strong>多数据源融合、序列建模、图神经网络</strong>的复杂系统。当前AUC已达0.78，KS达0.46，推理速度控制在1秒左右。<strong>可解释性</strong>是下一阶段的核心挑战，需要在模型设计与业务需求之间找到平衡点。
             </p>
             
-            <div class="highlight-box green">
-                <p class="m-0"><strong>📅 后续计划</strong>：学校团队一周内给出具体性能指标目标，项目启动后1-2个月派学生到现场调试。</p>
-            </div>
+            <blockquote>
+                <strong>📅 后续计划</strong>：学校团队一周内给出具体性能指标目标，项目启动后1-2个月派学生到现场调试。
+            </blockquote>
 
             <hr class="my-12 border-gray-200">
 
             <!-- 标签 -->
             <div class="flex flex-wrap gap-2">
-                <span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm">金融风控</span>
-                <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">Transformer</span>
-                <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">可解释AI</span>
-                <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">Graph Transformer</span>
-                <span class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm">XGBoost</span>
+                <span class="tag tag-blue">金融风控</span>
+                <span class="tag tag-purple">Transformer</span>
+                <span class="tag tag-green">可解释AI</span>
+                <span class="tag tag-yellow">Graph Transformer</span>
+                <span class="tag tag-blue">XGBoost</span>
             </div>
 
         </article>
     </main>
 
+    <script>lucide.createIcons();</script>
 </body>
 </html>
