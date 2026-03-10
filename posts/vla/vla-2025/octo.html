@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OpenDriveVLA 深度解析 | VLA 2025</title>
+    <title>Octo 深度解析 | VLA 2025</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -11,7 +11,7 @@
 <body class="bg-gray-50 text-gray-800">
     <nav class="bg-white border-b sticky top-0 z-50">
         <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
-            <a href="vla-2025.html" class="flex items-center gap-2 text-gray-700 hover:text-gray-900">
+            <a href="../vla-2025.html" class="flex items-center gap-2 text-gray-700 hover:text-gray-900">
                 <i data-lucide="arrow-left" class="w-5 h-5"></i>
                 <span class="font-medium">返回VLA综述</span>
             </a>
@@ -21,11 +21,11 @@
     <main class="max-w-3xl mx-auto px-4 py-8">
         <header class="mb-8">
             <div class="flex items-center gap-2 mb-3">
-                <span class="px-2 py-0.5 bg-cyan-100 text-cyan-700 rounded text-xs font-medium">AAAI 2026</span>
-                <span class="text-sm text-gray-500">arXiv:2503.23463</span>
+                <span class="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs font-medium">RSS 2024</span>
+                <span class="text-sm text-gray-500">arXiv:2405.12213</span>
             </div>
-            <h1 class="text-3xl font-bold mb-2">OpenDriveVLA: 端到端自动驾驶VLA</h1>
-            <p class="text-gray-600">Technical University of Munich, etc. | 2025年3月</p>
+            <h1 class="text-3xl font-bold mb-2">Octo: 开源通用机器人策略</h1>
+            <p class="text-gray-600">Berkeley, Stanford, etc. | 2024年5月</p>
         </header>
 
         <!-- 研究背景 -->
@@ -36,17 +36,18 @@
             </h2>
             <div class="prose text-gray-700">
                 <p class="mb-3">
-                    端到端自动驾驶从传感器输入直接输出控制信号，但现有方法多为纯视觉或纯LiDAR，缺乏对场景语义和交通规则的理解能力。大语言模型（LLM）展现了强大的推理能力，但如何将其与驾驶场景结合仍是开放问题。
+                    机器人学习社区迫切需要真正开源的通用策略（Generalist Policy）：一个模型能够控制多种机器人、适应不同传感器配置、并可通过少量微调迁移到新任务。
                 </p>
                 <p class="mb-3">
-                    OpenDriveVLA提出：<strong>能否构建一个VLA模型，统一处理3D环境感知、交通规则推理和轨迹规划？</strong>
+                    2023年的RT-X展示了大规模预训练的潜力，但闭源限制了研究。Octo的目标是成为<strong>机器人领域的"ImageNet时刻"</strong>——提供开源的基础模型、训练代码和数据 pipeline。
                 </p>
-                <div class="bg-cyan-50 rounded-lg p-4 mt-4">
-                    <h4 class="font-semibold text-cyan-900 mb-2">核心挑战</h4>
-                    <ul class="text-sm text-cyan-800 space-y-1">
-                        <li>• 驾驶场景需要精确的3D空间感知</li>
-                        <li>• 轨迹规划需要满足物理约束和安全要求</li>
-                        <li>• 需要处理多模态输入（相机、LiDAR、地图、历史轨迹）</li>
+                <div class="bg-blue-50 rounded-lg p-4 mt-4">
+                    <h4 class="font-semibold text-blue-900 mb-2">设计目标</h4>
+                    <ul class="text-sm text-blue-800 space-y-1">
+                        <li>• 支持多种观察空间（单目、双目、多视角相机）</li>
+                        <li>• 支持多种动作空间（关节位置、末端执行器、增量动作）</li>
+                        <li>• 易于微调到新机器人和新任务</li>
+                        <li>• 完全开源，包括训练代码和模型权重</li>
                     </ul>
                 </div>
             </div>
@@ -61,28 +62,28 @@
             
             <div class="space-y-4">
                 <div class="border-l-4 border-purple-500 pl-4">
-                    <h3 class="font-semibold text-gray-900 mb-2">分层视觉-语言对齐</h3>
+                    <h3 class="font-semibold text-gray-900 mb-2">Transformer架构</h3>
                     <p class="text-gray-700 text-sm mb-2">
-                        提出<strong>分层对齐机制</strong>桥接视觉和语言模态：
+                        采用标准的Transformer Encoder-Decoder架构：
                     </p>
                     <ul class="text-sm text-gray-700 space-y-1 ml-4">
-                        <li>• <strong>2D视觉token：</strong>从相机图像提取语义特征</li>
-                        <li>• <strong>3D结构token：</strong>从LiDAR和深度估计提取空间信息</li>
-                        <li>• <strong>统一投影：</strong>将2D和3D特征映射到LLM的语义空间</li>
+                        <li>• <strong>观察编码：</strong>使用预训练的ViT处理图像</li>
+                        <li>• <strong>任务编码：</strong>支持语言指令和目标图像两种形式</li>
+                        <li>• <strong>动作解码：</strong>扩散头生成连续动作块</li>
                     </ul>
                 </div>
 
                 <div class="border-l-4 border-blue-500 pl-4">
-                    <h3 class="font-semibold text-gray-900 mb-2">Agent-Env-Ego交互建模</h3>
+                    <h3 class="font-semibold text-gray-900 mb-2">灵活的配置系统</h3>
                     <p class="text-gray-700 text-sm">
-                        在LLM内显式建模三类交互：自车（Ego）与周围智能体（Agent）的关系、与环境（Env）的交互。通过自回归生成，逐步推理场景动态并规划轨迹。
+                        通过配置文件定义观察和动作空间，无需修改模型代码即可适配新机器人。支持任意数量的输入图像和不同的动作维度。
                     </p>
                 </div>
 
                 <div class="border-l-4 border-green-500 pl-4">
-                    <h3 class="font-semibold text-gray-900 mb-2">多阶段训练</h3>
+                    <h3 class="font-semibold text-gray-900 mb-2">Open X-Embodiment训练</h3>
                     <p class="text-gray-700 text-sm">
-                        第一阶段：3D感知预训练；第二阶段：驾驶场景理解；第三阶段：端到端轨迹生成。渐进式训练确保模型稳定性。
+                        在Open X-Embodiment数据集的80万条轨迹上训练，这是当时最大的开源机器人数据集，包含来自多个机构的多样化数据。
                     </p>
                 </div>
             </div>
@@ -97,28 +98,28 @@
 
             <div class="grid grid-cols-2 gap-4 mb-4">
                 <div class="bg-gray-50 rounded-lg p-4 text-center">
-                    <div class="text-2xl font-bold text-green-600">SOTA</div>
-                    <div class="text-xs text-gray-600">nuScenes规划</div>
+                    <div class="text-2xl font-bold text-green-600">800k</div>
+                    <div class="text-xs text-gray-600">训练轨迹</div>
                 </div>
                 <div class="bg-gray-50 rounded-lg p-4 text-center">
-                    <div class="text-2xl font-bold text-blue-600">0.68m</div>
-                    <div class="text-xs text-gray-600">L2误差@3s</div>
+                    <div class="text-2xl font-bold text-blue-600">93M</div>
+                    <div class="text-xs text-gray-600">模型参数</div>
                 </div>
             </div>
 
             <div class="space-y-3">
                 <h4 class="font-semibold text-gray-900">评估设置</h4>
                 <ul class="text-sm text-gray-700 space-y-1">
-                    <li>• <strong>数据集：</strong>nuScenes开环规划基准</li>
-                    <li>• <strong>指标：</strong>L2误差、碰撞率、驾驶分数</li>
-                    <li>• <strong>对比：</strong>UniAD, GPT-Driver, DriveVLM等</li>
+                    <li>• <strong>零样本：</strong>直接在新机器人上测试</li>
+                    <li>• <strong>微调：</strong>少量数据适应新任务</li>
+                    <li>• <strong>对比：</strong>RT-X, Diffusion Policy, 单任务策略</li>
                 </ul>
 
                 <h4 class="font-semibold text-gray-900 mt-4">关键结果</h4>
                 <ul class="text-sm text-gray-700 space-y-1">
-                    <li>• <strong>规划精度：</strong>L2误差0.68m（3秒预测），超越UniAD</li>
-                    <li>• <strong>安全性：</strong>碰撞率显著低于纯视觉方法</li>
-                    <li>• <strong>可解释性：</strong>可生成驾驶决策的自然语言解释</li>
+                    <li>• <strong>零样本能力：</strong>在未见过的机器人上表现优于单任务训练</li>
+                    <li>• <strong>微调效率：</strong>少量数据（10-100条）即可适应新任务</li>
+                    <li>• <strong>规模效应：</strong>模型和数据规模增加带来持续提升</li>
                 </ul>
             </div>
         </section>
@@ -134,22 +135,22 @@
                 <div class="flex items-start gap-3">
                     <span class="text-orange-500 mt-1">•</span>
                     <div>
-                        <strong>开环评估限制</strong>
-                        <p class="text-sm text-gray-600">当前仅在开环基准上评估，闭环仿真和真实道路测试仍是未来工作。</p>
+                        <strong>语言理解有限</strong>
+                        <p class="text-sm text-gray-600">相比VLA模型，Octo的语言理解能力较弱，复杂指令跟随能力有限。</p>
                     </div>
                 </div>
                 <div class="flex items-start gap-3">
                     <span class="text-orange-500 mt-1">•</span>
                     <div>
-                        <strong>计算延迟</strong>
-                        <p class="text-sm text-gray-600">LLM推理延迟较高，难以满足自动驾驶的实时性要求（通常需要10-20Hz）。</p>
+                        <strong>数据偏差</strong>
+                        <p class="text-sm text-gray-600">Open X-Embodiment数据以桌面操作为主，缺乏移动操作和双臂协调场景。</p>
                     </div>
                 </div>
                 <div class="flex items-start gap-3">
                     <span class="text-orange-500 mt-1">•</span>
                     <div>
-                        <strong>极端场景</strong>
-                        <p class="text-sm text-gray-600">对于训练数据中稀少的极端场景（如恶劣天气、罕见障碍物），泛化能力待验证。</p>
+                        <strong>推理速度</strong>
+                        <p class="text-sm text-gray-600">扩散头需要多步去噪，推理延迟较高。</p>
                     </div>
                 </div>
             </div>
@@ -159,11 +160,11 @@
         <section class="bg-gray-100 rounded-xl p-6">
             <h3 class="font-semibold mb-3">相关链接</h3>
             <div class="flex flex-wrap gap-3">
-                <a href="https://arxiv.org/abs/2503.23463" target="_blank" class="px-4 py-2 bg-white rounded-lg text-sm text-blue-600 hover:bg-blue-50 transition-colors">
+                <a href="https://arxiv.org/abs/2405.12213" target="_blank" class="px-4 py-2 bg-white rounded-lg text-sm text-blue-600 hover:bg-blue-50 transition-colors">
                     arXiv论文
                 </a>
-                <a href="https://github.com/DriveVLA/OpenDriveVLA" target="_blank" class="px-4 py-2 bg-white rounded-lg text-sm text-gray-700 hover:bg-gray-200 transition-colors">
-                    GitHub代码
+                <a href="https://octo-models.github.io/" target="_blank" class="px-4 py-2 bg-white rounded-lg text-sm text-gray-700 hover:bg-gray-200 transition-colors">
+                    项目主页
                 </a>
             </div>
         </section>
