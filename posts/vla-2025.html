@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,14 +9,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        .paper-card { transition: all 0.3s ease; border-left: 4px solid transparent; }
-        .paper-card:hover { border-left-color: #667eea; transform: translateX(4px); }
+        .paper-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .paper-card:hover {
+            border-left-color: #667eea;
+            transform: translateX(4px);
+        }
     </style>
 </head>
+
 <body class="bg-gray-50 text-gray-800">
     <nav class="bg-white border-b sticky top-0 z-50">
         <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-2 text-gray-700 hover:text-gray-900">
+            <a href="../index.html" class="flex items-center gap-2 text-gray-700 hover:text-gray-900">
                 <i data-lucide="arrow-left" class="w-5 h-5"></i>
                 <span class="font-medium">返回论坛</span>
             </a>
@@ -38,7 +47,8 @@
                 <span>深度阅读 40 分钟</span>
             </div>
             <p class="text-lg text-gray-600 leading-relaxed border-l-4 border-purple-500 pl-4">
-                Vision-Language-Action (VLA) 模型正经历从"直接映射"到"推理规划"、从"单一架构"到"混合范式"的范式转变。本文深度解析2025年代表性工作，<strong>每篇论文包含完整的研究背景、方法细节、实验分析和局限讨论</strong>。
+                Vision-Language-Action (VLA)
+                模型正经历从"直接映射"到"推理规划"、从"单一架构"到"混合范式"的范式转变。本文深度解析2025年代表性工作，<strong>每篇论文包含完整的研究背景、方法细节、实验分析和局限讨论</strong>。
             </p>
         </header>
 
@@ -67,9 +77,10 @@
         <!-- 核心论文详解 -->
         <section class="mb-8">
             <h2 class="text-2xl font-bold mb-6">核心论文深度解析（点击卡片查看详情）</h2>
-            
+
             <!-- GR00T N1 -->
-            <a href="posts/vla2025/groot-n1.html" class="block paper-card bg-white rounded-xl shadow-sm border p-6 mb-4">
+            <a href="posts/vla2025/groot-n1.html"
+                class="block paper-card bg-white rounded-xl shadow-sm border p-6 mb-4">
                 <div class="flex items-start justify-between gap-4">
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-2">
@@ -78,7 +89,8 @@
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mb-2">GR00T N1: NVIDIA人形机器人基础模型</h3>
                         <p class="text-gray-600 text-sm mb-3">
-                            双系统架构（System 2推理 + System 1动作），基于扩散Transformer生成50Hz实时动作，在Fourier GR-1和1X人形平台上验证。在超过10万GPU小时训练。
+                            双系统架构（System 2推理 + System 1动作），基于扩散Transformer生成50Hz实时动作，在Fourier
+                            GR-1和1X人形平台上验证。在超过10万GPU小时训练。
                         </p>
                         <div class="flex flex-wrap gap-2 text-xs">
                             <span class="px-2 py-1 bg-gray-100 rounded">双系统架构</span>
@@ -95,8 +107,10 @@
                 <div class="flex items-start justify-between gap-4">
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-2">
-                            <span class="px-2 py-0.5 bg-orange-100 text-orange-700 rounded text-xs font-medium">部分开源</span>
-                            <span class="text-xs text-gray-500">Physical Intelligence | 2024.10 | arXiv:2410.24164</span>
+                            <span
+                                class="px-2 py-0.5 bg-orange-100 text-orange-700 rounded text-xs font-medium">部分开源</span>
+                            <span class="text-xs text-gray-500">Physical Intelligence | 2024.10 |
+                                arXiv:2410.24164</span>
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mb-2">π0 / π0-FAST: Flow Matching VLA</h3>
                         <p class="text-gray-600 text-sm mb-3">
@@ -139,8 +153,10 @@
                 <div class="flex items-start justify-between gap-4">
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-2">
-                            <span class="px-2 py-0.5 bg-purple-100 text-purple-700 rounded text-xs font-medium">CVPR 2025</span>
-                            <span class="text-xs text-gray-500">NVIDIA, Stanford, MIT | 2025.03 | arXiv:2503.22020</span>
+                            <span class="px-2 py-0.5 bg-purple-100 text-purple-700 rounded text-xs font-medium">CVPR
+                                2025</span>
+                            <span class="text-xs text-gray-500">NVIDIA, Stanford, MIT | 2025.03 |
+                                arXiv:2503.22020</span>
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mb-2">CoT-VLA: 视觉思维链推理</h3>
                         <p class="text-gray-600 text-sm mb-3">
@@ -157,11 +173,13 @@
             </a>
 
             <!-- HybridVLA -->
-            <a href="posts/vla2025/hybridvla.html" class="block paper-card bg-white rounded-xl shadow-sm border p-6 mb-4">
+            <a href="posts/vla2025/hybridvla.html"
+                class="block paper-card bg-white rounded-xl shadow-sm border p-6 mb-4">
                 <div class="flex items-start justify-between gap-4">
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-2">
-                            <span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs font-medium">ICLR 2026</span>
+                            <span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs font-medium">ICLR
+                                2026</span>
                             <span class="text-xs text-gray-500">PKU | 2025.03 | arXiv:2503.10631</span>
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mb-2">HybridVLA: 扩散与自回归协同</h3>
@@ -183,7 +201,8 @@
                 <div class="flex items-start justify-between gap-4">
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-2">
-                            <span class="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded text-xs font-medium">模块化</span>
+                            <span
+                                class="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded text-xs font-medium">模块化</span>
                             <span class="text-xs text-gray-500">MSRA | 2024.11 | arXiv:2411.19650</span>
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mb-2">CogACT: 认知与动作分离</h3>
@@ -206,7 +225,8 @@
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-2">
                             <span class="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs font-medium">开源</span>
-                            <span class="text-xs text-gray-500">Tsinghua, Shanghai AI Lab | 2024.10 | arXiv:2410.07864</span>
+                            <span class="text-xs text-gray-500">Tsinghua, Shanghai AI Lab | 2024.10 |
+                                arXiv:2410.07864</span>
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mb-2">RDT-1B: 双臂操控扩散Transformer</h3>
                         <p class="text-gray-600 text-sm mb-3">
@@ -227,7 +247,8 @@
                 <div class="flex items-start justify-between gap-4">
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-2">
-                            <span class="px-2 py-0.5 bg-teal-100 text-teal-700 rounded text-xs font-medium">RSS 2025</span>
+                            <span class="px-2 py-0.5 bg-teal-100 text-teal-700 rounded text-xs font-medium">RSS
+                                2025</span>
                             <span class="text-xs text-gray-500">OpenDriveLab | 2025.05 | arXiv:2505.06111</span>
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mb-2">UniVLA: 任务中心潜动作</h3>
@@ -245,11 +266,13 @@
             </a>
 
             <!-- DexGraspVLA -->
-            <a href="posts/vla2025/dexgraspvla.html" class="block paper-card bg-white rounded-xl shadow-sm border p-6 mb-4">
+            <a href="posts/vla2025/dexgraspvla.html"
+                class="block paper-card bg-white rounded-xl shadow-sm border p-6 mb-4">
                 <div class="flex items-start justify-between gap-4">
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-2">
-                            <span class="px-2 py-0.5 bg-orange-100 text-orange-700 rounded text-xs font-medium">灵巧抓取</span>
+                            <span
+                                class="px-2 py-0.5 bg-orange-100 text-orange-700 rounded text-xs font-medium">灵巧抓取</span>
                             <span class="text-xs text-gray-500">PKU, BIGAI | 2025.02 | arXiv:2502.20900</span>
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mb-2">DexGraspVLA: 通用灵巧抓取</h3>
@@ -267,11 +290,13 @@
             </a>
 
             <!-- OpenDriveVLA -->
-            <a href="posts/vla2025/opendrivevla.html" class="block paper-card bg-white rounded-xl shadow-sm border p-6 mb-4">
+            <a href="posts/vla2025/opendrivevla.html"
+                class="block paper-card bg-white rounded-xl shadow-sm border p-6 mb-4">
                 <div class="flex items-start justify-between gap-4">
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-2">
-                            <span class="px-2 py-0.5 bg-cyan-100 text-cyan-700 rounded text-xs font-medium">AAAI 2026</span>
+                            <span class="px-2 py-0.5 bg-cyan-100 text-cyan-700 rounded text-xs font-medium">AAAI
+                                2026</span>
                             <span class="text-xs text-gray-500">TUM, etc. | 2025.03 | arXiv:2503.23463</span>
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mb-2">OpenDriveVLA: 端到端自动驾驶VLA</h3>
@@ -293,7 +318,8 @@
                 <div class="flex items-start justify-between gap-4">
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-2">
-                            <span class="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs font-medium">RSS 2024</span>
+                            <span class="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs font-medium">RSS
+                                2024</span>
                             <span class="text-xs text-gray-500">Berkeley, Stanford | 2024.05 | arXiv:2405.12213</span>
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mb-2">Octo: 开源通用机器人策略</h3>
@@ -315,8 +341,10 @@
                 <div class="flex items-start justify-between gap-4">
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-2">
-                            <span class="px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded text-xs font-medium">RSS 2025</span>
-                            <span class="text-xs text-gray-500">Physical Intelligence | 2025.01 | arXiv:2501.09747</span>
+                            <span class="px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded text-xs font-medium">RSS
+                                2025</span>
+                            <span class="text-xs text-gray-500">Physical Intelligence | 2025.01 |
+                                arXiv:2501.09747</span>
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mb-2">FAST: 高效动作Tokenization</h3>
                         <p class="text-gray-600 text-sm mb-3">
@@ -360,4 +388,5 @@
 
     <script>lucide.createIcons();</script>
 </body>
+
 </html>

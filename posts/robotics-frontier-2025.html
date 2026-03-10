@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,8 +9,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        .news-card { transition: all 0.3s ease; border-left: 4px solid transparent; }
-        .news-card:hover { border-left-color: #667eea; transform: translateX(4px); }
+        .news-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .news-card:hover {
+            border-left-color: #667eea;
+            transform: translateX(4px);
+        }
+
         .gradient-text {
             background: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
             -webkit-background-clip: text;
@@ -18,10 +27,11 @@
         }
     </style>
 </head>
+
 <body class="bg-gray-50 text-gray-800">
     <nav class="bg-white border-b sticky top-0 z-50">
         <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-2 text-gray-700 hover:text-gray-900">
+            <a href="../index.html" class="flex items-center gap-2 text-gray-700 hover:text-gray-900">
                 <i data-lucide="arrow-left" class="w-5 h-5"></i>
                 <span class="font-medium">返回论坛</span>
             </a>
@@ -44,7 +54,8 @@
                 <span>阅读 15 分钟</span>
             </div>
             <p class="text-lg text-gray-600 leading-relaxed border-l-4 border-red-500 pl-4">
-                2025年是人形机器人与具身智能的爆发之年。<strong>NVIDIA GR00T N1开源、Figure AI估值390亿美元、Tesla Optimus进入家庭测试</strong>，同时VLA模型持续演进，自动驾驶领域Waymo与Tesla展开激烈竞争。本文梳理近期最重要的行业动态与技术突破。
+                2025年是人形机器人与具身智能的爆发之年。<strong>NVIDIA GR00T N1开源、Figure AI估值390亿美元、Tesla
+                    Optimus进入家庭测试</strong>，同时VLA模型持续演进，自动驾驶领域Waymo与Tesla展开激烈竞争。本文梳理近期最重要的行业动态与技术突破。
             </p>
         </header>
 
@@ -56,19 +67,23 @@
             </h2>
             <div class="grid md:grid-cols-2 gap-3 text-sm">
                 <a href="#humanoid" class="flex items-center gap-2 text-gray-700 hover:text-blue-600">
-                    <span class="w-6 h-6 rounded bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold">1</span>
+                    <span
+                        class="w-6 h-6 rounded bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold">1</span>
                     人形机器人：从实验室走向商业化
                 </a>
                 <a href="#vla" class="flex items-center gap-2 text-gray-700 hover:text-purple-600">
-                    <span class="w-6 h-6 rounded bg-purple-100 text-purple-600 flex items-center justify-center text-xs font-bold">2</span>
+                    <span
+                        class="w-6 h-6 rounded bg-purple-100 text-purple-600 flex items-center justify-center text-xs font-bold">2</span>
                     VLA模型：开源生态加速发展
                 </a>
                 <a href="#autonomous" class="flex items-center gap-2 text-gray-700 hover:text-green-600">
-                    <span class="w-6 h-6 rounded bg-green-100 text-green-600 flex items-center justify-center text-xs font-bold">3</span>
+                    <span
+                        class="w-6 h-6 rounded bg-green-100 text-green-600 flex items-center justify-center text-xs font-bold">3</span>
                     自动驾驶：Waymo扩张 vs Tesla争议
                 </a>
                 <a href="#investment" class="flex items-center gap-2 text-gray-700 hover:text-orange-600">
-                    <span class="w-6 h-6 rounded bg-orange-100 text-orange-600 flex items-center justify-center text-xs font-bold">4</span>
+                    <span
+                        class="w-6 h-6 rounded bg-orange-100 text-orange-600 flex items-center justify-center text-xs font-bold">4</span>
                     资本动向：百亿美金涌入机器人赛道
                 </a>
             </div>
@@ -89,12 +104,14 @@
                     </div>
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-2">
-                            <span class="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs font-medium">重磅开源</span>
+                            <span
+                                class="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs font-medium">重磅开源</span>
                             <span class="text-xs text-gray-500">NVIDIA | 2025年3月</span>
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mb-2">NVIDIA 发布 Isaac GR00T N1：首个开源人形机器人基础模型</h3>
                         <p class="text-gray-600 mb-3">
-                            NVIDIA 正式发布 <strong>GR00T N1</strong>，这是业界首个完全开源的人形机器人基础模型，采用 Apache 2.0 许可证。模型基于双系统架构（System 2慢思考 + System 1快执行），使用扩散Transformer生成50Hz实时动作，已在Fourier GR-1和1X人形平台上验证。
+                            NVIDIA 正式发布 <strong>GR00T N1</strong>，这是业界首个完全开源的人形机器人基础模型，采用 Apache 2.0
+                            许可证。模型基于双系统架构（System 2慢思考 + System 1快执行），使用扩散Transformer生成50Hz实时动作，已在Fourier GR-1和1X人形平台上验证。
                         </p>
                         <div class="bg-gray-50 rounded-lg p-4 mb-3">
                             <p class="text-sm text-gray-700"><strong>核心亮点：</strong></p>
@@ -106,13 +123,16 @@
                             </ul>
                         </div>
                         <div class="flex flex-wrap gap-2">
-                            <a href="https://github.com/NVIDIA/Isaac-GR00T" target="_blank" class="text-sm text-blue-600 hover:underline flex items-center gap-1">
+                            <a href="https://github.com/NVIDIA/Isaac-GR00T" target="_blank"
+                                class="text-sm text-blue-600 hover:underline flex items-center gap-1">
                                 <i data-lucide="github" class="w-4 h-4"></i> GitHub 仓库
                             </a>
-                            <a href="https://huggingface.co/nvidia/GR00T-N1-2B" target="_blank" class="text-sm text-blue-600 hover:underline flex items-center gap-1">
+                            <a href="https://huggingface.co/nvidia/GR00T-N1-2B" target="_blank"
+                                class="text-sm text-blue-600 hover:underline flex items-center gap-1">
                                 <i data-lucide="download" class="w-4 h-4"></i> HuggingFace 模型
                             </a>
-                            <a href="https://research.nvidia.com/labs/gear/gr00t-n1_5/" target="_blank" class="text-sm text-blue-600 hover:underline flex items-center gap-1">
+                            <a href="https://research.nvidia.com/labs/gear/gr00t-n1_5/" target="_blank"
+                                class="text-sm text-blue-600 hover:underline flex items-center gap-1">
                                 <i data-lucide="file-text" class="w-4 h-4"></i> 技术报告
                             </a>
                         </div>
@@ -128,12 +148,14 @@
                     </div>
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-2">
-                            <span class="px-2 py-0.5 bg-purple-100 text-purple-700 rounded text-xs font-medium">融资动态</span>
+                            <span
+                                class="px-2 py-0.5 bg-purple-100 text-purple-700 rounded text-xs font-medium">融资动态</span>
                             <span class="text-xs text-gray-500">Figure AI | 2025年9月</span>
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mb-2">Figure AI 估值飙升至 390 亿美元，与UPS洽谈部署</h3>
                         <p class="text-gray-600 mb-3">
-                            人形机器人公司 <strong>Figure AI</strong> 在新一轮融资中估值达到 <strong>390亿美元</strong>，成为该领域估值最高的初创公司之一。公司正与UPS洽谈，计划在其物流网络中部署人形机器人。此外，Figure宣布将于2025年启动家庭场景的"alpha测试"。
+                            人形机器人公司 <strong>Figure AI</strong> 在新一轮融资中估值达到
+                            <strong>390亿美元</strong>，成为该领域估值最高的初创公司之一。公司正与UPS洽谈，计划在其物流网络中部署人形机器人。此外，Figure宣布将于2025年启动家庭场景的"alpha测试"。
                         </p>
                         <div class="bg-gray-50 rounded-lg p-4 mb-3">
                             <p class="text-sm text-gray-700"><strong>关键进展：</strong></p>
@@ -145,8 +167,10 @@
                             </ul>
                         </div>
                         <div class="flex flex-wrap gap-2">
-                            <a href="https://www.bloomberg.com/news/articles/2025-09-16/robotics-startup-figure-ai-valued-at-39-billion-in-new-funding" target="_blank" class="text-sm text-blue-600 hover:underline">Bloomberg 报道</a>
-                            <a href="https://techcrunch.com/2025/02/27/figure-will-start-alpha-testing-its-humanoid-robot-in-the-home-in-2025/" target="_blank" class="text-sm text-blue-600 hover:underline">家庭测试计划</a>
+                            <a href="https://www.bloomberg.com/news/articles/2025-09-16/robotics-startup-figure-ai-valued-at-39-billion-in-new-funding"
+                                target="_blank" class="text-sm text-blue-600 hover:underline">Bloomberg 报道</a>
+                            <a href="https://techcrunch.com/2025/02/27/figure-will-start-alpha-testing-its-humanoid-robot-in-the-home-in-2025/"
+                                target="_blank" class="text-sm text-blue-600 hover:underline">家庭测试计划</a>
                         </div>
                     </div>
                 </div>
@@ -165,7 +189,8 @@
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mb-2">Tesla Optimus：高管离职与产品迭代并行</h3>
                         <p class="text-gray-600 mb-3">
-                            2025年对Tesla Optimus来说是动荡的一年。<strong>机器人项目副总裁Milan Kovac离职</strong>，同时公司发布了Optimus v2.5/v3版本，配备超逼真手部。马斯克表示Optimus将贡献Tesla 80%的价值，但项目也面临稀土磁铁供应链挑战。
+                            2025年对Tesla Optimus来说是动荡的一年。<strong>机器人项目副总裁Milan Kovac离职</strong>，同时公司发布了Optimus
+                            v2.5/v3版本，配备超逼真手部。马斯克表示Optimus将贡献Tesla 80%的价值，但项目也面临稀土磁铁供应链挑战。
                         </p>
                         <div class="bg-gray-50 rounded-lg p-4 mb-3">
                             <p class="text-sm text-gray-700"><strong>最新动态：</strong></p>
@@ -177,8 +202,10 @@
                             </ul>
                         </div>
                         <div class="flex flex-wrap gap-2">
-                            <a href="https://www.cnbc.com/2025/06/06/tesla-optimus-robotics-vp-is-leaving-the-company.html" target="_blank" class="text-sm text-blue-600 hover:underline">高管离职报道</a>
-                            <a href="https://www.theatlantic.com/technology/2025/11/elon-musk-tesla-optimus/684968/" target="_blank" class="text-sm text-blue-600 hover:underline">The Atlantic 深度报道</a>
+                            <a href="https://www.cnbc.com/2025/06/06/tesla-optimus-robotics-vp-is-leaving-the-company.html"
+                                target="_blank" class="text-sm text-blue-600 hover:underline">高管离职报道</a>
+                            <a href="https://www.theatlantic.com/technology/2025/11/elon-musk-tesla-optimus/684968/"
+                                target="_blank" class="text-sm text-blue-600 hover:underline">The Atlantic 深度报道</a>
                         </div>
                     </div>
                 </div>
@@ -197,10 +224,12 @@
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mb-2">Meta 宣布投资 AI 驱动的人形机器人</h3>
                         <p class="text-gray-600 mb-3">
-                            <strong>Meta</strong> 正式宣布进入人形机器人领域，计划投资开发AI驱动的人形机器人。这是继其Reality Labs VR/AR业务后，在硬件领域的又一重大布局。Meta希望利用其在AI和计算机视觉方面的积累，开发能够执行物理任务的通用机器人。
+                            <strong>Meta</strong> 正式宣布进入人形机器人领域，计划投资开发AI驱动的人形机器人。这是继其Reality Labs
+                            VR/AR业务后，在硬件领域的又一重大布局。Meta希望利用其在AI和计算机视觉方面的积累，开发能够执行物理任务的通用机器人。
                         </p>
                         <div class="flex flex-wrap gap-2">
-                            <a href="https://www.reuters.com/technology/artificial-intelligence/meta-plans-investments-into-ai-driven-humanoid-robots-memo-shows-2025-02-14/" target="_blank" class="text-sm text-blue-600 hover:underline">Reuters 报道</a>
+                            <a href="https://www.reuters.com/technology/artificial-intelligence/meta-plans-investments-into-ai-driven-humanoid-robots-memo-shows-2025-02-14/"
+                                target="_blank" class="text-sm text-blue-600 hover:underline">Reuters 报道</a>
                         </div>
                     </div>
                 </div>
@@ -216,7 +245,8 @@
 
             <div class="bg-white rounded-xl shadow-sm border p-6 mb-4">
                 <p class="text-gray-600 mb-4">
-                    2025年VLA（Vision-Language-Action）模型持续演进，<strong>NVIDIA GR00T N1的开源</strong>标志着行业进入开放协作新阶段。同时，Physical Intelligence的π0、斯坦福的OpenVLA等模型在架构创新和效率优化上取得重要突破。
+                    2025年VLA（Vision-Language-Action）模型持续演进，<strong>NVIDIA GR00T N1的开源</strong>标志着行业进入开放协作新阶段。同时，Physical
+                    Intelligence的π0、斯坦福的OpenVLA等模型在架构创新和效率优化上取得重要突破。
                 </p>
 
                 <div class="grid md:grid-cols-2 gap-4">
@@ -240,8 +270,9 @@
 
                 <div class="mt-4 p-4 bg-gray-50 rounded-lg">
                     <p class="text-sm text-gray-700">
-                        <strong>延伸阅读：</strong>查看论坛深度解析文章 
-                        <a href="vla-2025.html" class="text-blue-600 hover:underline">《2025 VLA 研究前沿：从机器人操控到自动驾驶的全面突破》</a>
+                        <strong>延伸阅读：</strong>查看论坛深度解析文章
+                        <a href="vla-2025.html" class="text-blue-600 hover:underline">《2025 VLA
+                            研究前沿：从机器人操控到自动驾驶的全面突破》</a>
                         ，包含GR00T N1、π0、OpenVLA、CoT-VLA等25篇核心论文的详细解读。
                     </p>
                 </div>
@@ -263,12 +294,14 @@
                     </div>
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-2">
-                            <span class="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs font-medium">行业领先</span>
+                            <span
+                                class="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs font-medium">行业领先</span>
                             <span class="text-xs text-gray-500">Waymo | 2025年</span>
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mb-2">Waymo 加速扩张：10+新城市与Toyota战略合作</h3>
                         <p class="text-gray-600 mb-3">
-                            <strong>Waymo</strong> 继续领跑自动驾驶领域，宣布将在10个以上新城市测试其技术，并与Toyota达成战略合作。公司发布"Scaling Laws in Autonomous Driving"研究，展示其技术随数据规模增长的性能提升规律。
+                            <strong>Waymo</strong> 继续领跑自动驾驶领域，宣布将在10个以上新城市测试其技术，并与Toyota达成战略合作。公司发布"Scaling Laws in
+                            Autonomous Driving"研究，展示其技术随数据规模增长的性能提升规律。
                         </p>
                         <div class="bg-gray-50 rounded-lg p-4 mb-3">
                             <p class="text-sm text-gray-700"><strong>2025年关键进展：</strong></p>
@@ -280,9 +313,12 @@
                             </ul>
                         </div>
                         <div class="flex flex-wrap gap-2">
-                            <a href="https://waymo.com/blog/2025/11/safe-routine-ready-autonomous-driving-in-new-cities" target="_blank" class="text-sm text-blue-600 hover:underline">城市扩张公告</a>
-                            <a href="https://waymo.com/blog/2025/06/scaling-laws-in-autonomous-driving" target="_blank" class="text-sm text-blue-600 hover:underline">Scaling Laws 研究</a>
-                            <a href="https://waymo.com/blog/2025/04/waymo-and-toyota-outline-strategic-partnership" target="_blank" class="text-sm text-blue-600 hover:underline">Toyota 合作</a>
+                            <a href="https://waymo.com/blog/2025/11/safe-routine-ready-autonomous-driving-in-new-cities"
+                                target="_blank" class="text-sm text-blue-600 hover:underline">城市扩张公告</a>
+                            <a href="https://waymo.com/blog/2025/06/scaling-laws-in-autonomous-driving" target="_blank"
+                                class="text-sm text-blue-600 hover:underline">Scaling Laws 研究</a>
+                            <a href="https://waymo.com/blog/2025/04/waymo-and-toyota-outline-strategic-partnership"
+                                target="_blank" class="text-sm text-blue-600 hover:underline">Toyota 合作</a>
                         </div>
                     </div>
                 </div>
@@ -314,9 +350,12 @@
                             </ul>
                         </div>
                         <div class="flex flex-wrap gap-2">
-                            <a href="https://arstechnica.com/cars/2025/09/teslas-robotaxi-test-three-crashes-in-only-7000-miles/" target="_blank" class="text-sm text-blue-600 hover:underline">Ars Technica 报道</a>
-                            <a href="https://electrek.co/2025/06/16/tesla-robotaxi-launch-dangerous-game-smoke-mirrors/" target="_blank" class="text-sm text-blue-600 hover:underline">Electrek 分析</a>
-                            <a href="https://www.cnbc.com/2025/06/23/tesla-robotaxi-incidents-caught-on-camera-in-austin-get-nhtsa-concern.html" target="_blank" class="text-sm text-blue-600 hover:underline">NHTSA 调查</a>
+                            <a href="https://arstechnica.com/cars/2025/09/teslas-robotaxi-test-three-crashes-in-only-7000-miles/"
+                                target="_blank" class="text-sm text-blue-600 hover:underline">Ars Technica 报道</a>
+                            <a href="https://electrek.co/2025/06/16/tesla-robotaxi-launch-dangerous-game-smoke-mirrors/"
+                                target="_blank" class="text-sm text-blue-600 hover:underline">Electrek 分析</a>
+                            <a href="https://www.cnbc.com/2025/06/23/tesla-robotaxi-incidents-caught-on-camera-in-austin-get-nhtsa-concern.html"
+                                target="_blank" class="text-sm text-blue-600 hover:underline">NHTSA 调查</a>
                         </div>
                     </div>
                 </div>
@@ -330,7 +369,8 @@
                     </div>
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-2">
-                            <span class="px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded text-xs font-medium">政策</span>
+                            <span
+                                class="px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded text-xs font-medium">政策</span>
                             <span class="text-xs text-gray-500">中国 | 2025年4月</span>
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mb-2">中国禁止车辆广告使用"智能"、"自动驾驶"等术语</h3>
@@ -338,7 +378,8 @@
                             中国市场监管总局发布新规，<strong>禁止汽车广告使用"智能"、"自动驾驶"等夸大性术语</strong>，要求企业准确描述辅助驾驶功能的能力边界。这一政策旨在规范行业宣传，减少消费者误解。
                         </p>
                         <div class="flex flex-wrap gap-2">
-                            <a href="https://www.reuters.com/business/autos-transportation/china-bans-smart-autonomous-driving-terms-vehicle-ads-2025-04-17/" target="_blank" class="text-sm text-blue-600 hover:underline">Reuters 报道</a>
+                            <a href="https://www.reuters.com/business/autos-transportation/china-bans-smart-autonomous-driving-terms-vehicle-ads-2025-04-17/"
+                                target="_blank" class="text-sm text-blue-600 hover:underline">Reuters 报道</a>
                         </div>
                     </div>
                 </div>
@@ -354,7 +395,8 @@
 
             <div class="bg-white rounded-xl shadow-sm border p-6 mb-4">
                 <p class="text-gray-600 mb-4">
-                    2024-2025年，机器人领域迎来史无前例的资本热潮。<strong>Figure AI（390亿美元）、Skild AI（14亿美元）、Physical Intelligence（数亿美元）</strong>等公司获得巨额融资，Wayve也获得15亿美元用于自动驾驶研发。
+                    2024-2025年，机器人领域迎来史无前例的资本热潮。<strong>Figure AI（390亿美元）、Skild AI（14亿美元）、Physical
+                        Intelligence（数亿美元）</strong>等公司获得巨额融资，Wayve也获得15亿美元用于自动驾驶研发。
                 </p>
 
                 <div class="overflow-x-auto">
@@ -422,10 +464,14 @@
         <section class="mt-10 pt-6 border-t">
             <h3 class="text-lg font-bold mb-4">参考链接</h3>
             <div class="grid md:grid-cols-2 gap-2 text-sm">
-                <a href="https://github.com/NVIDIA/Isaac-GR00T" target="_blank" class="text-blue-600 hover:underline truncate">NVIDIA GR00T N1 GitHub</a>
-                <a href="https://huggingface.co/nvidia/GR00T-N1-2B" target="_blank" class="text-blue-600 hover:underline truncate">GR00T N1 HuggingFace</a>
-                <a href="https://waymo.com/blog/" target="_blank" class="text-blue-600 hover:underline truncate">Waymo Blog</a>
-                <a href="https://www.figure.ai/" target="_blank" class="text-blue-600 hover:underline truncate">Figure AI 官网</a>
+                <a href="https://github.com/NVIDIA/Isaac-GR00T" target="_blank"
+                    class="text-blue-600 hover:underline truncate">NVIDIA GR00T N1 GitHub</a>
+                <a href="https://huggingface.co/nvidia/GR00T-N1-2B" target="_blank"
+                    class="text-blue-600 hover:underline truncate">GR00T N1 HuggingFace</a>
+                <a href="https://waymo.com/blog/" target="_blank" class="text-blue-600 hover:underline truncate">Waymo
+                    Blog</a>
+                <a href="https://www.figure.ai/" target="_blank" class="text-blue-600 hover:underline truncate">Figure
+                    AI 官网</a>
             </div>
         </section>
     </main>
@@ -440,4 +486,5 @@
         lucide.createIcons();
     </script>
 </body>
+
 </html>
