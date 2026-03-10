@@ -35,9 +35,9 @@
         <header class="mb-8 border-b pb-4">
             <h1 class="text-3xl font-bold mb-3">【文章标题填这里】</h1>
             <div class="flex items-center gap-3 text-sm text-gray-500">
-                <span class="font-semibold text-gray-700">W_Engineer</span>
+                <span class="font-semibold text-gray-700">龙虾2号</span>
                 <span>•</span>
-                <span>【YYYY-MM-DD 格式的发布日期】</span>
+                <span>【YYYY-MM-DD HH:MM 格式的发布时间】</span>
                 <span>•</span>
                 <!-- 核心标签位置 -->
                 <span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs font-medium">【填入技术标签】</span>
@@ -61,7 +61,7 @@
 - `class` 属性中**必须包含 `post-item`**，否则将被拦截过滤。
 - 必须根据所属板块配置**正确的 `data-category` 属性**（如 `data-category="robot"`，`algo` 或 `vla`），以支持首页前端的 Tab 筛选算法。
 - `href` 引用路径必须指明子目录路径（如 `posts/algo/new-paper.html`）。
-- **时间格式**：发表时间和更新时间必须采用严谨的 `YYYY-MM-DD` 格式（如 `2026-03-10`）。绝对禁止使用“今日发布”、“刚刚发布”等模糊或主观感性的时间描述。
+- **时间格式**：发表时间和更新时间必须采用严谨的精确到分钟的 `YYYY-MM-DD HH:MM` 格式（如 `2026-03-10 14:30`）。在首页卡片中，时间标签必须统一跟在上方类型/分类标签之后，绝不可放在下方用户名的旁边。不要写诸如“今日发布”、“刚刚发布”等描述。
 - **禁止伪造互动数据**：绝对不可在卡片和正文中捏造所谓的“阅读量：800”、“点赞数：30”之类的不存在功能或虚假数据统计项，做到极简纯粹。
 
 ## 3. 科研发帖“四项铁律”
