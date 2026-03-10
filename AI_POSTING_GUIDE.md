@@ -24,69 +24,27 @@
 要在论坛中“发布”新帖，你需要完成以下三个步骤：
 
 ### 步骤 1：生成独立的帖子详情页 (HTML)
-所有的单篇帖子详情页应放置在站点根目录（或 `posts/` 等子目录）。
+所有的单篇帖子详情页应分类放置在特定的子目录下！
+目前支持的子目录板块有（必须存在其中一个中）：
+- `posts/robot/` （机器人仿真相关）
+- `posts/algo/` （算法与架构相关）
+- `posts/vla/` （VLA 相关）
+
 1. 根据用户的输入，生成完整标准的 HTML5 代码。
-2. 页面需引入 Tailwind CSS，并保持与主站一致的审美（比如使用 `Inter` 字体）。
-3. 使用 `write_to_file` 工具创建一个新的 HTML 文件，文件命名规范：`英文缩写-日期.html` (例：`robot-sim-v2.html`)。
-
-**帖子内容页的基础 HTML 模板参考：**
-```html
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>这里填入文章标题</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f5f7fa; color: #334155; }
-        .post-content h1 { font-size: 2.25rem; font-weight: bold; margin-bottom: 2rem; color: #1e293b; }
-        .post-content h2 { font-size: 1.5rem; font-weight: bold; margin-top: 2rem; margin-bottom: 1rem; color: #1e293b; }
-        .post-content p { margin-bottom: 1.5rem; line-height: 1.8; color: #475569; }
-        .post-content ul { list-style-type: disc; padding-left: 2rem; margin-bottom: 1.5rem; }
-        /* 更多的 Markdown 转 HTML 样式... */
-    </style>
-</head>
-<body class="antialiased">
-    <!-- 顶部导航条 -->
-    <nav class="bg-white/80 backdrop-blur-md sticky top-0 border-b border-gray-100 z-50">
-        <div class="max-w-4xl mx-auto px-4 h-16 flex items-center gap-4">
-            <!-- 关键：提供返回首页的链接 -->
-            <a href="index.html" class="text-gray-500 hover:text-blue-600 transition font-medium">← 返回讨论区</a>
-        </div>
-    </nav>
-    
-    <!-- 帖子标题头 -->
-    <header class="bg-white border-b border-gray-200">
-        <div class="max-w-4xl mx-auto px-4 py-16 text-center">
-            <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900">这里填入文章标题</h1>
-            <div class="mt-6 text-gray-500 flex items-center justify-center gap-4 text-sm">
-                <span>作者名</span><span>•</span><span>发表日期</span>
-            </div>
-        </div>
-    </header>
-
-    <!-- 帖子正文 -->
-    <main class="max-w-4xl mx-auto px-4 py-16 bg-white shadow-xl -mt-8 rounded-xl relative z-10 border border-gray-100 mb-20">
-        <article class="post-content px-4 md:px-12">
-            <!-- 将用户的正文内容转为对应的 HTML 标签(p, h2, ul 等)插入此处 -->
-        </article>
-    </main>
-</body>
-</html>
-```
+2. 页面需引入 Tailwind CSS，并保持与主站一致的审美。
+3. 导航栏的返回链接必须写对相对路径（即 `../index.html` 或者 `../../index.html` 视层级而定）。
+4. 使用 `write_to_file` 工具创建一个新文件，文件命名规范：`posts/分类板块/英文缩写-日期.html`。
 
 ### 步骤 2：在主页 (`index.html`) 中插入帖子索引卡片
-帖子独立页创建后，用户在首页是看不到的。你需要修改 `index.html`，把新帖子插到帖子信息流的最顶部。
+帖子独立页创建后，需要在 `index.html` 中插入对应的帖子信息流。为了配合网站的 Tab 动态过滤系统，你插入的 `<a>` 包裹标签**必须附带对应的 `class` 和 `data-category`**。
 
-1. 使用 `view_file` 或 `grep_search` 获取 `index.html` 的结构。定位到 `<div class="space-y-5">` （这是包裹所有帖子的父级容器）。
-2. 在 `<div class="space-y-5">` 内部的最前面，通过正则替换或区块替换工具 (`replace_file_content`) 插入下面的 HTML 片段。
+在 `<div class="space-y-5">` 内部的最前面插入下面的 HTML 片段。
 
 **首页帖子卡片 HTML 模板：**
 ```html
             <!-- 新帖卡片开始 -->
-            <a href="YOUR_NEW_POST_FILENAME.html" class="block group">
+            <!-- 关键点：一定要写对相对路径，并且 class 里必须包含 post-item，并且要填写 data-category="板块名" -->
+            <a href="posts/对应分类板块/YOUR_NEW_POST_FILENAME.html" class="block group post-item" data-category="分类板块名如robot或algo或vla">
                 <article class="post-card p-6 flex flex-col sm:flex-row gap-6 relative overflow-hidden">
                     <!-- 左侧装饰线 -->
                     <div class="absolute top-0 left-0 w-1 h-full bg-brand-400 opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -94,7 +52,7 @@
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center gap-3 mb-3">
                             <span class="px-2.5 py-0.5 rounded-md bg-gray-100 text-gray-600 text-xs font-semibold tracking-wide border border-gray-200">文章标签 (如: 技术分享)</span>
-                            <span class="text-xs text-gray-400 font-medium">主题分类 (如: 算法与架构)</span>
+                            <span class="text-xs text-gray-400 font-medium">主题分类 (填写中文名如: 算法与架构)</span>
                         </div>
                         
                         <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2 group-hover:text-brand-600 transition-colors break-words">
