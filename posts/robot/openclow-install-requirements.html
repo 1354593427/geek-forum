@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw 安装配置最低要求调研</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f7fa;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(13, 71, 161, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 0 2rem;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+        }
+
+        .nav-title {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .hero {
+            min-height: 60vh;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 2rem;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+
+        .section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #6366f1;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #a855f7;
+            display: inline-block;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th {
+            background: #6366f1;
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 0.875rem 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        tr:hover {
+            background: #f0f0ff;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .tag-primary {
+            background: #e0e7ff;
+            color: #6366f1;
+        }
+
+        .tag-warning {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .code-block {
+            background: #1e1e2e;
+            color: #cdd6f4;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .code-block .comment {
+            color: #6c7086;
+        }
+
+        .code-block .cmd {
+            color: #89b4fa;
+        }
+
+        .note {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1rem 0;
+        }
+
+        .note-title {
+            font-weight: 600;
+            color: #1d4ed8;
+            margin-bottom: 0.5rem;
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .pros, .cons {
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .pros {
+            background: #ecfdf5;
+        }
+
+        .cons {
+            background: #fef2f2;
+        }
+
+        .pros h4 {
+            color: #059669;
+            margin-bottom: 0.5rem;
+        }
+
+        .cons h4 {
+            color: #dc2626;
+            margin-bottom: 0.5rem;
+        }
+
+        ul {
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            .pros-cons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="nav">
+        <div class="nav-content">
+            <div class="nav-title">
+                <a href="../../index.html" style="color: white; text-decoration: none; margin-right: 15px; font-weight: normal; opacity: 0.8;">← 返回讨论区</a>
+                OpenClaw 安装配置指南
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>OpenClaw 安装配置最低要求</h1>
+            <div class="subtitle">macOS / Linux / Windows (WSL2)</div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">01 系统要求</h2>
+
+        <div class="card">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>配置项</th>
+                            <th>最低要求</th>
+                            <th>备注</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Node.js</strong></td>
+                            <td><span class="tag tag-primary">22.0.0+</span></td>
+                            <td>installer 脚本会自动安装</td>
+                        </tr>
+                        <tr>
+                            <td><strong>操作系统</strong></td>
+                            <td>macOS / Linux / Windows</td>
+                            <td>Windows 推荐 WSL2</td>
+                        </tr>
+                        <tr>
+                            <td><strong>pnpm</strong></td>
+                            <td>仅源码构建时需要</td>
+                            <td>npm 安装方式不需要</td>
+                        </tr>
+                        <tr>
+                            <td><strong>网络</strong></td>
+                            <td>需要访问 GitHub / npm</td>
+                            <td>国内需配置代理</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="note">
+            <div class="note-title">⚠️ Windows 用户特别说明</div>
+            <p>官方<strong>强烈推荐</strong>在 Windows 上使用 <a href="https://learn.microsoft.com/en-us/windows/wsl/install" target="_blank" style="color: #3b82f6;">WSL2</a> (Windows Subsystem for Linux) 运行 OpenClaw。虽然也有原生 Windows 支持，但 WSL2 可以避免很多路径和权限相关的问题。</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">02 安装方式</h2>
+
+        <div class="card">
+            <div class="card-title">方式一：Installer 脚本（推荐）</div>
+            <p style="margin-bottom: 1rem;">一行命令自动完成 Node 检测、安装和配置向导。</p>
+            
+            <p style="margin-bottom: 0.5rem; font-weight: 600;">macOS / Linux / WSL2:</p>
+            <div class="code-block">
+<span class="cmd">curl -fsSL https://openclaw.ai/install.sh | bash</span>
+            </div>
+
+            <p style="margin-bottom: 0.5rem; font-weight: 600;">Windows (PowerShell):</p>
+            <div class="code-block">
+<span class="cmd">iwr -useb https://openclaw.ai/install.ps1 | iex</span>
+            </div>
+
+            <p style="margin-top: 1rem;">跳过配置向导（静默安装）：</p>
+            <div class="code-block">
+<span class="cmd">curl -fsSL https://openclaw.ai/install.sh | bash -s -- --no-onboard</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">方式二：npm / pnpm 手动安装</div>
+            <p style="margin-bottom: 1rem;">如果你已经安装了 Node 22+，可以使用 npm 或 pnpm：</p>
+
+            <p style="margin-bottom: 0.5rem; font-weight: 600;">npm:</p>
+            <div class="code-block">
+<span class="cmd">npm install -g openclaw@latest</span><br>
+<span class="cmd">openclaw onboard --install-daemon</span>
+            </div>
+
+            <p style="margin-bottom: 0.5rem; font-weight: 600;">pnpm:</p>
+            <div class="code-block">
+<span class="cmd">pnpm add -g openclaw@latest</span><br>
+<span class="cmd">pnpm approve-builds -g</span><br>
+<span class="cmd">openclaw onboard --install-daemon</span>
+            </div>
+
+            <div class="note" style="margin-top: 1rem;">
+                <p>pnpm 需要手动批准包含构建脚本的包，第一次安装后运行 <code>pnpm approve-builds -g</code> 并选择列出的包。</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">方式三：从源码构建</div>
+            <p style="margin-bottom: 1rem;">适合贡献者或需要自定义的场景：</p>
+            <div class="code-block">
+<span class="cmd">git clone https://github.com/openclaw/openclaw.git</span><br>
+<span class="cmd">cd openclaw</span><br>
+<span class="cmd">npm install</span><br>
+<span class="cmd">npm run build</span><br>
+<span class="cmd">npm link</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">03 三大平台安装对比</h2>
+
+        <div class="pros-cons">
+            <div class="pros">
+                <h4>✅ macOS</h4>
+                <ul>
+                    <li>安装最简单</li>
+                    <li>原生支持完善</li>
+                    <li>推荐 Homebrew 安装 Node</li>
+                </ul>
+            </div>
+            <div class="cons">
+                <h4>⚠️ 注意事项</h4>
+                <ul>
+                    <li>如遇 sharp 构建错误，设置 <code>SHARP_IGNORE_GLOBAL_LIBVIPS=1</code></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="pros-cons">
+            <div class="pros">
+                <h4>✅ Linux (Ubuntu/Debian)</h4>
+                <ul>
+                    <li>与 macOS 类似</li>
+                    <li>安装脚本自动处理</li>
+                    <li>推荐使用 installer</li>
+                </ul>
+            </div>
+            <div class="cons">
+                <h4>⚠️ 注意事项</h4>
+                <ul>
+                    <li>确保 npm 全局 bin 目录在 PATH 中</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="pros-cons">
+            <div class="pros">
+                <h4>✅ Windows (WSL2)</h4>
+                <ul>
+                    <li>官方推荐方案</li>
+                    <li>避免路径/权限问题</li>
+                    <li>与 Linux 体验一致</li>
+                </ul>
+            </div>
+            <div class="cons">
+                <h4>⚠️ 注意事项</h4>
+                <ul>
+                    <li>需要 WSL2 安装和配置</li>
+                    <li>不推荐原生 Windows</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">04 验证安装</h2>
+
+        <div class="card">
+            <p>安装完成后，验证 OpenClaw 是否正常运行：</p>
+            <div class="code-block">
+<span class="cmd">openclaw status</span>
+            </div>
+            <p>查看版本：</p>
+            <div class="code-block">
+<span class="cmd">openclaw --version</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">05 信息来源</h2>
+
+        <div class="card">
+            <ul>
+                <li><strong>官方文档：</strong><a href="https://docs.openclaw.ai/install" target="_blank" style="color: #6366f1;">https://docs.openclaw.ai/install</a></li>
+                <li><strong>GitHub 仓库：</strong><a href="https://github.com/openclaw/openclaw" target="_blank" style="color: #6366f1;">https://github.com/openclaw/openclaw</a></li>
+                <li><strong>Getting Started：</strong><a href="https://docs.openclaw.ai/start/getting-started" target="_blank" style="color: #6366f1;">https://docs.openclaw.ai/start/getting-started</a></li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="section" style="text-align: center; padding: 2rem; color: #666;">
+        <p>OpenClaw 安装配置调研</p>
+        <p style="font-size: 0.9rem; margin-top: 0.5rem;">信息来源：官方文档 & GitHub</p>
+    </section>
+
+</body>
+
+</html>
