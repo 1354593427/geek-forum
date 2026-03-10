@@ -228,7 +228,8 @@
             margin: 1rem 0;
         }
 
-        .pros, .cons {
+        .pros,
+        .cons {
             padding: 1rem;
             border-radius: 8px;
         }
@@ -273,10 +274,13 @@
             .hero-content h1 {
                 font-size: 1.8rem;
             }
+
             .pros-cons {
                 grid-template-columns: 1fr;
             }
-            th, td {
+
+            th,
+            td {
                 padding: 0.5rem;
                 font-size: 0.85rem;
             }
@@ -288,7 +292,9 @@
     <nav class="nav">
         <div class="nav-content">
             <div class="nav-title">
-                <a href="../../index.html" style="color: white; text-decoration: none; margin-right: 15px; font-weight: normal; opacity: 0.8;">← 返回讨论区</a>
+                <a href="../../index.html"
+                    style="color: white; text-decoration: none; margin-right: 15px; font-weight: normal; opacity: 0.8;">←
+                    返回讨论区</a>
                 OpenClaw 安装配置指南
             </div>
         </div>
@@ -337,7 +343,8 @@
 
         <div class="note">
             <div class="note-title">📌 重要说明</div>
-            <p><strong>OpenClaw 官方文档未明确指定 CPU、内存、磁盘等硬件要求。</strong>以下是结合 Node.js 22 官方支持平台、WSL2 系统要求、以及实际使用场景给出的<strong>推荐配置</strong>，用于判断现有电脑是否足够安装。</p>
+            <p><strong>OpenClaw 官方文档未明确指定 CPU、内存、磁盘等硬件要求。</strong>以下是结合 Node.js 22 官方支持平台、WSL2
+                系统要求、以及实际使用场景给出的<strong>推荐配置</strong>，用于判断现有电脑是否足够安装。</p>
         </div>
     </section>
 
@@ -432,9 +439,10 @@
             <div class="card-title">🪟 Windows (WSL2) - 官方推荐</div>
             <div class="warning-box">
                 <div class="warning-box-title">⚠️ 强烈推荐使用 WSL2</div>
-                <p>OpenClaw 官方<strong>强烈推荐</strong>在 Windows 上使用 WSL2 (Windows Subsystem for Linux 2)。原生命令行支持不完善，WSL2 可提供与 Linux 一致的体验，避免路径、权限、工具兼容性问题。</p>
+                <p>OpenClaw 官方<strong>强烈推荐</strong>在 Windows 上使用 WSL2 (Windows Subsystem for Linux 2)。原生命令行支持不完善，WSL2
+                    可提供与 Linux 一致的体验，避免路径、权限、工具兼容性问题。</p>
             </div>
-            
+
             <div class="table-container">
                 <table>
                     <thead>
@@ -487,7 +495,7 @@
 
         <div class="card">
             <div class="card-title">🔍 为什么要求这些配置？</div>
-            
+
             <h4 style="color: #333; margin: 1rem 0 0.5rem;">1. Windows 版本要求 (WSL2)</h4>
             <ul style="margin-bottom: 1rem;">
                 <li><strong>原因：</strong>WSL2 仅在 Windows 10 版本 2004 (Build 19041) 及以上版本可用</li>
@@ -530,7 +538,7 @@
 
         <div class="card">
             <p style="margin-bottom: 1rem;">安装前检查以下项目：</p>
-            
+
             <div style="margin-left: 1rem;">
                 <p style="margin-bottom: 0.5rem;"><strong>Windows 用户：</strong></p>
                 <ul style="margin-bottom: 1rem;">
@@ -561,34 +569,62 @@
 
         <div class="card">
             <div class="card-title">方式一：Installer 脚本（推荐）</div>
-            
+
             <p style="margin-bottom: 0.5rem; font-weight: 600;">macOS / Linux / WSL2:</p>
             <div class="code-block">
-<span class="cmd">curl -fsSL https://openclaw.ai/install.sh | bash</span>
+                <span class="cmd">curl -fsSL https://openclaw.ai/install.sh | bash</span>
             </div>
 
             <p style="margin-bottom: 0.5rem; font-weight: 600;">Windows (PowerShell):</p>
             <div class="code-block">
-<span class="cmd">iwr -useb https://openclaw.ai/install.ps1 | iex</span>
+                <span class="cmd">iwr -useb https://openclaw.ai/install.ps1 | iex</span>
             </div>
         </div>
 
         <div class="card">
             <div class="card-title">方式二：npm / pnpm 手动安装</div>
             <div class="code-block">
-<span class="cmd">npm install -g openclaw@latest</span><br>
-<span class="cmd">openclaw onboard --install-daemon</span>
+                <span class="cmd">npm install -g openclaw@latest</span><br>
+                <span class="cmd">openclaw onboard --install-daemon</span>
             </div>
         </div>
     </section>
 
     <section class="section">
-        <h2 class="section-title">06 验证安装</h2>
+        <h2 class="section-title">06 验证安装与环境自检</h2>
 
         <div class="card">
-            <div class="code-block">
-<span class="cmd">openclaw status</span><br>
-<span class="cmd">openclaw --version</span>
+            <p style="margin-bottom: 1rem; color: #555; line-height: 1.625;">安装完成后，为了确保 OpenClaw
+                后台守护进程（Daemon）正常运转并能与您的宿主机硬件正确通信，必须进行严格的生命周期验证。请在您的终端中输入并执行以下基础自检命令：</p>
+            <div class="code-block" style="margin-bottom: 1.5rem;">
+                <span class="comment"># 1. 检查 OpenClaw 核心服务的运行状态与健康度</span><br>
+                <span class="cmd">openclaw status</span><br><br>
+                <span class="comment"># 2. 检查当前安装的 CLI 客户端与 Daemon 服务端版本是否匹配</span><br>
+                <span class="cmd">openclaw --version</span>
+            </div>
+
+            <h4 style="color: #333; margin: 1.5rem 0 0.5rem; font-size: 1.05rem;">✓ 预期的正常输出示例 (Expected Output)</h4>
+            <div class="code-block"
+                style="background: #f8f9fa; color: #333; border: 1px solid #e2e8f0; font-family: monospace;">
+                <span style="color: #16a34a; font-weight: bold;">●</span> OpenClaw Daemon is active and running<br>
+                <span style="color: #64748b;">└─</span> CLI Version: 2.1.0-stable<br>
+                <span style="color: #64748b;">└─</span> Daemon Platform: linux-x64 (WSL)<br>
+                <span style="color: #64748b;">└─</span> Underlying Node.js: v22.0.0<br>
+                <span style="color: #64748b;">└─</span> Port Listening: :8080
+            </div>
+
+            <div class="warning-box" style="margin-top: 1.5rem; border-left-color: #ef4444; background: #fef2f2;">
+                <div class="warning-box-title" style="color: #b91c1c;">💣 常见自检错误排查 (Troubleshooting)</div>
+                <ul style="margin-bottom: 0; color: #7f1d1d; font-size: 0.9rem;">
+                    <li style="margin-bottom: 0.5rem;"><strong>命令找不到 (command not found)</strong>：意味着 npm
+                        的全局二进制路径尚未注册。请检查 Node.js 全局安装路径（如 <code>~/.npm-global/bin</code>）是否已正确追加至您的
+                        <code>~/.bashrc</code> 或 <code>~/.zshrc</code> 的 <code>$PATH</code> 变量中。
+                    </li>
+                    <li style="margin-bottom: 0.5rem;"><strong>Daemon 启动崩溃 (EACCES: permission denied)</strong>：通常发生于
+                        Linux/macOS 环境下无特权用户的权限不足。请尝试执行 <code>sudo openclaw onboard --repair</code> 修复运行时权限。</li>
+                    <li><strong>端口地址冲突 (EADDRINUSE: Port 8080)</strong>：OpenClaw Gateway 默认监听宿主机的 8080 端口。若已被其他服务（如
+                        Nginx, Tomcat）占用，必须手动映射：可通过注入环境变量 <code>export OPENCLAW_PORT=9090</code> 来强制切换服务的监听端口。</li>
+                </ul>
             </div>
         </div>
     </section>
@@ -598,10 +634,15 @@
 
         <div class="card">
             <ul>
-                <li><strong>OpenClaw 安装文档：</strong><a href="https://docs.openclaw.ai/install" target="_blank" style="color: #6366f1;">https://docs.openclaw.ai/install</a></li>
-                <li><strong>OpenClaw Windows 平台：</strong><a href="https://docs.openclaw.ai/platforms/windows" target="_blank" style="color: #6366f1;">https://docs.openclaw.ai/platforms/windows</a></li>
-                <li><strong>WSL2 安装指南 (Microsoft)：</strong><a href="https://learn.microsoft.com/en-us/windows/wsl/install" target="_blank" style="color: #6366f1;">https://learn.microsoft.com/en-us/windows/wsl/install</a></li>
-                <li><strong>Node.js 官方 releases：</strong><a href="https://nodejs.org/en/about/releases/" target="_blank" style="color: #6366f1;">https://nodejs.org/en/about/releases/</a></li>
+                <li><strong>OpenClaw 安装文档：</strong><a href="https://docs.openclaw.ai/install" target="_blank"
+                        style="color: #6366f1;">https://docs.openclaw.ai/install</a></li>
+                <li><strong>OpenClaw Windows 平台：</strong><a href="https://docs.openclaw.ai/platforms/windows"
+                        target="_blank" style="color: #6366f1;">https://docs.openclaw.ai/platforms/windows</a></li>
+                <li><strong>WSL2 安装指南 (Microsoft)：</strong><a
+                        href="https://learn.microsoft.com/en-us/windows/wsl/install" target="_blank"
+                        style="color: #6366f1;">https://learn.microsoft.com/en-us/windows/wsl/install</a></li>
+                <li><strong>Node.js 官方 releases：</strong><a href="https://nodejs.org/en/about/releases/" target="_blank"
+                        style="color: #6366f1;">https://nodejs.org/en/about/releases/</a></li>
             </ul>
         </div>
     </section>
