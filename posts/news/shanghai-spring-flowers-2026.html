@@ -130,6 +130,28 @@
             border-radius: 1rem;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
         }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .gallery-grid img {
+            border-radius: 0.75rem;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-grid img:hover {
+            transform: scale(1.02);
+        }
+
+        @media (min-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
     </style>
 </head>
 
@@ -185,9 +207,19 @@
         </header>
 
         <!-- 封面图 -->
-        <div class="mb-10">
-            <img src="cover.jpg" alt="上海春日花海" class="cover-image w-full h-auto">
-            <p class="text-center text-sm text-gray-500 mt-3">📍 上海各大公园花海实景</p>
+        <div class="mb-6">
+            <img src="img1.jpg" alt="上海春日花海" class="cover-image w-full h-auto">
+        </div>
+
+        <!-- 图集 -->
+        <div class="gallery-grid mb-10">
+            <img src="img2.jpg" alt="世纪公园梅花" class="w-full h-auto">
+            <img src="img3.jpg" alt="顾村公园樱花" class="w-full h-auto">
+            <img src="img4.jpg" alt="奇迹花园小王子" class="w-full h-auto">
+            <img src="img5.jpg" alt="世博文化公园" class="w-full h-auto">
+            <img src="img6.jpg" alt="上海春兰展" class="w-full h-auto">
+            <img src="img7.jpg" alt="静安花朝节" class="w-full h-auto">
+            <img src="img8.jpg" alt="浦东牡丹园" class="w-full h-auto">
         </div>
 
         <!-- 简介 -->
@@ -202,28 +234,32 @@
                 打卡点位
             </h2>
             <div class="grid md:grid-cols-2 gap-3 text-sm">
-                <a href="#gu cun" class="flex items-center gap-2 text-gray-700 hover:text-pink-600">
+                <a href="#gucun" class="flex items-center gap-2 text-gray-700 hover:text-pink-600">
                     <span class="w-6 h-6 rounded bg-pink-100 text-pink-600 flex items-center justify-center text-xs font-bold">1</span>
                     顾村公园 · 樱花
                 </a>
+                <a href="#shiji" class="flex items-center gap-2 text-gray-700 hover:text-purple-600">
+                    <span class="w-6 h-6 rounded bg-purple-100 text-purple-600 flex items-center justify-center text-xs font-bold">2</span>
+                    世纪公园 · 梅花
+                </a>
                 <a href="#qijigarden" class="flex items-center gap-2 text-gray-700 hover:text-rose-600">
-                    <span class="w-6 h-6 rounded bg-rose-100 text-rose-600 flex items-center justify-center text-xs font-bold">2</span>
+                    <span class="w-6 h-6 rounded bg-rose-100 text-rose-600 flex items-center justify-center text-xs font-bold">3</span>
                     奇迹花园 · 小王子
                 </a>
-                <a href="#shibo" class="flex items-center gap-2 text-gray-700 hover:text-purple-600">
-                    <span class="w-6 h-6 rounded bg-purple-100 text-purple-600 flex items-center justify-center text-xs font-bold">3</span>
+                <a href="#shibo" class="flex items-center gap-2 text-gray-700 hover:text-pink-600">
+                    <span class="w-6 h-6 rounded bg-pink-100 text-pink-600 flex items-center justify-center text-xs font-bold">4</span>
                     世博文化公园 · 垂枝樱
                 </a>
                 <a href="#lan" class="flex items-center gap-2 text-gray-700 hover:text-green-600">
-                    <span class="w-6 h-6 rounded bg-green-100 text-green-600 flex items-center justify-center text-xs font-bold">4</span>
+                    <span class="w-6 h-6 rounded bg-green-100 text-green-600 flex items-center justify-center text-xs font-bold">5</span>
                     上海春兰展
                 </a>
                 <a href="#jing-an" class="flex items-center gap-2 text-gray-700 hover:text-orange-600">
-                    <span class="w-6 h-6 rounded bg-orange-100 text-orange-600 flex items-center justify-center text-xs font-bold">5</span>
+                    <span class="w-6 h-6 rounded bg-orange-100 text-orange-600 flex items-center justify-center text-xs font-bold">6</span>
                     静安花朝节
                 </a>
                 <a href="#mudan" class="flex items-center gap-2 text-gray-700 hover:text-yellow-600">
-                    <span class="w-6 h-6 rounded bg-yellow-100 text-yellow-600 flex items-center justify-center text-xs font-bold">6</span>
+                    <span class="w-6 h-6 rounded bg-yellow-100 text-yellow-600 flex items-center justify-center text-xs font-bold">7</span>
                     浦东牡丹园
                 </a>
             </div>
@@ -232,13 +268,13 @@
         <!-- 正文 -->
         <article class="article-content">
 
-            <h2 id="gucun">🌸 顾村公园樱花</h2>
+            <h2 id="gucun">🌸 顾村公园｜上海樱花节</h2>
             <div class="location-card">
                 <div class="flex items-center gap-2 text-sm text-pink-600 mb-2">
                     <i data-lucide="calendar" class="w-4 h-4"></i>
-                    <span>3月中旬-4月中旬</span>
+                    <span>即日起-4月9日</span>
                 </div>
-                <p>顾村公园的樱花盛开期通常在3月中旬至4月中旬，分为多个时间段：</p>
+                <p>魔都赏樱顶流！16000多株樱花铺成1600余亩樱海，120个品种次第开放～</p>
                 <ul class="mt-3 space-y-2">
                     <li class="flex items-center gap-2">
                         <span class="w-2 h-2 rounded-full bg-pink-400"></span>
@@ -250,7 +286,7 @@
                     </li>
                     <li class="flex items-center gap-2">
                         <span class="w-2 h-2 rounded-full bg-pink-400"></span>
-                        夜间开放至21:30，光影下的樱花超梦幻
+                        夜间开放至21:30 🌛樱模式，光影下的樱花超梦幻
                     </li>
                 </ul>
             </div>
@@ -258,13 +294,22 @@
                 💡 <strong>贴士</strong>：樱票才10元！看每日赏樱气象指数选👍打卡日，7/15号线直达超方便
             </blockquote>
 
+            <h2 id="shiji">🌺 世纪公园｜百年梅树赏末章</h2>
+            <div class="location-card">
+                <div class="flex items-center gap-2 text-sm text-purple-600 mb-2">
+                    <i data-lucide="calendar" class="w-4 h-4"></i>
+                    <span>即日起-3月15日</span>
+                </div>
+                <p>梅花盛花期尾声，晚梅「美人梅」迎👍观赏期！还有6.5米百年骨里红、4.5米造型垂枝梅，赏梅要抓紧啦～</p>
+            </div>
+
             <h2 id="qijigarden">🌹 奇迹花园｜小王子花海盛宴</h2>
             <div class="location-card">
                 <div class="flex items-center gap-2 text-sm text-rose-600 mb-2">
                     <i data-lucide="map-pin" class="w-4 h-4"></i>
-                    <span>闵行区浦星公路2578弄8号</span>
+                    <span>闵行区浦星公路2578弄8号 · 即日起-6月8日</span>
                 </div>
-                <p>即日起至6月8日有小王子爱与花实景展！30余万株全球花卉，月月有新景：</p>
+                <p>小王子爱与花实景展来啦！30余万株全球花卉，月月有新景：</p>
                 <ul class="mt-3 space-y-2">
                     <li class="flex items-center gap-2">
                         <span class="w-2 h-2 rounded-full bg-rose-400"></span>
@@ -283,7 +328,7 @@
 
             <h2 id="shibo">🌸 世博文化公园｜粉樱接力垂枝梅</h2>
             <div class="location-card">
-                <div class="flex items-center gap-2 text-sm text-purple-600 mb-2">
+                <div class="flex items-center gap-2 text-sm text-pink-600 mb-2">
                     <i data-lucide="calendar" class="w-4 h-4"></i>
                     <span>即日起-5月20日</span>
                 </div>
