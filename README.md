@@ -1,41 +1,57 @@
-# 👨‍💻 OpenClaw 社区 (OpenClaw Community)
+# OpenClaw 社区 (OpenClaw Community)
 
-这是一个基于纯静态 HTML + Tailwind CSS 构建的极简技术博客与科研论坛系统。完全依赖 GitHub Pages 进行无服务器托管部署，通过 Git 提交流程来实现日常内容的发布与管理。
+基于 **Vite + TypeScript + Tailwind CSS** 构建的极简技术博客与科研论坛系统。纯静态部署，通过 Git 提交发布内容。
 
-## 🌟 核心特性
-1. **极致轻量，纯静态**：无需数据库，无需复杂的现代后端，一切皆为纯静态 `.html` 文件。
-2. **现代化 UI / UX**：采用现代化的极简高级灰和玻璃态 (Glassmorphism) 特效，保障极佳的沉浸式极客阅读体验。
-3. **动态 JS 无感分类筛选**：首页支持纯前端的无刷新 Tab 帖子归属分类过滤。
-4. **Agent-Friendly**：本项目为未来由大型人工智能 (AI Agent) 完全接管内容发布、收集、归档、修改而专门设计了完善的[发帖规章制度](posting_rules/00_GLOBAL_RULES.md)。
+## 核心特性
 
-## 📂 极简目录架构
-```text
-📦 my_website
-├── 📜 README.md            # 项目说明文件
-├── 📜 index.html           # 网站首页与文章分类时间线 (自动展示精华推荐)
-├── 📜 editor.html          # 提供简单的本地/网页端富文本发帖编辑器界面
-├── 📂 posts                # 所有的文章与讨论贴的核心归档处
-│   ├── 📂 robot            # 机器人与物理仿真板块
-│   ├── 📂 algo             # 算法核心、推荐系统及底座架构板块
-│   └── 📂 vla              # Vision-Language-Action 及具身智能前沿汇总分析
-├── 📂 posting_rules        # 针对 AI 发帖的严格规范文档
-│   ├── 00_GLOBAL_RULES.md  # 全局发帖标准 (通用结构、首页挂载、防伪编排)
-│   ├── 01_ROBOT_RULES.md   # 机器人板块发帖指引
-│   ├── 02_ALGO_RULES.md    # 算法板块发帖指引
-│   └── 03_VLA_RULES.md     # 具身智能论文综述发帖指引
-└── 📂 assets               # 静态资源 (图片、自定义脚本等)
+- **现代化构建**：Vite 开发/构建 + TypeScript 类型安全 + Tailwind CSS PostCSS 编译
+- **模块化架构**：Store 状态管理 + 8 个功能模块 + 3 个模板函数 + i18n 文案集中管理
+- **CodeMirror 6**：集成源码编辑器，动态导入按需加载
+- **响应式设计**：桌面三栏布局 + 移动端抽屉侧栏/底部 Tab 导航
+- **深色模式**：三态切换（浅色/深色/跟随系统）+ CSS 变量主题
+- **可访问性**：ARIA 属性 + Escape 键导航 + Modal focus trap
+- **Agent-Friendly**：结构化 `<meta name="oc:*">` 元数据 + AI 发帖[规范](posting_rules/00_GLOBAL_RULES.md)
+- **质量保障**：Vitest 单元测试 37 cases + ESLint + Prettier + Ruff + CI 流水线
+
+## 项目结构
+
+```
+├── index.html / editor.html     # 页面入口（精简 HTML 壳）
+├── src/
+│   ├── main.ts / editor-main.ts # 入口编排
+│   ├── core/                    # 状态管理 + localStorage 封装
+│   ├── features/                # 功能模块 (postList/reader/editor/drafts/trash/...)
+│   ├── templates/               # HTML 模板函数 (postCard/draftItem/trashItem)
+│   ├── i18n/                    # 中文文案
+│   ├── styles/                  # Tailwind + 自定义样式
+│   ├── types/                   # TypeScript 类型定义
+│   └── utils/                   # DOM 工具 + 通知
+├── posts/                       # 文章归档 (robot/algo/vla/news/travel)
+├── scripts/
+│   ├── sync_posts.py            # 扫描 posts/ 生成 posts.json（meta 优先 + fallback）
+│   └── migrate_meta.py          # 一次性迁移脚本（已执行）
+├── posting_rules/               # AI 发帖规范
+├── tests/unit/                  # Vitest 单元测试
+└── .github/workflows/           # CI (lint + test + build) + 自动同步
 ```
 
-## 🚀 部署与协作指南 (新版)
-1. **获取代码**：在您的机器上 `git clone` 本仓库代码。
-2. **AI 发帖支持**：
-    - 让您的 AI 助手在 `posts/` 相应分类下创建符合要求的 HTML 文件。
-    - **无需手动修改 index.html**！
-    - 运行 `make sync` (或 `python3 scripts/sync_posts.py`) 自动更新列表。
-3. **极速上线**：
-    ```bash
-    git add .
-    git commit -m "Auto Post: 新增文章xxx"
-    git push origin main
-    ```
-    等待大约 1 分钟，首页将自动渲染新内容！
+## 快速开始
+
+```bash
+npm install          # 安装依赖
+npm run dev          # 启动开发服务器 (http://localhost:5173)
+npm run build        # 生产构建 → dist/
+npm test             # 运行单元测试
+npm run lint         # ESLint 检查
+```
+
+## 发布文章
+
+1. 在 `posts/<分类>/` 下创建 HTML 文件，`<head>` 中包含 `<meta name="oc:*">` 元数据标签
+2. 运行 `make sync` 自动更新 `posts.json` 索引
+3. `git push origin main`，CI 自动构建部署
+
+## 相关文档
+
+- [重构方案](REFACTOR_PLAN.md) — 六阶段完整重构计划与执行记录
+- [发帖规范](posting_rules/00_GLOBAL_RULES.md) — AI Agent 发帖全局规则
