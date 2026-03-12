@@ -6,15 +6,18 @@
 import store from './core/Store.js';
 import Router from './core/Router.js';
 import postsAPI from './core/PostsAPI.js';
+import syncManager from './core/SyncManager.js';
 import Sidebar from './components/Sidebar.js';
 import PostList from './components/PostList.js';
 import Reader from './components/Reader.js';
+import SearchBox from './components/SearchBox.js';
 
 class App {
   constructor() {
     this.sidebar = null;
     this.postList = null;
     this.reader = null;
+    this.searchBox = null;
     this.router = null;
   }
 
@@ -38,6 +41,9 @@ class App {
     
     // Bind modals
     this.initModals();
+    
+    // Start auto-sync (every 5 minutes)
+    syncManager.startAutoSync(5 * 60 * 1000);
     
     console.log('[App] Ready');
   }
@@ -162,6 +168,52 @@ class App {
     // Listen for modal events from Sidebar
     document.addEventListener('open-drafts', () => this.openDraftsModal());
     document.addEventListener('open-trash', () => this.openTrashModal());
+    document.addEventListener('post-contextmenu', (e) => this.showContextMenu(e.detail));
+    
+    // Hide context menu on click elsewhere
+    document.addEventListener('click', () => this.hideContextMenu());
+  }
+
+  showContextMenu({ url, x, y }) {
+    const menu = document.getElementById('contextMenu');
+    if (!menu) return;
+    
+    menu.style.display = 'block';
+    menu.style.left = `${x}px`;
+    menu.style.top = `${y}px`;
+    menu.dataset.url = url;
+  }
+
+  hideContextMenu() {
+    const menu = document.getElementById('contextMenu');
+    if (menu) {
+      menu.style.display = 'none';
+    }
+  }
+
+  handleEditFromMenu() {
+    const menu = document.getElementById('contextMenu');
+    const url = menu?.dataset.url;
+    if (url) {
+      // TODO: Implement edit mode
+      console.log('Edit:', url);
+    }
+    this.hideContextMenu();
+  }
+
+  handleDeleteFromMenu() {
+    const menu = document.getElementById('contextMenu');
+    const url = menu?.dataset.url;
+    if (url) {
+      const post = store.getState().posts.find(p => p.url === url);
+      if (post) {
+        store.moveToTrash(post);
+        if (store.getState().currentUrl === url) {
+          window.location.hash = '';
+        }
+      }
+    }
+    this.hideContextMenu();
   }
 
   openDraftsModal() {
@@ -243,3 +295,24 @@ class App {
 // Export
 export default App;
 export { App };
+
+// Global handlers for inline onclick
+window.handleEditFromMenu = function() {
+  const app = window.geekForum;
+  if (app) app.handleEditFromMenu();
+};
+
+window.handleDeleteFromMenu = function() {
+  const app = window.geekForum;
+  if (app) app.handleDeleteFromMenu();
+};
+
+window.closeDraftsModal = function() {
+  document.getElementById('draftsModal')?.classList.add('hidden');
+  document.getElementById('draftsModal')?.classList.remove('flex');
+};
+
+window.closeTrashModal = function() {
+  document.getElementById('trashModal')?.classList.add('hidden');
+  document.getElementById('trashModal')?.classList.remove('flex');
+};
