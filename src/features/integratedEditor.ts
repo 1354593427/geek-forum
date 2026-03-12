@@ -149,6 +149,7 @@ function syncToPreview() {
     const title = $input('editTitle').value
 
     if (fileType === 'html') {
+        // eslint-disable-next-line no-useless-escape
         const script = `<script>document.addEventListener('click',function(e){var el=e.target;while(el&&['SPAN','A','STRONG','EM','CODE','I','B'].includes(el.tagName))el=el.parentElement;if(!el||el===document.body||el===document.documentElement)return;var id=el.id?'id="'+el.id+'"':'';var fc=el.className&&typeof el.className==='string'?el.className.trim().split(/\\s+/)[0]:'';var cls=fc?'class="'+fc+'"':'';var txt=el.textContent?el.textContent.trim().slice(0,60):'';var s=id||cls||txt;if(s)window.parent.postMessage({type:'locate-in-source',searchText:s},'*');},true);<\/script>`
         iframe.srcdoc = source.includes('</body>') ? source.replace(/<\/body>/i, script + '</body>') : source + script
     } else {

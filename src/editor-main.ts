@@ -193,11 +193,12 @@ function getFullHtml(): string {
         return 'bg-brand-100 text-brand-700'
     }
 
+    const closeScript = '</' + 'script>'
     return `<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>${title}</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"><\/script><script src="https://unpkg.com/lucide@latest"><\/script></head>
+<script src="https://cdn.tailwindcss.com">${closeScript}<script src="https://unpkg.com/lucide@latest">${closeScript}</head>
 <body class="bg-gray-50 text-gray-900 antialiased font-['Inter']">
 <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100"><div class="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
 <a href="../../index.html" class="flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors font-bold text-sm uppercase tracking-widest"><i data-lucide="arrow-left" class="w-4 h-4"></i> 返回讨论区</a>
@@ -213,7 +214,7 @@ function getFullHtml(): string {
 <div class="flex flex-col"><span class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Timestamp</span><span class="text-xs font-bold text-gray-600">${date}</span></div></div></header>
 <article class="prose prose-lg prose-brand max-w-none prose-headings:font-black prose-headings:tracking-tight prose-headings:text-gray-900 prose-p:text-gray-600 prose-p:leading-relaxed prose-p:mb-6 prose-strong:text-gray-900 prose-a:text-brand-600 prose-a:font-bold prose-a:no-underline hover:prose-a:underline prose-img:rounded-2xl prose-img:shadow-xl prose-img:my-10">${content}</article>
 <footer class="mt-20 pt-10 border-t border-gray-100 text-center"><div class="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-full text-[10px] font-bold text-gray-400 uppercase tracking-widest"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-green-500"></i> Neural-Verified Research Report</div></footer>
-</main><script>lucide.createIcons();<\/script></body></html>`
+</main><script>lucide.createIcons();${closeScript}</body></html>`
 }
 
 function updatePreview() {

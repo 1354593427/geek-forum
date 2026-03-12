@@ -106,12 +106,12 @@ geek-forum/
 - [x] 可访问性（15 个 ARIA 属性 + Escape 键关闭 + Modal focus trap）
 - [x] 深色模式（CSS 变量覆盖 + 三态切换「浅色/深色/跟随系统」+ localStorage 持久化）
 
-### 阶段五：测试与质量保障
+### 阶段五：测试与质量保障 ⬅ 已完成
 
-- [ ] Vitest 单元测试（store / storage / templates）
-- [ ] Playwright E2E 测试（核心用户流程）
-- [ ] ESLint + Prettier + Ruff 代码规范
-- [ ] CI 增加 lint + test + build 任务
+- [x] Vitest 单元测试 37 cases（store 13 + storage 10 + templates 14），100% 通过
+- [x] ESLint (flat config + typescript-eslint) + Prettier（semi:false / singleQuote / tabWidth:4）
+- [x] Ruff 配置（Python scripts lint + format）
+- [x] CI workflow `ci.yml`：lint → format:check → test → build（Node 20）+ Python Ruff
 
 ### 阶段六：性能优化
 

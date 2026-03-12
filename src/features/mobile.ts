@@ -1,11 +1,8 @@
-import { $id } from '../utils/dom'
-
 let sidebarOpen = false
 
 export function init() {
     const btnMenu = document.getElementById('btnMobileMenu')
     const backdrop = document.getElementById('sidebarBackdrop')
-    const sidebar = document.getElementById('sidebarColumn')
 
     if (btnMenu) {
         btnMenu.addEventListener('click', () => toggleSidebar(true))
