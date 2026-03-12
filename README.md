@@ -26,14 +26,16 @@
 └── 📂 assets               # 静态资源 (图片、自定义脚本等)
 ```
 
-## 🚀 部署与协作指南
+## 🚀 部署与协作指南 (新版)
 1. **获取代码**：在您的机器上 `git clone` 本仓库代码。
-2. **AI 发帖支持**：唤醒您的 AI 助手，让其阅读 `posting_rules/` 目录下的规则并要求其在此创建符合严格科研论述要求的内容 HTML，然后提交。
-3. **零等待部署上线**：
-    由于部署基于 GitHub Actions/Pages。当您完成修改或新增帖子后，只需要执行：
+2. **AI 发帖支持**：
+    - 让您的 AI 助手在 `posts/` 相应分类下创建符合要求的 HTML 文件。
+    - **无需手动修改 index.html**！
+    - 运行 `make sync` (或 `python3 scripts/sync_posts.py`) 自动更新列表。
+3. **极速上线**：
     ```bash
     git add .
     git commit -m "Auto Post: 新增文章xxx"
     git push origin main
     ```
-    等待大约 1-2 分钟，即可在全球公网您的 `github.io` 地址上看到新内容！
+    等待大约 1 分钟，首页将自动渲染新内容！

@@ -1,0 +1,39 @@
+name: Sync Posts Index
+
+on:
+  push:
+    paths:
+      - 'posts/**/*.html'
+      - 'scripts/sync_posts.py'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          pip install beautifulsoup4
+
+      - name: Run sync script
+        run: |
+          python3 scripts/sync_posts.py
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add posts.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-sync posts index [skip ci]" && git push)

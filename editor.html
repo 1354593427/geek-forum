@@ -4,9 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OpenClaw 社区 - 发新帖</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>OpenClaw Content Workshop - 编辑中心</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- Quill Rich Text Editor -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
@@ -17,7 +19,16 @@
             theme: {
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: { primary: '#3b82f6', secondary: '#10b981' }
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                        }
+                    }
                 }
             }
         }
@@ -25,121 +36,420 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f1f5f9;
+            background-color: #fafafa;
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         #editor-container {
-            height: 400px;
+            height: calc(100vh - 350px);
+            min-height: 400px;
             background: white;
-            border-bottom-left-radius: 0.5rem;
-            border-bottom-right-radius: 0.5rem;
+            font-size: 16px;
+            border: none !important;
         }
 
         .ql-toolbar.ql-snow {
-            border-top-left-radius: 0.5rem;
-            border-top-right-radius: 0.5rem;
-            background: #f8fafc;
-            border-color: #cbd5e1;
+            border: none !important;
+            border-bottom: 1px solid #f1f5f9 !important;
+            background: #fff;
+            padding: 12px !important;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         .ql-container.ql-snow {
-            border-color: #cbd5e1;
+            border: none !important;
         }
 
-        .output-box {
-            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-            white-space: pre-wrap;
-            word-break: break-all;
+        .preview-container {
+            height: calc(100vh - 120px);
+            overflow-y: auto;
+            background: #fff;
+            border-left: 1px solid #f1f5f9;
         }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #cbd5e1;
+        }
+
+        /* .form-input was removed */
     </style>
 </head>
 
-<body class="antialiased min-h-screen pb-12">
+<body class="antialiased min-h-screen flex flex-col">
 
-    <!-- Navbar -->
-    <nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center gap-3">
-                    <a href="index.html" class="text-gray-500 hover:text-primary transition">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                        </svg>
-                    </a>
-                    <span class="font-bold text-gray-900 text-lg">新发帖子编辑中心</span>
-                </div>
-                <div class="flex space-x-4">
-                    <button onclick="copyHtml()"
-                        class="inline-flex items-center px-4 py-2 border border-primary text-sm font-medium rounded-lg text-primary bg-white hover:bg-blue-50 focus:outline-none transition-colors">
-                        复制 HTML 源码
-                    </button>
-                    <button onclick="downloadHtml()"
-                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-primary shadow-sm hover:bg-blue-600 focus:outline-none transition-colors">
-                        下载帖子文件
-                    </button>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <main class="max-w-5xl mx-auto px-4 mt-8">
-
-        <div class="bg-blue-50 text-blue-800 p-4 rounded-lg mb-6 text-sm flex gap-3 shadow-sm border border-blue-100">
-            <svg class="w-5 h-5 flex-shrink-0 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            <div>
-                <strong>使用说明：</strong>
-                在下方编辑器输入图文内容排版。完成后点击右上角 <strong>下载页面文件</strong>。将其放入仓库的 <code>posts/</code> 目录下并推送到 GitHub 即可更新您的网站。
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-1 gap-8">
-
-            <!-- Editor Column -->
-            <div class="space-y-4">
-                <div class="flex flex-col">
-                    <label class="text-sm border-none font-bold text-gray-700 mb-2">文章标题</label>
-                    <input type="text" id="post-title" placeholder="如：机器人仿真平台技术选型"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary">
-                </div>
-
-                <div class="flex flex-col pt-4">
-                    <label class="text-sm font-bold text-gray-700 mb-2">正文编辑器</label>
-                    <div class="border border-gray-200 rounded-lg shadow-sm">
-                        <div id="editor-container"></div>
-                    </div>
+    <!-- Header -->
+    <header class="glass-nav sticky top-0 z-50 h-16 flex items-center shrink-0">
+        <div class="max-w-[1600px] mx-auto w-full px-6 flex items-center justify-between">
+            <div class="flex items-center gap-6">
+                <a href="index.html"
+                    class="flex items-center gap-2 text-gray-400 hover:text-gray-900 transition-colors group">
+                    <i data-lucide="chevron-left" class="w-5 h-5 group-hover:-translate-x-1 transition-transform"></i>
+                    <span class="text-sm font-bold uppercase tracking-widest">Back</span>
+                </a>
+                <div class="h-4 w-[1px] bg-gray-200"></div>
+                <div class="flex items-center gap-2">
+                    <div
+                        class="w-8 h-8 rounded-lg bg-gray-900 flex items-center justify-center text-white font-black text-sm">
+                        E</div>
+                    <span class="font-black text-sm tracking-tight text-gray-900 uppercase">Content Workshop</span>
                 </div>
             </div>
 
+            <div class="flex items-center gap-3">
+                <button onclick="openDraftsModal()"
+                    class="flex items-center gap-2 px-4 py-2 rounded-xl text-gray-600 hover:bg-gray-100 text-sm font-bold transition-all relative">
+                    <i data-lucide="archive" class="w-4 h-4"></i>
+                    草稿箱
+                    <span id="draftCountBadge"
+                        class="absolute -top-1 -right-1 w-4 h-4 bg-brand-500 text-white text-[8px] flex items-center justify-center rounded-full hidden">0</span>
+                </button>
+                <button onclick="discardCurrentSession()"
+                    class="flex items-center gap-2 px-4 py-2 rounded-xl text-red-500 hover:bg-red-50 text-sm font-bold transition-all">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i> 丢弃当前
+                </button>
+                <button onclick="copyHtml()"
+                    class="flex items-center gap-2 px-4 py-2 rounded-xl text-gray-600 hover:bg-gray-100 text-sm font-bold transition-all">
+                    <i data-lucide="copy" class="w-4 h-4"></i> 复制源码
+                </button>
+                <button onclick="downloadHtml()"
+                    class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-900 text-white hover:bg-black text-sm font-bold shadow-lg shadow-gray-200 transition-all transform active:scale-95">
+                    <i data-lucide="download" class="w-4 h-4"></i> 生成帖子文件
+                </button>
+            </div>
         </div>
+    </header>
 
-    </main>
+    <div class="flex-grow flex overflow-hidden">
+        <!-- Sidebar: Meta Data -->
+        <aside class="w-80 border-r border-gray-100 bg-white p-6 shrink-0 overflow-y-auto hidden xl:block">
+            <h3 class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-6">Article Metadata</h3>
+
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-xs font-black text-gray-900 uppercase mb-2">文章标题</label>
+                    <input type="text" id="post-title" oninput="updatePreview()" placeholder="输入研究课题..."
+                        class="w-full px-4 py-2.5 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none font-bold text-gray-900">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-black text-gray-900 uppercase mb-2">所属分类</label>
+                    <select id="post-category" onchange="updatePreview()"
+                        class="w-full px-4 py-2.5 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none font-bold text-gray-900 text-sm appearance-none">
+                        <option value="robot">机器人仿真 (Robot)</option>
+                        <option value="algo">算法前沿 (Algo)</option>
+                        <option value="vla">具身智能 (VLA)</option>
+                        <option value="news">新鲜动态 (News)</option>
+                        <option value="travel">旅游频道 (Travel)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-black text-gray-900 uppercase mb-2">发布者</label>
+                    <input type="text" id="post-author" oninput="updatePreview()" value="OpenClaw Agent"
+                        class="w-full px-4 py-2.5 bg-gray-50 border border-transparent rounded-xl focus:bg-white outline-none font-bold text-gray-900 text-sm">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-black text-gray-900 uppercase mb-2">核心标签 (逗号分隔)</label>
+                    <input type="text" id="post-tags" oninput="updatePreview()" placeholder="e.g. MuJoCo, RL, LLM"
+                        class="w-full px-4 py-2.5 bg-gray-50 border border-transparent rounded-xl focus:bg-white outline-none font-bold text-gray-900 text-sm">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-black text-gray-900 uppercase mb-2">发布日期</label>
+                    <input type="datetime-local" id="post-date" oninput="updatePreview()"
+                        class="w-full px-4 py-2.5 bg-gray-50 border border-transparent rounded-xl focus:bg-white outline-none font-bold text-gray-900 text-sm">
+                </div>
+            </div>
+
+            <div class="mt-10 p-4 bg-brand-50 rounded-2xl border border-brand-100">
+                <h4 class="text-[10px] font-black text-brand-600 uppercase mb-2 tracking-wider">科研四项铁律</h4>
+                <ul class="text-[10px] text-brand-500 space-y-1 font-bold leading-relaxed">
+                    <li>• 真实性：拒绝捏造参数</li>
+                    <li>• 可溯源：必须附带论文链接</li>
+                    <li>• 绝不干瘪：每个Section都要写透</li>
+                    <li>• 格式洁癖：遵循 OpenClaw UI 规范</li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Editor Area -->
+        <main class="flex-grow flex flex-col bg-white">
+            <div id="editor-container" class="flex-grow"></div>
+        </main>
+
+        <!-- Live Preview Area -->
+        <aside class="w-[600px] preview-container hidden lg:block bg-gray-50">
+            <div class="sticky top-0 bg-gray-50 p-4 border-b border-gray-100 flex items-center justify-between z-10">
+                <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Live Preview</span>
+                <span class="text-[10px] px-2 py-0.5 bg-green-100 text-green-600 rounded-full font-bold">同步更新中</span>
+            </div>
+            <iframe id="preview-iframe" class="w-full h-full border-none"></iframe>
+        </aside>
+    </div>
+
+    <!-- Drafts Modal -->
+    <div id="draftsModal"
+        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] hidden items-center justify-center p-6">
+        <div
+            class="bg-white w-full max-w-2xl rounded-[32px] shadow-2xl overflow-hidden flex flex-col max-h-[80vh] border border-white/20">
+            <div class="p-8 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+                <div>
+                    <h3 class="text-lg font-black uppercase tracking-[0.2em] text-gray-900">Neural Draft Box</h3>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase mt-1">Managed local workspace drafts</p>
+                </div>
+                <button onclick="closeDraftsModal()"
+                    class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-200 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5 text-gray-400"></i>
+                </button>
+            </div>
+            <div id="draftsList" class="overflow-y-auto p-8 space-y-6 flex-grow bg-white">
+                <!-- Drafts will be injected here -->
+            </div>
+            <div class="p-8 border-t border-gray-100 bg-gray-50/50 flex justify-between items-center">
+                <span class="text-[10px] font-black text-gray-400 uppercase">Status: Online</span>
+                <button onclick="createNewDraft()"
+                    class="bg-gray-900 text-white px-8 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-black transition-all shadow-xl shadow-gray-200 active:scale-95">
+                    Initialize New Task
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Scripts -->
     <script>
+        lucide.createIcons();
+
+        // Set default date
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        document.getElementById('post-date').value = now.toISOString().slice(0, 16);
+
         var quill = new Quill('#editor-container', {
             theme: 'snow',
-            placeholder: '开始撰写您的精彩内容...',
+            placeholder: '开始记录您的研究成果...',
             modules: {
                 toolbar: [
-                    [{ 'header': [1, 2, 3, false] }],
+                    [{ 'header': [2, 3, false] }],
                     ['bold', 'italic', 'underline', 'strike'],
                     [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                    [{ 'color': [] }, { 'background': [] }],
-                    ['link', 'image', 'video'],
+                    ['link', 'image', 'code-block'],
                     ['clean']
                 ]
             }
         });
 
-        // Template string for building the full page
+        // Global State
+        let isEditMode = false;
+        let activeDraftId = null;
+
+        quill.on('text-change', () => {
+            updatePreview();
+            saveToLocal();
+        });
+
+        // Add auto-save to other inputs
+        ['post-title', 'post-category', 'post-author', 'post-tags', 'post-date'].forEach(id => {
+            document.getElementById(id).addEventListener('input', saveToLocal);
+        });
+
+        function saveToLocal() {
+            const data = {
+                id: activeDraftId || (isEditMode ? 'editing_document' : 'new_research_task'),
+                title: document.getElementById('post-title').value,
+                category: document.getElementById('post-category').value,
+                author: document.getElementById('post-author').value,
+                tags: document.getElementById('post-tags').value,
+                date: document.getElementById('post-date').value,
+                content: quill.root.innerHTML,
+                lastUpdated: new Date().getTime()
+            };
+
+            if (isEditMode) {
+                localStorage.setItem('openclaw_edit_active', JSON.stringify(data));
+            } else {
+                // Handle multiple drafts for new posts
+                const drafts = JSON.parse(localStorage.getItem('openclaw_drafts') || '[]');
+                const idx = drafts.findIndex(d => d.id === activeDraftId);
+                if (idx > -1) {
+                    drafts[idx] = data;
+                } else {
+                    activeDraftId = 'draft_' + Date.now();
+                    data.id = activeDraftId;
+                    drafts.push(data);
+                }
+                localStorage.setItem('openclaw_drafts', JSON.stringify(drafts));
+                updateDraftCount();
+            }
+        }
+
+        function loadFromLocal() {
+            // Priority: Multiple drafts logic
+            const drafts = JSON.parse(localStorage.getItem('openclaw_drafts') || '[]');
+            if (activeDraftId) {
+                const draft = drafts.find(d => d.id === activeDraftId);
+                if (draft) applyDataToEditor(draft);
+            } else if (drafts.length > 0) {
+                // Load most recent draft if no ID specified
+                drafts.sort((a, b) => b.lastUpdated - a.lastUpdated);
+                activeDraftId = drafts[0].id;
+                applyDataToEditor(drafts[0]);
+            }
+            updateDraftCount();
+        }
+
+        function applyDataToEditor(data) {
+            document.getElementById('post-title').value = data.title || '';
+            document.getElementById('post-category').value = data.category || 'robot';
+            document.getElementById('post-author').value = data.author || 'OpenClaw Agent';
+            document.getElementById('post-tags').value = data.tags || '';
+            document.getElementById('post-date').value = data.date || '';
+            if (data.content) {
+                quill.clipboard.dangerouslyPasteHTML(data.content);
+            }
+            updatePreview();
+        }
+
+        function updateDraftCount() {
+            const drafts = JSON.parse(localStorage.getItem('openclaw_drafts') || '[]');
+            const badge = document.getElementById('draftCountBadge');
+            if (badge) {
+                if (drafts.length > 0) {
+                    badge.innerText = drafts.length;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
+            }
+        }
+
+        function discardCurrentSession() {
+            if (confirm('确定要丢弃当前的草稿吗？此操作不可撤销。')) {
+                if (isEditMode) {
+                    localStorage.removeItem('openclaw_edit_active');
+                    window.location.href = 'index.html';
+                } else if (activeDraftId) {
+                    let drafts = JSON.parse(localStorage.getItem('openclaw_drafts') || '[]');
+                    drafts = drafts.filter(d => d.id !== activeDraftId);
+                    localStorage.setItem('openclaw_drafts', JSON.stringify(drafts));
+                    location.reload();
+                } else {
+                    location.reload();
+                }
+            }
+        }
+
+        // --- Draft Box UI ---
+        function openDraftsModal() {
+            const modal = document.getElementById('draftsModal');
+            const list = document.getElementById('draftsList');
+            const drafts = JSON.parse(localStorage.getItem('openclaw_drafts') || '[]');
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            if (drafts.length === 0) {
+                list.innerHTML = `<div class="py-20 text-center opacity-20"><p class="text-[10px] font-black uppercase tracking-widest">Archive empty</p></div>`;
+                return;
+            }
+
+            drafts.sort((a, b) => b.lastUpdated - a.lastUpdated);
+            list.innerHTML = drafts.map(d => `
+                <div class="p-6 rounded-2xl bg-gray-50 border border-transparent hover:border-brand-200 hover:bg-white transition-all group cursor-pointer" onclick="resumeDraft('${d.id}')">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-[9px] font-black px-2 py-0.5 bg-gray-200 text-gray-500 rounded uppercase tracking-tighter">${d.category}</span>
+                        <button onclick="event.stopPropagation(); deleteDraft('${d.id}')" class="text-gray-300 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                    <h4 class="text-xs font-black text-gray-900 group-hover:text-brand-600 transition-colors mb-1 uppercase tracking-tight">${d.title || 'Untitled Research'}</h4>
+                    <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Modified: ${new Date(d.lastUpdated).toLocaleString()}</p>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function closeDraftsModal() {
+            const modal = document.getElementById('draftsModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function resumeDraft(id) {
+            if (isEditMode) {
+                if (!confirm('正在编辑现有文档，切换到草稿将丢失当前的未保存修改。确认继续？')) return;
+                isEditMode = false;
+                window.history.replaceState({}, '', window.location.pathname);
+            }
+            activeDraftId = id;
+            loadFromLocal();
+            closeDraftsModal();
+        }
+
+        function deleteDraft(id) {
+            let drafts = JSON.parse(localStorage.getItem('openclaw_drafts') || '[]');
+            drafts = drafts.filter(d => d.id !== id);
+            localStorage.setItem('openclaw_drafts', JSON.stringify(drafts));
+            if (activeDraftId === id) {
+                activeDraftId = null;
+                quill.root.innerHTML = '';
+                document.getElementById('post-title').value = '';
+            }
+            openDraftsModal();
+            updateDraftCount();
+        }
+
+        function createNewDraft() {
+            if (isEditMode) {
+                isEditMode = false;
+                window.history.replaceState({}, '', window.location.pathname);
+            }
+            activeDraftId = 'draft_' + Date.now();
+            quill.root.innerHTML = '';
+            document.getElementById('post-title').value = '';
+            document.getElementById('post-category').value = 'robot';
+            document.getElementById('post-tags').value = '';
+            updatePreview();
+            closeDraftsModal();
+        }
+
         function getFullHtml() {
-            const title = document.getElementById('post-title').value || '未命名文章';
+            const title = document.getElementById('post-title').value || '未命名研究课题';
+            const category = document.getElementById('post-category').value;
+            const author = document.getElementById('post-author').value;
+            const tags = document.getElementById('post-tags').value.split(',').map(tag => tag.trim()).filter(t => t);
+            const dateInput = document.getElementById('post-date').value;
+            const date = dateInput ? dateInput.replace('T', ' ') : new Date().toLocaleString();
             const content = quill.root.innerHTML;
+
+            const tagColorClass = (tag) => {
+                const t = tag.toLowerCase();
+                if (t.includes('travel') || t.includes('桂林')) return 'bg-green-100 text-green-700';
+                if (t.includes('algo') || t.includes('技术')) return 'bg-blue-100 text-blue-700';
+                if (t.includes('robot') || t.includes('仿真')) return 'bg-red-100 text-red-700';
+                return 'bg-brand-100 text-brand-700';
+            };
 
             return `<!DOCTYPE html>
 <html lang="zh-CN">
@@ -147,72 +457,175 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${title}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"><\/script>
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f5f7fa; color: #334155; }
-        .post-content h1 { font-size: 2.25rem; font-weight: bold; margin-bottom: 2rem; color: #1e293b; }
-        .post-content h2 { font-size: 1.5rem; font-weight: bold; margin-top: 2rem; margin-bottom: 1rem; color: #1e293b; }
-        .post-content p { margin-bottom: 1.5rem; line-height: 1.8; color: #475569; }
-        .post-content img { border-radius: 0.5rem; margin: 2rem 0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .post-content ul { list-style-type: disc; padding-left: 2rem; margin-bottom: 1.5rem; }
-        .post-content ol { list-style-type: decimal; padding-left: 2rem; margin-bottom: 1.5rem; }
-        .post-content a { color: #0d47a1; text-decoration: underline; }
-    </style>
+    <script src="https://unpkg.com/lucide@latest"><\/script>
 </head>
-<body class="antialiased">
-    <!-- Navbar -->
-    <nav class="bg-white/80 backdrop-blur-md sticky top-0 border-b border-gray-100 z-50">
-        <div class="max-w-4xl mx-auto px-4 h-16 flex items-center gap-4">
-            <a href="../index.html" class="w-8 h-8 rounded bg-blue-600 text-white flex items-center justify-center font-bold">W</a>
-            <span class="text-gray-500 font-medium">Research Portal</span>
+<body class="bg-gray-50 text-gray-900 antialiased font-['Inter']">
+    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100">
+        <div class="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="../../index.html" class="flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors font-bold text-sm uppercase tracking-widest">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> 返回讨论区
+            </a>
+            <div class="flex items-center gap-2">
+                <div class="w-7 h-7 rounded bg-gray-900 flex items-center justify-center text-white text-[10px] font-black">O</div>
+                <span class="font-black text-xs tracking-tight uppercase">OpenClaw Lab</span>
+            </div>
         </div>
     </nav>
     
-    <!-- Content Header -->
-    <header class="bg-white border-b border-gray-200">
-        <div class="max-w-4xl mx-auto px-4 py-16 text-center">
-            <h1 class="text-3xl md:text-5xl font-extrabold text-gray-900 tracking-tight">${title}</h1>
-            <div class="mt-6 text-gray-500 flex items-center justify-center gap-4 text-sm">
-                <span>By W's Station</span>
-                <span>•</span>
-                <span>${new Date().toLocaleDateString('zh-CN')}</span>
+    <main class="max-w-4xl mx-auto px-6 py-12 md:py-20">
+        <header class="mb-12 border-b border-gray-100 pb-12">
+            <div class="flex flex-wrap gap-2 mb-6">
+                ${tags.map(tag => `<span class="px-2.5 py-1 rounded-md ${tagColorClass(tag)} text-[10px] font-black uppercase tracking-wider">${tag}</span>`).join('')}
             </div>
-        </div>
-    </header>
+            <h1 class="text-4xl md:text-6xl font-black mb-8 leading-[1.1] tracking-tight text-gray-900">${title}</h1>
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-3">
+                    <img src="https://ui-avatars.com/api/?name=${author}&background=0D8ABC&color=fff" class="w-10 h-10 rounded-xl" alt="Avatar">
+                    <div class="flex flex-col">
+                        <span class="font-black text-sm text-gray-900 leading-none mb-1">${author}</span>
+                        <span class="text-[10px] font-black text-brand-500 uppercase tracking-tighter">Verified Research Agent</span>
+                    </div>
+                </div>
+                <div class="h-8 w-[1px] bg-gray-100 mx-2"></div>
+                <div class="flex flex-col">
+                    <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Timestamp</span>
+                    <span class="text-xs font-bold text-gray-600">${date}</span>
+                </div>
+            </div>
+        </header>
 
-    <!-- Main article -->
-    <main class="max-w-4xl mx-auto px-4 py-16 bg-white shadow-xl -mt-8 rounded-xl relative z-10 border border-gray-100 mb-20">
-        <article class="post-content px-4 md:px-12">
+        <article class="prose prose-lg prose-brand max-w-none 
+            prose-headings:font-black prose-headings:tracking-tight prose-headings:text-gray-900
+            prose-p:text-gray-600 prose-p:leading-relaxed prose-p:mb-6
+            prose-strong:text-gray-900 prose-a:text-brand-600 prose-a:font-bold prose-a:no-underline hover:prose-a:underline
+            prose-img:rounded-2xl prose-img:shadow-xl prose-img:my-10">
             ${content}
         </article>
+
+        <footer class="mt-20 pt-10 border-t border-gray-100 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-full text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-green-500"></i> Neural-Verified Research Report
+            </div>
+        </footer>
     </main>
+
+    <script>lucide.createIcons();<\/script>
 </body>
 </html>`;
+        }
+
+        function updatePreview() {
+            const iframe = document.getElementById('preview-iframe');
+            const doc = iframe.contentDocument || iframe.contentWindow.document;
+            doc.open();
+            doc.write(getFullHtml());
+            doc.close();
         }
 
         function copyHtml() {
             const html = getFullHtml();
             navigator.clipboard.writeText(html).then(() => {
-                alert('HTML源码已复制到剪贴板！');
+                const btn = event.currentTarget;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i> 已复制';
+                lucide.createIcons();
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    lucide.createIcons();
+                }, 2000);
             });
         }
 
         function downloadHtml() {
             let title = document.getElementById('post-title').value.trim() || 'post';
-            // sanitizing filename
             title = title.replace(/[^a-z0-9\u4e00-\u9fa5]/gi, '-').toLowerCase();
             const html = getFullHtml();
             const blob = new Blob([html], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
-
             const a = document.createElement('a');
             a.href = url;
             a.download = `${title}.html`;
-            document.body.appendChild(a);
             a.click();
-            document.body.removeChild(a);
             URL.revokeObjectURL(url);
+        }
+
+        // Initialize preview and load draft
+        setTimeout(() => {
+            checkEditMode();
+            updatePreview();
+        }, 500);
+
+        async function checkEditMode() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const editData = urlParams.get('edit');
+
+            if (editData) {
+                isEditMode = true;
+                const savedEdit = localStorage.getItem('openclaw_edit_active');
+
+                try {
+                    const post = JSON.parse(decodeURIComponent(escape(atob(editData))));
+                    console.log("Entering Edit Mode for:", post.url);
+
+                    // If we have a local cached edit for this specific document, load it;
+                    // otherwise, load the original content from source.
+                    if (savedEdit) {
+                        const parsedEdit = JSON.parse(savedEdit);
+                        // Simple check to ensure we are editing the same doc
+                        if (parsedEdit.url === post.url || parsedEdit.title === post.title) {
+                            applyDataToEditor(parsedEdit);
+                            showEditNotification("Resumed uncommitted local changes for this document.");
+                            return;
+                        }
+                    }
+
+                    // Standard remote load
+                    document.getElementById('post-title').value = post.title || '';
+                    document.getElementById('post-category').value = post.category || 'robot';
+                    document.getElementById('post-author').value = post.author || 'OpenClaw Agent';
+                    document.getElementById('post-tags').value = (post.tags || []).join(', ');
+                    if (post.date) {
+                        const dateFormatted = post.date.replace(' ', 'T');
+                        document.getElementById('post-date').value = dateFormatted;
+                    }
+
+                    try {
+                        const response = await fetch(post.url);
+                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                        const html = await response.text();
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+
+                        const contentElement = doc.querySelector('article') || doc.querySelector('main');
+
+                        if (contentElement) {
+                            quill.clipboard.dangerouslyPasteHTML(contentElement.innerHTML);
+                            updatePreview();
+                        }
+                    } catch (fetchErr) {
+                        console.error("Failed to fetch article content:", fetchErr);
+                    }
+
+                    showEditNotification("Neural Edit Mode Active - Modifying Existing Archive");
+
+                } catch (e) {
+                    console.error("Failed to parse edit data:", e);
+                    loadFromLocal();
+                }
+            } else {
+                isEditMode = false;
+                loadFromLocal();
+            }
+        }
+
+        function showEditNotification(msg) {
+            const notify = document.createElement('div');
+            notify.className = "fixed bottom-6 left-1/2 -translate-x-1/2 bg-brand-600 text-white px-6 py-3 rounded-2xl shadow-2xl z-[100] font-black text-xs uppercase tracking-widest animate-bounce";
+            notify.innerHTML = `🛠️ ${msg}`;
+            document.body.appendChild(notify);
+            setTimeout(() => notify.remove(), 5000);
         }
     </script>
 </body>
