@@ -8,21 +8,22 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- Tailwind -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind (disable warnings for dev) -->
+    <script src="https://cdn.tailwindcss.com?warning=false"></script>
     
     <!-- CodeMirror -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/theme/dracula.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/addon/fold/foldgutter.css">
     
-    <!-- Fuse.js -->
-    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
+    <!-- Fuse.js as global -->
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
     
-    <!-- Import Map -->
+    <!-- Import Map - 修复 fuse.js 引用 -->
     <script type="importmap">
     {
         "imports": {
+            "fuse.js": "https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js",
             "./src/core/": "./src/core/",
             "./src/components/": "./src/components/",
             "./src/utils/": "./src/utils/"
@@ -33,12 +34,6 @@
     <!-- CSS -->
     <link rel="stylesheet" href="src/styles/main.css">
     <link rel="stylesheet" href="src/styles/components.css">
-    
-    <style>
-        /* Fallback styles in case CSS doesn't load */
-        body { font-family: 'Inter', sans-serif; margin: 0; }
-        .app-container { display: flex; height: 100vh; }
-    </style>
 </head>
 <body class="antialiased flex h-screen overflow-hidden">
     <!-- Column 1: Navigation Sidebar -->

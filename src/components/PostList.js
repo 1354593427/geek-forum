@@ -3,7 +3,7 @@
  */
 
 import store from '../core/Store.js';
-import Fuse from 'fuse.js';
+// Fuse.js is loaded as global from CDN
 
 class PostList {
   constructor(container) {
