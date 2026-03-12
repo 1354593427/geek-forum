@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>【上海春日赏花攻略】魔都花海打卡指南 | 极客论坛</title>
+    <title>【2026上海春日赏花全攻略】27个赏花地汇总 | 极客论坛</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -37,7 +37,7 @@
         .article-content h3 {
             font-size: 1.35rem;
             font-weight: 600;
-            margin-top: 2rem;
+            margin-top: 1.5rem;
             margin-bottom: 0.75rem;
             color: #1f2937;
         }
@@ -71,15 +71,6 @@
             border-radius: 0 0.5rem 0.5rem 0;
         }
 
-        .article-content a {
-            color: #ec4899;
-            text-decoration: none;
-        }
-
-        .article-content a:hover {
-            text-decoration: underline;
-        }
-
         .tag {
             display: inline-flex;
             align-items: center;
@@ -91,25 +82,11 @@
             margin-bottom: 0.5rem;
         }
 
-        .tag-pink {
-            background: #fce7f3;
-            color: #db2777;
-        }
-
-        .tag-purple {
-            background: #f3e8ff;
-            color: #7c3aed;
-        }
-
-        .tag-green {
-            background: #dcfce7;
-            color: #15803d;
-        }
-
-        .tag-yellow {
-            background: #fef3c7;
-            color: #b45309;
-        }
+        .tag-pink { background: #fce7f3; color: #db2777; }
+        .tag-purple { background: #f3e8ff; color: #7c3aed; }
+        .tag-green { background: #dcfce7; color: #15803d; }
+        .tag-yellow { background: #fef3c7; color: #b45309; }
+        .tag-blue { background: #dbeafe; color: #1d4ed8; }
 
         .location-card {
             background: white;
@@ -124,11 +101,6 @@
             border-color: #f9a8d4;
             box-shadow: 0 8px 24px rgba(236, 72, 153, 0.12);
             transform: translateY(-2px);
-        }
-
-        .cover-image {
-            border-radius: 1rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
         }
 
         .gallery-grid {
@@ -151,6 +123,32 @@
             .gallery-grid {
                 grid-template-columns: repeat(4, 1fr);
             }
+        }
+
+        .flower-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        .flower-table th {
+            background: #fce7f3;
+            font-weight: 600;
+            text-align: left;
+            padding: 0.75rem;
+            border: 1px solid #f9a8d4;
+            color: #831843;
+        }
+
+        .flower-table td {
+            padding: 0.75rem;
+            border: 1px solid #e5e7eb;
+            color: #4b5563;
+        }
+
+        .flower-table tr:hover {
+            background: #fdf2f8;
         }
     </style>
 </head>
@@ -181,15 +179,16 @@
             <div class="flex flex-wrap gap-2 mb-4">
                 <span class="tag tag-pink">上海赏花</span>
                 <span class="tag tag-purple">春游</span>
-                <span class="tag tag-green">小红书</span>
+                <span class="tag tag-green">全攻略</span>
+                <span class="tag tag-blue">27个地点</span>
             </div>
 
             <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-4 text-gray-900">
-                【上海春日赏花攻略】魔都7大花海打卡指南
+                【2026上海春日赏花全攻略】27个赏花地汇总
             </h1>
 
             <p class="text-lg text-gray-500 mb-6">
-                春天来了，上海变成了花的海洋！本文整理了最新小红书上的魔都赏花攻略，带你解锁7大花海打卡圣地～
+                接下来的上海将会进入一年中最浪漫的季节！综合多篇小红书高分攻略，整理出10个区共27个经典赏花点，收藏好挨个冲～
             </p>
 
             <div class="flex items-center gap-4 text-sm text-gray-500 border-b border-gray-100 pb-6">
@@ -208,73 +207,133 @@
 
         <!-- 封面图 -->
         <div class="mb-6">
-            <img src="img1.jpg" alt="上海春日花海" class="cover-image w-full h-auto">
+            <img src="img1.jpg" alt="上海春日花海" class="rounded-xl shadow-lg w-full h-auto">
         </div>
 
         <!-- 图集 -->
         <div class="gallery-grid mb-10">
-            <img src="img2.jpg" alt="世纪公园梅花" class="w-full h-auto">
-            <img src="img3.jpg" alt="顾村公园樱花" class="w-full h-auto">
-            <img src="img4.jpg" alt="奇迹花园小王子" class="w-full h-auto">
-            <img src="img5.jpg" alt="世博文化公园" class="w-full h-auto">
-            <img src="img6.jpg" alt="上海春兰展" class="w-full h-auto">
-            <img src="img7.jpg" alt="静安花朝节" class="w-full h-auto">
-            <img src="img8.jpg" alt="浦东牡丹园" class="w-full h-auto">
+            <img src="new_img1.jpg" alt="上海赏花地图" class="w-full h-auto">
+            <img src="new_img2.jpg" alt="世纪公园" class="w-full h-auto">
+            <img src="new_img3.jpg" alt="共青森林公园梨花" class="w-full h-auto">
+            <img src="img2.jpg" alt="顾村公园樱花" class="w-full h-auto">
+            <img src="img3.jpg" alt="奇迹花园" class="w-full h-auto">
+            <img src="img4.jpg" alt="世博文化公园" class="w-full h-auto">
+            <img src="new_img4.jpg" alt="延春公园梨花" class="w-full h-auto">
+            <img src="img5.jpg" alt="静安花朝节" class="w-full h-auto">
         </div>
 
         <!-- 简介 -->
         <blockquote class="mb-10 text-lg">
-            🌸 魔都春天的正确打开方式——从顾村公园的浪漫樱花到奇迹花园的小王子花海，这7个地方承包你的整个春天！
+            🌸 魔都春天的正确打开方式——从樱花到梨花，从白玉兰到郁金香，这27个地方承包你的整个春天！
         </blockquote>
+
+        <!-- 赏花时间表 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-8">
+            <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="calendar" class="w-5 h-5 text-pink-500"></i>
+                2026年3月-5月赏花时间表
+            </h2>
+            <table class="flower-table">
+                <thead>
+                    <tr>
+                        <th>花种</th>
+                        <th>最佳观赏期</th>
+                        <th>推荐地点</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>🌸 樱花</td>
+                        <td>3月中-4月中</td>
+                        <td>顾村公园、高东樱花路、共青森林公园</td>
+                    </tr>
+                    <tr>
+                        <td>🌺 梅花</td>
+                        <td>2月中-3月中</td>
+                        <td>世纪公园、莘庄公园</td>
+                    </tr>
+                    <tr>
+                        <td>💚 梨花</td>
+                        <td>3月下旬-4月初</td>
+                        <td>共青森林公园、延春公园、古城公园</td>
+                    </tr>
+                    <tr>
+                        <td>🟣 玉兰</td>
+                        <td>3月中-4月初</td>
+                        <td>陆家嘴、古城公园、闵行文化公园</td>
+                    </tr>
+                    <tr>
+                        <td>🌷 郁金香</td>
+                        <td>3月中-4月中</td>
+                        <td>外滩、闵行文化公园、世纪公园</td>
+                    </tr>
+                    <tr>
+                        <td>🌹 玫瑰/月季</td>
+                        <td>4月-5月</td>
+                        <td>奇迹花园、辰山植物园</td>
+                    </tr>
+                    <tr>
+                        <td>🌺 牡丹</td>
+                        <td>3月下旬-4月</td>
+                        <td>浦东牡丹园、上海植物园</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
 
         <!-- 目录 -->
         <section class="bg-white rounded-xl shadow-sm border p-6 mb-8">
             <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
                 <i data-lucide="map-pin" class="w-5 h-5 text-pink-500"></i>
-                打卡点位
+                按区域分类
             </h2>
-            <div class="grid md:grid-cols-2 gap-3 text-sm">
-                <a href="#gucun" class="flex items-center gap-2 text-gray-700 hover:text-pink-600">
-                    <span class="w-6 h-6 rounded bg-pink-100 text-pink-600 flex items-center justify-center text-xs font-bold">1</span>
-                    顾村公园 · 樱花
-                </a>
-                <a href="#shiji" class="flex items-center gap-2 text-gray-700 hover:text-purple-600">
-                    <span class="w-6 h-6 rounded bg-purple-100 text-purple-600 flex items-center justify-center text-xs font-bold">2</span>
-                    世纪公园 · 梅花
-                </a>
-                <a href="#qijigarden" class="flex items-center gap-2 text-gray-700 hover:text-rose-600">
-                    <span class="w-6 h-6 rounded bg-rose-100 text-rose-600 flex items-center justify-center text-xs font-bold">3</span>
-                    奇迹花园 · 小王子
-                </a>
-                <a href="#shibo" class="flex items-center gap-2 text-gray-700 hover:text-pink-600">
-                    <span class="w-6 h-6 rounded bg-pink-100 text-pink-600 flex items-center justify-center text-xs font-bold">4</span>
-                    世博文化公园 · 垂枝樱
-                </a>
-                <a href="#lan" class="flex items-center gap-2 text-gray-700 hover:text-green-600">
-                    <span class="w-6 h-6 rounded bg-green-100 text-green-600 flex items-center justify-center text-xs font-bold">5</span>
-                    上海春兰展
-                </a>
-                <a href="#jing-an" class="flex items-center gap-2 text-gray-700 hover:text-orange-600">
-                    <span class="w-6 h-6 rounded bg-orange-100 text-orange-600 flex items-center justify-center text-xs font-bold">6</span>
-                    静安花朝节
-                </a>
-                <a href="#mudan" class="flex items-center gap-2 text-gray-700 hover:text-yellow-600">
-                    <span class="w-6 h-6 rounded bg-yellow-100 text-yellow-600 flex items-center justify-center text-xs font-bold">7</span>
-                    浦东牡丹园
-                </a>
+            <div class="grid md:grid-cols-2 gap-4 text-sm">
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-2">🌸 樱花</h3>
+                    <ul class="space-y-1 text-gray-600">
+                        <li>顾村公园 - 16000株樱花</li>
+                        <li>高东樱花路 - 樱花大道</li>
+                        <li>共青森林公园 - 野趣樱花</li>
+                        <li>米积村 - 小众赏樱</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-2">💚 梨花</h3>
+                    <ul class="space-y-1 text-gray-600">
+                        <li>共青森林公园 - 隐藏机位</li>
+                        <li>延春公园 - 梨白配海棠</li>
+                        <li>古城公园 - 陆家嘴同框</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-2">🟣 玉兰</h3>
+                    <ul class="space-y-1 text-gray-600">
+                        <li>陆家嘴 - 蓝调白玉兰</li>
+                        <li>古城公园 - 地标同框</li>
+                        <li>闵行文化公园 - 玉兰路</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-2">🌷 郁金香</h3>
+                    <ul class="space-y-1 text-gray-600">
+                        <li>外滩 - 郁金香花毯</li>
+                        <li>闵行文化公园 - 彩色花海</li>
+                        <li>世纪公园 - 荷兰花园</li>
+                    </ul>
+                </div>
             </div>
         </section>
 
         <!-- 正文 -->
         <article class="article-content">
 
-            <h2 id="gucun">🌸 顾村公园｜上海樱花节</h2>
+            <h2>🌸 必打卡：顾村公园樱花</h2>
             <div class="location-card">
                 <div class="flex items-center gap-2 text-sm text-pink-600 mb-2">
-                    <i data-lucide="calendar" class="w-4 h-4"></i>
-                    <span>即日起-4月9日</span>
+                    <i data-lucide="map-pin" class="w-4 h-4"></i>
+                    <span>宝山区沪太路4788号</span>
                 </div>
-                <p>魔都赏樱顶流！16000多株樱花铺成1600余亩樱海，120个品种次第开放～</p>
+                <p><strong>魔都赏樱顶流！</strong>16000多株樱花铺成1600余亩樱海，120个品种次第开放～</p>
                 <ul class="mt-3 space-y-2">
                     <li class="flex items-center gap-2">
                         <span class="w-2 h-2 rounded-full bg-pink-400"></span>
@@ -286,96 +345,144 @@
                     </li>
                     <li class="flex items-center gap-2">
                         <span class="w-2 h-2 rounded-full bg-pink-400"></span>
-                        夜间开放至21:30 🌛樱模式，光影下的樱花超梦幻
+                        夜间开放至21:30 🌛樱模式，光影超梦幻
                     </li>
                 </ul>
             </div>
             <blockquote>
-                💡 <strong>贴士</strong>：樱票才10元！看每日赏樱气象指数选👍打卡日，7/15号线直达超方便
+                💡 <strong>贴士</strong>：樱票才10元！7/15号线直达，看每日赏樱气象指数选👍打卡日
             </blockquote>
 
-            <h2 id="shiji">🌺 世纪公园｜百年梅树赏末章</h2>
+            <h2>💚 小众惊喜：梨花</h2>
             <div class="location-card">
-                <div class="flex items-center gap-2 text-sm text-purple-600 mb-2">
-                    <i data-lucide="calendar" class="w-4 h-4"></i>
-                    <span>即日起-3月15日</span>
+                <div class="flex items-center gap-2 text-sm text-green-600 mb-2">
+                    <i data-lucide="leaf" class="w-4 h-4"></i>
+                    <span>推荐3个小众梨花观赏点</span>
                 </div>
-                <p>梅花盛花期尾声，晚梅「美人梅」迎👍观赏期！还有6.5米百年骨里红、4.5米造型垂枝梅，赏梅要抓紧啦～</p>
+                <p>梨花💚它一树清新的绿白，像极了春天里凝结的雪！大多数人还不认识它，快去打卡～</p>
+                <ul class="mt-3 space-y-3">
+                    <li class="bg-green-50 p-3 rounded-lg">
+                        <strong>📍共青森林公园</strong>
+                        <p class="text-sm text-gray-600 mt-1">隐藏机位！树下有紫色二月兰，画面呈油画感，知道的人很少</p>
+                    </li>
+                    <li class="bg-green-50 p-3 rounded-lg">
+                        <strong>📍延春公园</strong>
+                        <p class="text-sm text-gray-600 mt-1">杨浦区街心小公园，梨树很大，下有海棠花，可观赏"一树梨花压海棠"</p>
+                    </li>
+                    <li class="bg-green-50 p-3 rounded-lg">
+                        <strong>📍古城公园</strong>
+                        <p class="text-sm text-gray-600 mt-1">在外滩商圈，可拍到陆家嘴地标同框！靠近豫园，适合citywalk</p>
+                    </li>
+                </ul>
             </div>
 
-            <h2 id="qijigarden">🌹 奇迹花园｜小王子花海盛宴</h2>
+            <h2>🟣 蓝调白玉兰：陆家嘴</h2>
+            <div class="location-card">
+                <div class="flex items-center gap-2 text-sm text-purple-600 mb-2">
+                    <i data-lucide="image" class="w-4 h-4"></i>
+                    <span>陆家嘴环路/世纪大道</span>
+                </div>
+                <p>蓝调下的玉兰花太美了！白玉兰与魔都地标建筑同框，出片率超高～</p>
+                <p class="text-sm text-gray-500 mt-2">📷 推荐机位：陆家嘴环路、世纪大道沿线</p>
+            </div>
+
+            <h2>🌷 郁金香：避开人挤人</h2>
+            <div class="location-card">
+                <div class="flex items-center gap-2 text-sm text-yellow-600 mb-2">
+                    <i data-lucide="flower" class="w-4 h-4"></i>
+                    <span>这些地方郁金香更美！</span>
+                </div>
+                <p>别再只去外滩人挤人啦！这些地方郁金香同样绝美：</p>
+                <ul class="mt-3 space-y-2">
+                    <li>✅ <strong>闵行文化公园</strong> - 彩色郁金香花海，人少出片</li>
+                    <li>✅ <strong>世纪公园</strong> - 荷兰花园风格的欧式郁金香</li>
+                    <li>✅ <strong>静安中环公园</strong> - 藏在CBD里的秘密花园</li>
+                </ul>
+            </div>
+
+            <h2>🌹 奇迹花园：小王子花海</h2>
             <div class="location-card">
                 <div class="flex items-center gap-2 text-sm text-rose-600 mb-2">
                     <i data-lucide="map-pin" class="w-4 h-4"></i>
                     <span>闵行区浦星公路2578弄8号 · 即日起-6月8日</span>
                 </div>
-                <p>小王子爱与花实景展来啦！30余万株全球花卉，月月有新景：</p>
+                <p>小王子爱与花实景展！30余万株全球花卉，月月有新景：</p>
                 <ul class="mt-3 space-y-2">
-                    <li class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-rose-400"></span>
-                        <strong>3月</strong>：16万株郁金香汇成彩色星河
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-rose-400"></span>
-                        玫瑰花墙、小王子与狐狸雕塑超好拍
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-rose-400"></span>
-                        还有AI机器人探索馆，亲子游超合适
-                    </li>
+                    <li>🌷 3月：16万株郁金香汇成彩色星河</li>
+                    <li>🌹 玫瑰花墙、小王子与狐狸雕塑</li>
+                    <li>🤖 AI机器人探索馆，亲子游超合适</li>
                 </ul>
             </div>
 
-            <h2 id="shibo">🌸 世博文化公园｜粉樱接力垂枝梅</h2>
-            <div class="location-card">
-                <div class="flex items-center gap-2 text-sm text-pink-600 mb-2">
-                    <i data-lucide="calendar" class="w-4 h-4"></i>
-                    <span>即日起-5月20日</span>
+            <h2>🏆 27个赏花地完整清单</h2>
+            <div class="bg-pink-50 rounded-xl p-6 border border-pink-100">
+                <p class="text-pink-800 mb-4">综合多篇小红书高分攻略，按10个区整理：</p>
+                <div class="grid md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                        <h4 class="font-bold text-pink-900 mb-2">🌸 宝山区</h4>
+                        <ul class="text-pink-700 space-y-1">
+                            <li>顾村公园 - 樱花</li>
+                            <li>淞南公园 - 玉兰</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-pink-900 mb-2">🌸 浦东新区</h4>
+                        <ul class="text-pink-700 space-y-1">
+                            <li>世纪公园 - 梅花/郁金香</li>
+                            <li>高东樱花路 - 樱花</li>
+                            <li>浦东牡丹园 - 牡丹</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-pink-900 mb-2">🌸 闵行区</h4>
+                        <ul class="text-pink-700 space-y-1">
+                            <li>闵行文化公园 - 玉兰/郁金香</li>
+                            <li>奇迹花园 - 小王子花展</li>
+                            <li>莘庄公园 - 梅花</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-pink-900 mb-2">🌸 黄浦区</h4>
+                        <ul class="text-pink-700 space-y-1">
+                            <li>古城公园 - 梨花/玉兰</li>
+                            <li>外滩 - 郁金香</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-pink-900 mb-2">🌸 杨浦区</h4>
+                        <ul class="text-pink-700 space-y-1">
+                            <li>延春公园 - 梨花/海棠</li>
+                            <li>共青森林公园 - 樱花/梨花</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-pink-900 mb-2">🌸 静安区</h4>
+                        <ul class="text-pink-700 space-y-1">
+                            <li>静安花朝节 - 3.14-3.29</li>
+                            <li>静安中环公园 - 郁金香</li>
+                        </ul>
+                    </div>
                 </div>
-                <p>世界花艺园的粉色浪漫接力！垂枝梅渐落，垂枝樱3月中旬迎盛花期。现在早樱已零星绽放，玉兰、茶花也开得正艳，一步一景超美～</p>
-            </div>
-
-            <h2 id="lan">🌼 上海春兰展｜中式君子之约</h2>
-            <div class="location-card">
-                <div class="flex items-center gap-2 text-sm text-green-600 mb-2">
-                    <i data-lucide="calendar" class="w-4 h-4"></i>
-                    <span>即日起-3月18日</span>
-                </div>
-                <p>上海植物园主会场+曲水园/醉白池分会场，三园联展的春兰盛宴，搭配山茶展，在江南园林里赏兰韵，中式美学拉满！</p>
-            </div>
-
-            <h2 id="jing-an">🌺 静安花朝节｜十二花神巡游</h2>
-            <div class="location-card">
-                <div class="flex items-center gap-2 text-sm text-orange-600 mb-2">
-                    <i data-lucide="calendar" class="w-4 h-4"></i>
-                    <span>3月14日-3月29日 · 大宁公园</span>
-                </div>
-                <p>分为浪漫/运动/次元三大主题周，有水上机器人表演、十二花神巡游等活动，春日氛围感拉满！</p>
-            </div>
-
-            <h2 id="mudan">🌷 浦东牡丹园｜古建牡丹雅韵</h2>
-            <div class="location-card">
-                <div class="flex items-center gap-2 text-sm text-yellow-600 mb-2">
-                    <i data-lucide="calendar" class="w-4 h-4"></i>
-                    <span>即日起-3月30日</span>
-                </div>
-                <p>景运堂内的牡丹展太有韵味！牡丹芍药搭配海棠马蹄莲，中式插花与飞檐翘角相映，沉浸式感受国风浪漫～</p>
             </div>
 
             <h2>📸 拍照小tips</h2>
-            <div class="bg-pink-50 rounded-xl p-6 border border-pink-100">
+            <div class="bg-purple-50 rounded-xl p-6 border border-purple-100">
                 <ul class="space-y-3">
                     <li class="flex items-start gap-3">
-                        <i data-lucide="camera" class="w-5 h-5 text-pink-500 mt-0.5"></i>
+                        <i data-lucide="camera" class="w-5 h-5 text-purple-500 mt-0.5"></i>
                         <span>穿浅色系衣裙/汉服，和花海超配</span>
                     </li>
                     <li class="flex items-start gap-3">
-                        <i data-lucide="sun" class="w-5 h-5 text-pink-500 mt-0.5"></i>
+                        <i data-lucide="sun" class="w-5 h-5 text-purple-500 mt-0.5"></i>
                         <span>侧逆光拍花超出片，花瓣自带柔光滤镜</span>
                     </li>
                     <li class="flex items-start gap-3">
-                        <i data-lucide="image" class="w-5 h-5 text-pink-500 mt-0.5"></i>
+                        <i data-lucide="image" class="w-5 h-5 text-purple-500 mt-0.5"></i>
                         <span>用花枝当前景虚化，故事感满分</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i data-lucide="clock" class="w-5 h-5 text-purple-500 mt-0.5"></i>
+                        <span>工作日早晨或周末早起，人少光线好</span>
                     </li>
                 </ul>
             </div>
@@ -386,22 +493,29 @@
             <div class="bg-gradient-to-r from-pink-50 to-rose-50 rounded-xl p-6 border border-pink-100 mb-8">
                 <h3 class="text-lg font-bold text-pink-900 mb-3 flex items-center gap-2">
                     <i data-lucide="link" class="w-5 h-5"></i>
-                    原文来源
+                    参考来源
                 </h3>
-                <p class="text-pink-800 mb-4">本文整理自小红书用户 <strong>@Origin</strong> 的笔记：</p>
-                <a href="https://www.xiaohongshu.com/explore/69afc38a000000000902095b?xsec_token=ABdF_UPDVB06kuYK2QJeCjYKsrVIQ_qxoJ9fJdMD_NI2Q=" 
+                <p class="text-pink-800 mb-4">本文综合整理自以下小红书作者的攻略：</p>
+                <ul class="space-y-2 text-pink-700">
+                    <li>• @春秋旅游 - 上海赏花地图｜27个赏花地汇总</li>
+                    <li>• @你七哥 - 答应我💚今年真别错过小众梨花好吗</li>
+                    <li>• @Origin - 上海春日浪漫7大花海打卡攻略</li>
+                    <li>• @我是姚嘻嘻 - 上海蓝调白玉兰封神</li>
+                    <li>• @爱拍照的Yummy - 上海看郁金香攻略</li>
+                </ul>
+                <a href="https://www.xiaohongshu.com/explore/69b14250000000002203854b?xsec_token=ABhh62ITNvJ27MzSH_0KFE0-px6jgsHz7dCDfEMtussRo=" 
                    target="_blank" 
-                   class="inline-flex items-center gap-2 px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors">
+                   class="inline-flex items-center gap-2 px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors mt-4">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
                     </svg>
-                    在小红书查看原文
+                    查看完整攻略
                 </a>
             </div>
 
             <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
                 <p class="text-yellow-800 text-sm">
-                    <strong>⚠️ 声明</strong>：本帖内容为AI整理自公开的小红书笔记，仅供参考。版权归属原作者所有，如有侵权请联系删除。
+                    <strong>⚠️ 声明</strong>：本帖内容为AI综合多篇小红书高分攻略整理，仅供参考。版权归属原作者所有。
                 </p>
             </div>
 
@@ -409,8 +523,9 @@
             <div class="flex flex-wrap gap-2 mt-8">
                 <span class="tag tag-pink">上海赏花</span>
                 <span class="tag tag-purple">春游</span>
-                <span class="tag tag-green">小红书</span>
-                <span class="tag tag-yellow">樱花季</span>
+                <span class="tag tag-green">樱花</span>
+                <span class="tag tag-yellow">梨花</span>
+                <span class="tag tag-blue">郁金香</span>
             </div>
 
         </article>
