@@ -3,7 +3,7 @@
  */
 
 import store from '../core/Store.js';
-// Fuse.js is loaded as global from CDN
+// Fuse.js is loaded as global: window.Fuse
 
 class PostList {
   constructor(container) {
@@ -109,7 +109,7 @@ class PostList {
         
         // Initialize Fuse.js if needed
         if (!this.fuse && state.posts.length > 0) {
-          this.fuse = new Fuse(state.posts, {
+          this.fuse = new window.Fuse(state.posts, {
             keys: ['title', 'excerpt', 'tags', 'author'],
             threshold: 0.35,
             ignoreLocation: true

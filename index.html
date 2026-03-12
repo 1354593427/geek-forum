@@ -19,11 +19,10 @@
     <!-- Fuse.js as global -->
     <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
     
-    <!-- Import Map - 修复 fuse.js 引用 -->
+    <!-- Import Map - fuse.js is loaded as global -->
     <script type="importmap">
     {
         "imports": {
-            "fuse.js": "https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js",
             "./src/core/": "./src/core/",
             "./src/components/": "./src/components/",
             "./src/utils/": "./src/utils/"

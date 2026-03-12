@@ -14,7 +14,7 @@ class SearchBox {
 
   initialize(posts) {
     // Initialize Fuse.js
-    this.fuse = new Fuse(posts, {
+    this.fuse = new window.Fuse(posts, {
       keys: [
         { name: 'title', weight: 0.4 },
         { name: 'excerpt', weight: 0.3 },
