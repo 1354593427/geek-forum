@@ -1,141 +1,591 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OpenClaw | Workstation SPA</title>
-    
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind (disable warnings for dev) -->
-    <script src="https://cdn.tailwindcss.com?warning=false"></script>
-    
-    <!-- CodeMirror -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/theme/dracula.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/addon/fold/foldgutter.css">
-    
-    <!-- Fuse.js as global -->
-    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
-    
-    <!-- Import Map - fuse.js is loaded as global -->
-    <script type="importmap">
-    {
-        "imports": {
-            "./src/core/": "./src/core/",
-            "./src/components/": "./src/components/",
-            "./src/utils/": "./src/utils/"
-        }
-    }
-    </script>
-    
-    <!-- CSS -->
-    <link rel="stylesheet" href="src/styles/main.css">
-    <link rel="stylesheet" href="src/styles/components.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script type="module" src="/src/main.ts"></script>
 </head>
+
 <body class="antialiased flex h-screen overflow-hidden">
-    <!-- Column 1: Navigation Sidebar -->
-    <aside id="sidebarColumn" class="sidebar"></aside>
-    
+
+    <!-- Mobile Header -->
+    <header id="mobileHeader" class="hidden">
+        <button id="btnMobileMenu" class="p-2 -ml-1 rounded-lg hover:bg-gray-100 transition-colors" aria-label="打开菜单">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+        <div class="flex items-center gap-2">
+            <div class="w-7 h-7 bg-gradient-to-tr from-brand-600 to-indigo-600 rounded-lg flex items-center justify-center">
+                <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"></path></svg>
+            </div>
+            <span class="font-black text-sm tracking-tight text-gray-900">OpenClaw</span>
+        </div>
+        <a href="editor.html" class="p-2 -mr-1 rounded-lg hover:bg-gray-100 transition-colors" aria-label="发布研究任务">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-width="2.5" stroke-linecap="round"></path></svg>
+        </a>
+    </header>
+
+    <!-- Sidebar Backdrop (Mobile) -->
+    <div id="sidebarBackdrop" class="hidden"></div>
+
+
+    <!-- Column 1: Navigation Sidebar (Fixed) -->
+    <aside id="sidebarColumn" style="width: var(--sidebar-width)"
+        class="flex-shrink-0 border-r border-gray-100 bg-white flex flex-col z-50">
+        <div class="p-6">
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 bg-gradient-to-tr from-brand-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-brand-500/20">
+                    <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                    </svg>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-black text-lg tracking-tight leading-none text-gray-900">OpenClaw</span>
+                    <span class="text-[9px] font-bold text-brand-500 tracking-widest uppercase mt-1">Research Hub</span>
+                </div>
+            </div>
+        </div>
+
+        <nav class="flex-grow px-3 space-y-1">
+            <div class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] px-3 mb-4 mt-2">导航</div>
+            <button data-nav="all"
+                class="nav-btn sidebar-item-active w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
+                    </path>
+                </svg>
+                全部资源
+            </button>
+            <button data-nav="robot"
+                class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M11 4a2 2 0 114 0v1a2 2 0 11-4 0V4zM11 14a2 2 0 114 0v1a2 2 0 11-4 0v-1zM11 19a2 2 0 114 0v1a2 2 0 11-4 0v-1z">
+                    </path>
+                </svg>
+                机器人与仿真
+            </button>
+            <button data-nav="algo"
+                class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                </svg>
+                算法与架构
+            </button>
+            <button data-nav="vla"
+                class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                具身智能 VLA
+            </button>
+            <button data-nav="travel"
+                class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.065M15 20a8 8 0 10-8.914-13.483">
+                    </path>
+                </svg>
+                探索与生活
+            </button>
+            <div class="h-px bg-gray-50 mx-4 my-2"></div>
+            <button id="btnDrafts"
+                class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-brand-600 hover:bg-brand-50 transition-all group">
+                <div class="flex items-center gap-3">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                        </path>
+                    </svg>
+                    草稿箱
+                </div>
+                <span id="draftCountNav"
+                    class="text-[10px] font-black bg-gray-100 group-hover:bg-brand-100 px-1.5 py-0.5 rounded-full transition-colors">0</span>
+            </button>
+            <button id="btnTrash"
+                class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-red-600 hover:bg-red-50 transition-all group">
+                <div class="flex items-center gap-3">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                        </path>
+                    </svg>
+                    回收站
+                </div>
+                <span id="trashCount"
+                    class="text-[10px] font-black bg-gray-100 group-hover:bg-red-100 px-1.5 py-0.5 rounded-full transition-colors">0</span>
+            </button>
+
+
+            <div class="h-px bg-gray-50 mx-4 my-2"></div>
+            <button id="btnDarkMode" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-gray-900 hover:bg-gray-50 transition-all" aria-label="切换深色模式">
+                <span class="text-sm">💻</span><span>跟随系统</span>
+            </button>
+
+            <!-- Live Signal Feed -->
+            <div class="mt-8 px-3 pb-6">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-ping"></span>
+                    <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest">实时信号源</span>
+                </div>
+                <div id="liveLog"
+                    class="p-3 bg-gray-50 rounded-xl border border-gray-100 h-24 overflow-hidden relative">
+                    <div id="logContainer"
+                        class="text-[9px] text-gray-500 font-mono leading-relaxed space-y-1 transition-all duration-500">
+                        <div class="flex items-center gap-2 text-blue-500">
+                            <span class="font-bold">[SYS]</span>
+                            <span>Neural-Link Up</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Stats Section -->
+        <div class="p-6 mt-auto border-t border-gray-50 bg-gray-50/50">
+            <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-[10px] font-black text-gray-400 uppercase">平台状态</span>
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-gray-500 font-medium">总研报数</span>
+                        <span id="totalPosts" class="text-xs font-black text-gray-900 tracking-tighter">--</span>
+                    </div>
+                </div>
+            </div>
+            <a href="editor.html"
+                class="mt-4 w-full flex items-center justify-center gap-2 py-2.5 bg-gray-900 text-white text-xs font-bold rounded-xl hover:bg-gray-800 transition-all shadow-lg shadow-gray-200">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 4v16m8-8H4" stroke-width="3" stroke-linecap="round"></path>
+                </svg>
+                发布研究任务
+            </a>
+        </div>
+    </aside>
+
     <!-- Resizer 1 -->
     <div id="resizer1" class="resizer"></div>
-    
-    <!-- Column 2: Explorer -->
-    <main id="explorerColumn" class="explorer">
-        <header class="p-6 border-b border-gray-50 bg-white/90 backdrop-blur sticky top-0 z-10">
+
+    <!-- Column 2: Explorer (List & Search) -->
+    <main id="explorerColumn" style="width: var(--explorer-width)"
+        class="flex-shrink-0 bg-white border-r border-gray-100 flex flex-col z-40 relative">
+        <header class="p-6 border-b border-gray-50 glass-blur sticky top-0 bg-white/90 z-10">
             <div class="relative group mb-4">
-                <input type="text" id="postSearch" placeholder="搜索全球研报 / 技术文档..." 
+                <input type="text" id="postSearch" placeholder="搜索全球研报 / 技术文档..."
                     class="w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 border border-transparent rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all outline-none">
-                <svg class="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                <svg class="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
             </div>
             <div class="flex items-center justify-between">
-                <span id="resultsCount" class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Latest Research</span>
-                <select id="sortOrder" class="text-[10px] font-black text-brand-600 bg-transparent outline-none uppercase tracking-tighter cursor-pointer">
-                    <option value="newest">Newest First</option>
-                    <option value="oldest">Oldest First</option>
+                <span id="resultsCount"
+                    class="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none">最新研报</span>
+                <select id="sortOrder"
+                    class="text-[10px] font-black text-brand-600 bg-transparent outline-none uppercase tracking-tighter cursor-pointer">
+                    <option value="newest">最新优先</option>
+                    <option value="oldest">最早优先</option>
                 </select>
             </div>
         </header>
-        <div id="postList" class="flex-grow overflow-y-auto overflow-x-hidden p-4 space-y-3"></div>
+
+        <div id="postList" class="flex-grow overflow-y-auto overflow-x-hidden">
+            <!-- Skeleton Loader -->
+            <div class="p-6 space-y-4" id="skeletonPosts">
+                <div class="h-24 bg-gray-50 rounded-xl skeleton"></div>
+                <div class="h-24 bg-gray-50 rounded-xl skeleton"></div>
+                <div class="h-24 bg-gray-50 rounded-xl skeleton"></div>
+            </div>
+        </div>
     </main>
-    
+
     <!-- Resizer 2 -->
     <div id="resizer2" class="resizer"></div>
-    
-    <!-- Column 3: Reader -->
-    <section id="readerColumn" class="reader"></section>
-    
-    <!-- Drafts Modal -->
-    <div id="draftsModal" class="modal-overlay hidden">
-        <div class="modal-content">
-            <div class="p-6 border-b border-gray-100 flex justify-between items-center">
-                <div>
-                    <h3 class="text-lg font-black uppercase tracking-[0.2em] text-brand-600">Draft Box</h3>
-                    <p class="text-[10px] font-bold text-gray-400 uppercase mt-1">Local workspace research tasks</p>
+
+    <!-- Column: Integrated Editor (Dynamic Reveal) -->
+    <div id="integratedEditor">
+        <header class="px-5 py-4 border-b border-gray-100 flex items-center justify-between bg-white shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-7 h-7 rounded-lg bg-brand-500 flex items-center justify-center text-white">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                        </path>
+                    </svg>
                 </div>
-                <button onclick="closeDraftsModal()" class="p-2 hover:bg-gray-100 rounded-lg">&times;</button>
+                <h3 class="text-xs font-black text-gray-900 uppercase tracking-widest">源码编辑器</h3>
+                <span id="fileTypeBadge"
+                    class="px-2 py-0.5 rounded-md bg-gray-100 text-[9px] font-black text-gray-500 uppercase tracking-widest">HTML</span>
             </div>
-            <div id="draftsList" class="p-6 max-h-96 overflow-y-auto"></div>
-        </div>
-    </div>
-    
-    <!-- Trash Modal -->
-    <div id="trashModal" class="modal-overlay hidden">
-        <div class="modal-content">
-            <div class="p-6 border-b border-gray-100 flex justify-between items-center">
-                <div>
-                    <h3 class="text-lg font-black uppercase tracking-[0.2em] text-red-600">Recycle Bin</h3>
-                    <p class="text-[10px] font-bold text-gray-400 uppercase mt-1">Soft-deleted research archives</p>
-                </div>
-                <button onclick="closeTrashModal()" class="p-2 hover:bg-gray-100 rounded-lg">&times;</button>
+            <button id="btnEditorClose" aria-label="关闭编辑" class="p-2 hover:bg-gray-100 rounded-lg transition-colors text-gray-400"
+                title="关闭编辑">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+        </header>
+        <div class="px-5 py-3 border-b border-gray-50 grid grid-cols-3 gap-2 bg-gray-50/60 shrink-0">
+            <div>
+                <label class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 block">标题</label>
+                <input type="text" id="editTitle"
+                    class="w-full text-xs font-bold border-none bg-white p-2 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none transition-all shadow-sm">
             </div>
-            <div id="trashList" class="p-6 max-h-96 overflow-y-auto"></div>
+            <div>
+                <label class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 block">分类</label>
+                <select id="editCategory"
+                    class="w-full text-xs font-bold border-none bg-white p-2 rounded-lg outline-none shadow-sm">
+                    <option value="robot">Robot</option>
+                    <option value="algo">Algo</option>
+                    <option value="vla">VLA</option>
+                    <option value="news">News</option>
+                    <option value="travel">Travel</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 block">标签</label>
+                <input type="text" id="editTags"
+                    class="w-full text-xs font-bold border-none bg-white p-2 rounded-lg outline-none shadow-sm">
+            </div>
         </div>
-    </div>
-    
-    <!-- Context Menu -->
-    <div id="contextMenu" class="context-menu hidden">
-        <div class="menu-item" onclick="handleEditFromMenu()">Edit Metadata</div>
-        <div class="menu-item menu-item-danger" onclick="handleDeleteFromMenu()">Purge Document</div>
+        <div id="rawSourceEditor"></div>
+        <div class="px-4 py-3 bg-gray-50/80 border-t border-gray-100 flex gap-2 shrink-0">
+            <button id="btnEditorDiscard"
+                class="flex-1 py-2 bg-white border border-gray-200 text-gray-600 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-gray-50 transition-all">放弃</button>
+            <button id="btnEditorSave"
+                class="flex-1 py-2 bg-brand-500 text-white rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-brand-600 shadow-lg shadow-brand-100 transition-all">应用同步</button>
+        </div>
     </div>
 
-    <!-- App Entry -->
-    <script type="module">
-        import App from './src/app.js?v=5';
-        
-        document.addEventListener('DOMContentLoaded', async () => {
-            try {
-                const app = new App();
-                await app.init();
-                window.geekForum = app;
-                console.log('[App] Initialized successfully');
-            } catch (error) {
-                console.error('[App] Init failed:', error);
-            }
-        });
-    </script>
-    
-    <!-- Global Handlers -->
-    <script>
-    window.handleEditFromMenu = function() {
-        const app = window.geekForum;
-        if (app) app.handleEditFromMenu();
-    };
-    window.handleDeleteFromMenu = function() {
-        const app = window.geekForum;
-        if (app) app.handleDeleteFromMenu();
-    };
-    window.closeDraftsModal = function() {
-        const m = document.getElementById('draftsModal');
-        if (m) { m.classList.add('hidden'); m.classList.remove('flex'); }
-    };
-    window.closeTrashModal = function() {
-        const m = document.getElementById('trashModal');
-        if (m) { m.classList.add('hidden'); m.classList.remove('flex'); }
-    };
-    </script>
+    <!-- Drafts Modal -->
+    <div id="draftsModal" role="dialog" aria-modal="true" aria-labelledby="draftsModalTitle"
+        class="fixed inset-0 bg-black/60 backdrop-blur-md z-[100] hidden items-center justify-center p-6">
+        <div
+            class="bg-white w-full max-w-lg rounded-[32px] shadow-2xl overflow-hidden flex flex-col max-h-[80vh] border border-gray-100">
+            <div class="p-8 border-b border-gray-50 flex items-center justify-between bg-gray-50/50">
+                <div>
+                    <h3 class="text-lg font-black uppercase tracking-[0.2em] text-brand-600" id="draftsModalTitle">草稿箱</h3>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase mt-1">本地工作区研究任务</p>
+                </div>
+                <button id="btnDraftsClose"
+                    class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-200 transition-colors">
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+            <div id="draftsList" class="overflow-y-auto p-8 space-y-4 flex-grow bg-white">
+                <!-- Draft items injected here -->
+            </div>
+            <div class="p-8 border-t border-gray-100 bg-gray-50/50 flex justify-between items-center">
+                <button id="btnDraftsCloseFooter"
+                    class="text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-gray-600">关闭</button>
+                <button id="btnDraftsClear"
+                    class="bg-gray-800 text-white px-8 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-black transition-all shadow-xl shadow-gray-200 active:scale-95">
+                    Clear All Drafts
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recycle Bin Modal -->
+    <div id="trashModal" role="dialog" aria-modal="true" aria-labelledby="trashModalTitle"
+        class="fixed inset-0 bg-black/60 backdrop-blur-md z-[100] hidden items-center justify-center p-6">
+        <div
+            class="bg-white w-full max-w-lg rounded-[32px] shadow-2xl overflow-hidden flex flex-col max-h-[80vh] border border-gray-100">
+            <div class="p-8 border-b border-gray-50 flex items-center justify-between bg-gray-50/50">
+                <div>
+                    <h3 class="text-lg font-black uppercase tracking-[0.2em] text-red-600" id="trashModalTitle">回收站</h3>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase mt-1">已软删除的研究档案</p>
+                </div>
+                <button id="btnTrashClose"
+                    class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-200 transition-colors">
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+            <div id="trashList" class="overflow-y-auto p-8 space-y-4 flex-grow bg-white">
+                <!-- Trash items will be injected here -->
+            </div>
+            <div class="p-8 border-t border-gray-100 bg-gray-50/50 flex justify-between items-center">
+                <button id="btnTrashCloseFooter"
+                    class="text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-gray-600">取消</button>
+                <button id="btnTrashEmpty"
+                    class="bg-red-500 text-white px-8 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-red-600 transition-all shadow-xl shadow-red-100 active:scale-95">
+                    Empty Permanently
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Context Menu -->
+    <div id="contextMenu">
+        <div id="menuEdit" class="menu-item">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                </path>
+            </svg>
+            Edit Metadata
+        </div>
+        <div class="h-px bg-gray-100 my-1 mx-2"></div>
+        <div id="menuDelete" class="menu-item menu-item-danger">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                </path>
+            </svg>
+            Purge Document
+        </div>
+    </div>
+
+    <!-- Column 3: Reader (Content Viewer) -->
+    <section id="readerColumn" class="flex-grow bg-[#FBFBFC] relative overflow-hidden flex flex-col">
+        <!-- Reader Toolbar -->
+        <div id="readerToolbar"
+            class="h-14 border-b border-gray-100 bg-white flex items-center justify-between px-6 z-10 shrink-0 hidden">
+            <div class="flex items-center gap-4">
+                <button id="btnMobileBack" class="p-2 -ml-2 mr-1 rounded-lg hover:bg-gray-100 transition-colors" aria-label="返回列表">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+                <div class="flex flex-col">
+                    <div id="readerBreadcrumb" class="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em]">
+                        研报 / 详情</div>
+                    <div id="readerTitleMini" class="text-xs font-bold text-gray-900 truncate max-w-[300px]">--</div>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button id="openExtLink" aria-label="在新标签页打开"
+                    class="p-2 text-gray-400 hover:text-gray-900 transition-colors bg-gray-50 rounded-lg"
+                    title="在新标签页打开">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                    </svg>
+                </button>
+                <div class="w-px h-6 bg-gray-100 mx-2"></div>
+                <button id="btnFullscreen" aria-label="全屏阅读模式"
+                    class="p-2 text-gray-400 hover:text-brand-600 transition-colors bg-gray-50 rounded-lg"
+                    title="全屏阅读模式">
+                    <svg id="fullscreenIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4">
+                        </path>
+                    </svg>
+                </button>
+                <div class="w-px h-6 bg-gray-100 mx-1"></div>
+                <button id="btnCloseReader" aria-label="关闭阅读器"
+                    class="p-2 text-gray-400 hover:text-red-500 transition-colors bg-gray-50 rounded-lg">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="readerContainer" class="flex-grow relative overflow-hidden">
+            <!-- Placeholder / Dashboard -->
+            <div id="readerPlaceholder"
+                class="absolute inset-0 flex flex-col items-center justify-start p-8 lg:p-12 overflow-y-auto bg-[#FBFBFC] hide-scrollbar">
+                <div class="w-full max-w-4xl animate-content pt-8">
+                    <!-- Dashboard Header -->
+                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+                        <div class="max-w-md">
+                            <div
+                                class="inline-flex items-center px-3 py-1 rounded-full bg-brand-50 text-brand-600 text-[9px] font-black uppercase tracking-[0.2em] mb-4 border border-brand-100">
+                                <span class="w-1.5 h-1.5 rounded-full bg-brand-500 mr-2 animate-pulse"></span>
+                                核心节点 Alpha-01 在线
+                            </div>
+                            <h1 class="text-3xl lg:text-5xl font-black text-gray-900 tracking-tight leading-[1.1]">
+                                OpenClaw <span class="text-brand-600 italic">Workstation</span>
+                            </h1>
+                            <p class="text-gray-400 text-sm mt-4 leading-relaxed font-medium">
+                                欢迎回到科研控制台。当前所有神经链路运行正常，已就绪处理新的具身智能实验记录与算法研报。
+                            </p>
+                        </div>
+                        <div class="flex flex-col items-end gap-2 text-right">
+                            <div class="text-[10px] font-black text-gray-300 uppercase tracking-widest leading-none">
+                                本地时间 / 状态</div>
+                            <div id="liveClock"
+                                class="text-2xl font-black text-gray-900 italic tracking-tighter tabular-nums">--:--:--
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard Grid -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+                        <!-- Left Stats Column -->
+                        <div class="lg:col-span-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <!-- Topic Pulse Visualization -->
+                            <div
+                                class="md:col-span-2 bg-white rounded-3xl p-6 border border-gray-100 shadow-sm relative overflow-hidden group">
+                                <div class="relative z-10 flex flex-col h-full">
+                                    <div class="flex items-center justify-between mb-8">
+                                        <h3
+                                            class="text-xs font-black text-gray-900 uppercase tracking-widest flex items-center gap-2">
+                                            <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                            </svg>
+                                            Topic Pulse (7D)
+                                        </h3>
+                                    </div>
+                                    <div class="flex-grow flex items-end justify-between gap-1 h-32">
+                                        <svg class="w-full h-full overflow-visible" viewBox="0 0 400 100"
+                                            preserveAspectRatio="none">
+                                            <path d="M0,80 Q50,20 100,50 T200,30 T300,70 T400,40" fill="none"
+                                                stroke="#0ea5e9" stroke-width="4" stroke-linecap="round"></path>
+                                            <path d="M0,80 Q50,20 100,50 T200,30 T300,70 T400,40 V100 H0 Z"
+                                                fill="url(#pulseGradient)" opacity="0.1"></path>
+                                            <defs>
+                                                <linearGradient id="pulseGradient" x1="0" y1="0" x2="0" y2="1">
+                                                    <stop offset="0%" stop-color="#0ea5e9"></stop>
+                                                    <stop offset="100%" stop-color="#fff"></stop>
+                                                </linearGradient>
+                                            </defs>
+                                        </svg>
+                                    </div>
+                                    <div class="mt-6 flex items-center justify-between">
+                                        <div class="flex flex-col">
+                                            <span
+                                                class="text-[9px] font-black text-gray-400 uppercase tracking-widest">增长</span>
+                                            <span class="text-xl font-black text-gray-900">+12%</span>
+                                        </div>
+                                        <p
+                                            class="text-[10px] text-brand-600 font-bold bg-brand-50 px-3 py-1 rounded-full uppercase tracking-widest">
+                                            Robot Simulation Peak
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Real-time Metrics Card -->
+                            <div class="bg-gray-900 rounded-3xl p-6 text-white shadow-xl flex flex-col justify-between">
+                                <div>
+                                    <h3 class="text-xs font-black text-white/40 uppercase tracking-widest mb-6">归档密度</h3>
+                                    <div class="text-5xl font-black tracking-tighter mb-2 italic">98.2<span
+                                            class="text-brand-400 font-normal">%</span></div>
+                                    <p class="text-[10px] text-white/50 font-medium leading-relaxed">
+                                        链路完整性已达到峰值，通过了神经防伪验证。</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Secondary Row -->
+                        <div class="lg:col-span-8 space-y-8">
+                            <!-- Mission Pipeline -->
+                            <div class="bg-white rounded-3xl border border-gray-100 p-8 shadow-sm">
+                                <div class="flex items-center justify-between mb-8">
+                                    <h3
+                                        class="text-xs font-black text-gray-900 uppercase tracking-[0.2em] flex items-center gap-2">
+                                        <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                                        Mission Pipeline
+                                    </h3>
+                                </div>
+                                <div class="space-y-4">
+                                    <div
+                                        class="flex items-center justify-between p-4 rounded-2xl bg-gray-50/80 border border-gray-100 group hover:border-brand-200 transition-all">
+                                        <div class="flex items-center gap-4">
+                                            <div
+                                                class="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600 transform group-hover:rotate-12 transition-transform">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
+                                                    </path>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <div class="text-xs font-bold text-gray-900 uppercase tracking-tight">
+                                                    VLA Weights Aggregation</div>
+                                                <div
+                                                    class="text-[11px] text-gray-400 font-medium uppercase tracking-widest mt-0.5">
+                                                    流水线 #882 / 处理中...</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions Sidebar -->
+                        <div class="lg:col-span-4 space-y-6">
+                            <div
+                                class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-3xl p-6 text-white shadow-xl shadow-brand-500/20 group relative overflow-hidden">
+                                <h3 class="text-sm font-black mb-4 flex items-center gap-2">自动化发帖指南</h3>
+                                <p class="text-white/70 text-[11px] leading-relaxed font-semibold mb-6">了解如何让 AI
+                                    助手在该平台生成高质量的技术内容。</p>
+                                <a href="posting_rules/00_GLOBAL_RULES.md" target="_blank"
+                                    class="block w-full text-center py-2.5 bg-white text-brand-900 text-xs font-bold rounded-xl hover:bg-gray-50 transition-all uppercase tracking-widest">进入中心</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div
+                        class="mt-20 pt-10 border-t border-gray-100 flex items-center justify-between opacity-40 pb-12">
+                        <div class="text-[9px] font-black text-gray-300 uppercase italic">Running Build:
+                            v2.4.92-beta-stable</div>
+                        <div class="flex gap-4">
+                            <div class="w-2 h-2 rounded-full bg-gray-200"></div>
+                            <div class="w-2 h-2 rounded-full bg-gray-200 animate-pulse"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Iframe for Post Content -->
+            <div id="iframeWrapper" class="absolute inset-0 hidden opacity-0 bg-white">
+                <iframe id="postIframe" src="" class="w-full h-full border-none"></iframe>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div id="readerLoading"
+                class="absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-sm z-20 hidden">
+                <div class="flex flex-col items-center gap-3">
+                    <div class="w-8 h-8 border-4 border-brand-100 border-t-brand-600 rounded-full animate-spin"></div>
+                    <span class="text-[9px] font-black text-brand-600 uppercase tracking-widest">正在加载仓库...</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mobile Tab Bar -->
+    <nav id="mobileTabBar" class="hidden" aria-label="移动端导航">
+        <button data-tab="home" class="flex flex-col items-center gap-0.5 text-brand-600 pt-1" aria-label="首页">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+            <span class="text-[9px] font-bold">首页</span>
+        </button>
+        <button data-tab="search" class="flex flex-col items-center gap-0.5 text-gray-400 pt-1" aria-label="搜索">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <span class="text-[9px] font-bold">搜索</span>
+        </button>
+        <button data-tab="menu" class="flex flex-col items-center gap-0.5 text-gray-400 pt-1" aria-label="分类菜单">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+            <span class="text-[9px] font-bold">分类</span>
+        </button>
+        <button data-tab="drafts" class="flex flex-col items-center gap-0.5 text-gray-400 pt-1" aria-label="草稿箱">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            <span class="text-[9px] font-bold">草稿</span>
+        </button>
+    </nav>
+
 </body>
+
 </html>
