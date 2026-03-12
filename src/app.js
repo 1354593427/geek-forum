@@ -51,24 +51,27 @@ class App {
   initRouter() {
     this.router = new Router();
     
-    this.router
-      .register('/', () => {
-        store.setCurrentUrl('');
-      })
-      .register('/post/:path', (params) => {
-        const url = params.path;
-        store.setCurrentUrl(url);
-      })
-      .register('/404', ({ url }) => {
-        console.warn(`Page not found: ${url}`);
-      })
-      .beforeEach((url) => {
-        // Close edit mode on navigation
-        if (store.getState().isEditMode) {
-          store.setEditMode(false);
-        }
-      })
-      .init();
+    this.router.register('/', () => {
+      store.setCurrentUrl('');
+    });
+    
+    this.router.register('/post/:path', (params) => {
+      const url = params.path;
+      store.setCurrentUrl(url);
+    });
+    
+    this.router.register('/404', ({ url }) => {
+      console.warn(`Page not found: ${url}`);
+    });
+    
+    this.router.beforeEach((url) => {
+      // Close edit mode on navigation
+      if (store.getState().isEditMode) {
+        store.setEditMode(false);
+      }
+    });
+    
+    this.router.init();
   }
 
   async loadPosts() {
