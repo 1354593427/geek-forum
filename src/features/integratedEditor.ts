@@ -1,52 +1,61 @@
-import { EditorView, basicSetup } from 'codemirror'
-import { EditorState, Compartment, StateEffect, StateField } from '@codemirror/state'
-import { Decoration, type DecorationSet } from '@codemirror/view'
-import { html } from '@codemirror/lang-html'
-import { markdown } from '@codemirror/lang-markdown'
-import { oneDark } from '@codemirror/theme-one-dark'
-
 import * as store from '../core/store'
 import { $id, $input, $select } from '../utils/dom'
 import * as reader from './reader'
 import * as postList from './postList'
 
-let view: EditorView | null = null
+let view: any = null
 let editingUrl: string | null = null
 let userHasEdited = false
 let fileType = 'html'
 
-const langConf = new Compartment()
+let cmLoaded = false
+let langConf: any = null
+let setHighlight: any = null
+let htmlLang: () => any
+let mdLang: () => any
 
-const setHighlight = StateEffect.define<{ from: number; to: number } | null>()
-const highlightField = StateField.define<DecorationSet>({
-    create: () => Decoration.none,
-    update(deco, tr) {
-        for (const e of tr.effects) {
-            if (e.is(setHighlight)) {
-                if (e.value) {
-                    return Decoration.set([
-                        Decoration.mark({ class: 'cm-locate-highlight' }).range(e.value.from, e.value.to),
-                    ])
+async function ensureCM() {
+    if (cmLoaded) return
+    const [cm, state, cmView, langHtml, langMd, theme] = await Promise.all([
+        import('codemirror'),
+        import('@codemirror/state'),
+        import('@codemirror/view'),
+        import('@codemirror/lang-html'),
+        import('@codemirror/lang-markdown'),
+        import('@codemirror/theme-one-dark'),
+    ])
+
+    langConf = new state.Compartment()
+    htmlLang = langHtml.html
+    mdLang = langMd.markdown
+
+    setHighlight = state.StateEffect.define<{ from: number; to: number } | null>()
+    const highlightField = state.StateField.define({
+        create: () => cmView.Decoration.none,
+        update(deco: any, tr: any) {
+            for (const e of tr.effects) {
+                if (e.is(setHighlight)) {
+                    if (e.value) {
+                        return cmView.Decoration.set([
+                            cmView.Decoration.mark({ class: 'cm-locate-highlight' }).range(e.value.from, e.value.to),
+                        ])
+                    }
+                    return cmView.Decoration.none
                 }
-                return Decoration.none
             }
-        }
-        return deco
-    },
-    provide: f => EditorView.decorations.from(f),
-})
+            return deco
+        },
+        provide: (f: any) => cm.EditorView.decorations.from(f),
+    })
 
-export function init() {
-    const container = $id('rawSourceEditor')
-
-    const state = EditorState.create({
+    const editorState = state.EditorState.create({
         doc: '',
         extensions: [
-            basicSetup,
-            langConf.of(html()),
-            oneDark,
+            cm.basicSetup,
+            langConf.of(htmlLang()),
+            theme.oneDark,
             highlightField,
-            EditorView.updateListener.of(update => {
+            cm.EditorView.updateListener.of((update: any) => {
                 if (update.docChanged && view) {
                     userHasEdited = true
                     syncToPreview()
@@ -54,8 +63,13 @@ export function init() {
             }),
         ],
     })
-    view = new EditorView({ state, parent: container })
 
+    const container = $id('rawSourceEditor')
+    view = new cm.EditorView({ state: editorState, parent: container })
+    cmLoaded = true
+}
+
+export function init() {
     ;['editTitle', 'editTags', 'editCategory'].forEach(id => {
         $id(id).addEventListener('input', () => { userHasEdited = true })
     })
@@ -73,6 +87,8 @@ export async function enterEditMode(url: string) {
     const post = store.findPost(url)
     if (!post) return
 
+    await ensureCM()
+
     editingUrl = url
     userHasEdited = false
     document.body.classList.add('edit-mode')
@@ -85,8 +101,8 @@ export async function enterEditMode(url: string) {
             fileType === 'md' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'
         }`
     }
-    if (view) {
-        view.dispatch({ effects: langConf.reconfigure(fileType === 'md' ? markdown() : html()) })
+    if (view && langConf) {
+        view.dispatch({ effects: langConf.reconfigure(fileType === 'md' ? mdLang() : htmlLang()) })
     }
 
     $input('editTitle').value = post.title
@@ -149,8 +165,8 @@ function syncToPreview() {
     const title = $input('editTitle').value
 
     if (fileType === 'html') {
-        // eslint-disable-next-line no-useless-escape
-        const script = `<script>document.addEventListener('click',function(e){var el=e.target;while(el&&['SPAN','A','STRONG','EM','CODE','I','B'].includes(el.tagName))el=el.parentElement;if(!el||el===document.body||el===document.documentElement)return;var id=el.id?'id="'+el.id+'"':'';var fc=el.className&&typeof el.className==='string'?el.className.trim().split(/\\s+/)[0]:'';var cls=fc?'class="'+fc+'"':'';var txt=el.textContent?el.textContent.trim().slice(0,60):'';var s=id||cls||txt;if(s)window.parent.postMessage({type:'locate-in-source',searchText:s},'*');},true);<\/script>`
+        const closeTag = '</' + 'script>'
+        const script = `<script>document.addEventListener('click',function(e){var el=e.target;while(el&&['SPAN','A','STRONG','EM','CODE','I','B'].includes(el.tagName))el=el.parentElement;if(!el||el===document.body||el===document.documentElement)return;var id=el.id?'id="'+el.id+'"':'';var fc=el.className&&typeof el.className==='string'?el.className.trim().split(/\\s+/)[0]:'';var cls=fc?'class="'+fc+'"':'';var txt=el.textContent?el.textContent.trim().slice(0,60):'';var s=id||cls||txt;if(s)window.parent.postMessage({type:'locate-in-source',searchText:s},'*');},true);${closeTag}`
         iframe.srcdoc = source.includes('</body>') ? source.replace(/<\/body>/i, script + '</body>') : source + script
     } else {
         const esc = source.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -160,7 +176,7 @@ function syncToPreview() {
 }
 
 function locateInSource(searchText: string) {
-    if (!view || !searchText) return
+    if (!view || !searchText || !setHighlight) return
     const doc = view.state.doc.toString()
     const query = searchText.trim().slice(0, 80).toLowerCase()
     const idx = doc.toLowerCase().indexOf(query)

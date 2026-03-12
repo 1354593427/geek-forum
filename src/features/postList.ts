@@ -5,11 +5,17 @@ import { postCard } from '../templates/postCard'
 
 let fuse: Fuse<any> | null = null
 let contextMenuHandler: ((e: MouseEvent, url: string) => void) | null = null
+let debounceTimer: ReturnType<typeof setTimeout> | null = null
+
+function debouncedRender() {
+    if (debounceTimer) clearTimeout(debounceTimer)
+    debounceTimer = setTimeout(render, 300)
+}
 
 export function init(opts: { onContextMenu: (e: MouseEvent, url: string) => void }) {
     contextMenuHandler = opts.onContextMenu
 
-    $input('postSearch').addEventListener('input', render)
+    $input('postSearch').addEventListener('input', debouncedRender)
     $id('sortOrder').addEventListener('change', render)
 
     document.querySelectorAll('.nav-btn').forEach(btn => {

@@ -8,19 +8,6 @@ export default defineConfig({
         main: resolve(__dirname, 'index.html'),
         editor: resolve(__dirname, 'editor.html'),
       },
-      output: {
-        manualChunks: {
-          codemirror: [
-            'codemirror',
-            '@codemirror/state',
-            '@codemirror/view',
-            '@codemirror/lang-html',
-            '@codemirror/lang-markdown',
-            '@codemirror/theme-one-dark',
-            '@codemirror/search',
-          ],
-        },
-      },
     },
   },
 })
