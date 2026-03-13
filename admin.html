@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw 管理后台</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <script type="module" src="/src/admin-main.ts"></script>
+</head>
+<body class="antialiased min-h-screen bg-[#FBFBFC] font-['Inter']">
+    <div id="adminRoot" class="min-h-screen flex flex-col">
+        <!-- Loading -->
+        <div id="adminLoading" class="flex-1 flex items-center justify-center">
+            <div class="text-center">
+                <div class="w-8 h-8 border-4 border-brand-100 border-t-brand-600 rounded-full animate-spin mx-auto mb-4"></div>
+                <p class="text-xs text-gray-500 font-medium">加载中...</p>
+            </div>
+        </div>
+        <!-- Login Form (hidden by default) -->
+        <div id="adminLogin" class="hidden flex-1 flex items-center justify-center p-8">
+            <div class="w-full max-w-sm bg-white rounded-2xl border border-gray-100 p-8 shadow-sm">
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="w-12 h-12 bg-gradient-to-br from-brand-600 to-indigo-600 rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-black text-gray-900">管理后台</h1>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">OpenClaw Admin</p>
+                    </div>
+                </div>
+                <form id="loginForm" class="space-y-4">
+                    <div>
+                        <label class="block text-[10px] font-black text-gray-500 uppercase tracking-wider mb-1">用户名</label>
+                        <input type="text" id="loginUsername" required
+                            class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none"
+                            placeholder="admin">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black text-gray-500 uppercase tracking-wider mb-1">密码</label>
+                        <input type="password" id="loginPassword" required
+                            class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none"
+                            placeholder="••••••••">
+                    </div>
+                    <p id="loginError" class="text-xs text-red-500 hidden"></p>
+                    <button type="submit"
+                        class="w-full py-3 bg-gray-900 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-black transition-colors">
+                        登录
+                    </button>
+                </form>
+                <p class="mt-6 text-center">
+                    <a href="index.html" class="text-[10px] font-bold text-brand-600 hover:underline">← 返回首页</a>
+                </p>
+            </div>
+        </div>
+        <!-- No API configured -->
+        <div id="adminNoApi" class="hidden flex-1 flex items-center justify-center p-8">
+            <div class="text-center max-w-md">
+                <p class="text-sm text-gray-600 mb-4">管理后台需要配置后端 API。请在 <code class="text-xs bg-gray-100 px-1 rounded">.env</code> 中设置 <code class="text-xs bg-gray-100 px-1 rounded">VITE_API_BASE</code> 并重新构建。</p>
+                <a href="index.html" class="text-brand-600 font-bold text-sm hover:underline">← 返回首页</a>
+            </div>
+        </div>
+        <!-- Dashboard (hidden by default) -->
+        <div id="adminDashboard" class="hidden flex-1 flex flex-col">
+            <header class="h-14 border-b border-gray-100 bg-white flex items-center justify-between px-6 shrink-0">
+                <div class="flex items-center gap-3">
+                    <a href="index.html" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    </a>
+                    <h1 class="text-sm font-black text-gray-900 uppercase tracking-widest">管理后台</h1>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span id="adminUsername" class="text-xs font-bold text-gray-500"></span>
+                    <button id="btnLogout" class="text-[10px] font-black text-red-500 uppercase tracking-wider hover:text-red-600">退出</button>
+                </div>
+            </header>
+            <div class="flex-1 overflow-auto p-6">
+                <div class="max-w-4xl mx-auto space-y-8">
+                    <!-- Stats Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                            <div class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">已发布文章</div>
+                            <div id="statTotalPosts" class="text-3xl font-black text-gray-900 leading-none">--</div>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                            <div class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">待处理草稿</div>
+                            <div id="statTotalDrafts" class="text-3xl font-black text-brand-600 leading-none">--</div>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                            <div class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">回收站项目</div>
+                            <div id="statTotalTrash" class="text-3xl font-black text-red-500 leading-none">--</div>
+                        </div>
+                    </div>
+
+                    <!-- Tabs -->
+
+                    <div class="flex gap-2 border-b border-gray-100 pb-4 flex-wrap">
+                        <button data-tab="posts" class="admin-tab px-4 py-2 rounded-lg text-xs font-black uppercase tracking-wider bg-brand-50 text-brand-600">文章</button>
+                        <button data-tab="drafts" class="admin-tab px-4 py-2 rounded-lg text-xs font-black uppercase tracking-wider text-gray-500 hover:bg-gray-50">草稿</button>
+                        <button data-tab="media" class="admin-tab px-4 py-2 rounded-lg text-xs font-black uppercase tracking-wider text-gray-500 hover:bg-gray-50">图片</button>
+                        <button data-tab="categories" class="admin-tab px-4 py-2 rounded-lg text-xs font-black uppercase tracking-wider text-gray-500 hover:bg-gray-50">主题</button>
+                        <button data-tab="trash" class="admin-tab px-4 py-2 rounded-lg text-xs font-black uppercase tracking-wider text-gray-500 hover:bg-gray-50">回收站</button>
+                    </div>
+                    <!-- Posts -->
+                    <div id="tabPosts" class="admin-panel">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xs font-black text-gray-900 uppercase tracking-widest">文章列表</h2>
+                            <span id="postsCount" class="text-[10px] font-bold text-gray-400">--</span>
+                        </div>
+                        <div id="postsList" class="space-y-2 rounded-xl border border-gray-100 bg-white divide-y divide-gray-50"></div>
+                    </div>
+                    <!-- Drafts -->
+                    <div id="tabDrafts" class="admin-panel hidden">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xs font-black text-gray-900 uppercase tracking-widest">草稿列表</h2>
+                            <a href="editor.html" class="text-[10px] font-black text-brand-600 uppercase tracking-wider hover:underline">+ 新建草稿</a>
+                        </div>
+                        <div id="draftsList" class="space-y-2 rounded-xl border border-gray-100 bg-white divide-y divide-gray-50"></div>
+                    </div>
+                    <!-- Media -->
+                    <div id="tabMedia" class="admin-panel hidden">
+                        <div class="flex justify-between items-center mb-4 flex-wrap gap-3">
+                            <h2 class="text-xs font-black text-gray-900 uppercase tracking-widest">图片管理</h2>
+                            <div class="flex items-center gap-3">
+                                <select id="mediaCategoryFilter" class="text-xs border border-gray-200 rounded-lg px-2 py-1.5 focus:ring-2 focus:ring-brand-500 outline-none bg-white">
+                                    <option value="">全部</option>
+                                </select>
+                                <span id="mediaCount" class="text-[10px] font-bold text-gray-400">--</span>
+                                <a href="editor.html" class="text-[10px] font-black text-brand-600 uppercase tracking-wider hover:underline">在编辑器中上传</a>
+                            </div>
+                        </div>
+                        <div id="mediaList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+                    </div>
+                    <!-- Categories/Themes -->
+                    <div id="tabCategories" class="admin-panel hidden">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xs font-black text-gray-900 uppercase tracking-widest">主题管理</h2>
+                            <div class="flex items-center gap-3">
+                                <input type="text" id="newCategoryName" placeholder="主题名称" class="px-3 py-1.5 text-xs border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none w-40">
+                                <input type="text" id="newCategorySlug" placeholder="slug（可选）" class="px-3 py-1.5 text-xs border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none w-28">
+                                <button id="btnAddCategory" class="px-4 py-1.5 bg-brand-600 text-white text-[10px] font-black uppercase rounded-lg hover:bg-brand-700">添加</button>
+                            </div>
+                        </div>
+                        <div id="categoriesList" class="space-y-2 rounded-xl border border-gray-100 bg-white divide-y divide-gray-50"></div>
+                    </div>
+                    <!-- Trash -->
+                    <div id="tabTrash" class="admin-panel hidden">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xs font-black text-gray-900 uppercase tracking-widest">回收站</h2>
+                            <button id="btnEmptyTrash" class="text-[10px] font-black text-red-500 uppercase tracking-wider hover:underline">清空</button>
+                        </div>
+                        <div id="trashList" class="space-y-2 rounded-xl border border-gray-100 bg-white divide-y divide-gray-50"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
