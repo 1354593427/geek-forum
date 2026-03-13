@@ -5,9 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:api": "cd backend && npm run dev",
     "build": "vite build && cp -r posts dist/ && cp posts.json dist/ && cp -r posting_rules dist/",
     "preview": "vite preview",
     "sync": "python3 scripts/sync_posts.py",
+    "sync:api": "python3 scripts/sync_posts.py && python3 scripts/sync_to_api.py",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint src/ tests/",

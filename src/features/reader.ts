@@ -1,6 +1,9 @@
 import * as store from '../core/store'
+import { getDataSource } from '../api/dataSource'
 import { $id } from '../utils/dom'
 import * as postList from './postList'
+import * as drafts from './drafts'
+import * as trash from './trash'
 
 export function init() {
     window.addEventListener('hashchange', handleHashChange)
@@ -13,14 +16,55 @@ export function handleHashChange() {
     const url = window.location.hash.slice(1)
     if (!url) { close(); return }
 
+    const placeholder = $id('readerPlaceholder')
+    const toolbar = $id('readerToolbar')
+    const wrapper = $id('iframeWrapper')
+    const draftsView = $id('draftsView')
+    const trashView = $id('trashView')
+
+    if (url === 'drafts') {
+        placeholder.classList.add('hidden')
+        wrapper.classList.add('hidden')
+        trashView.classList.add('hidden')
+        trashView.classList.remove('flex')
+        toolbar.classList.remove('hidden')
+        draftsView.classList.remove('hidden')
+        draftsView.classList.add('flex')
+        $id('readerBreadcrumb').innerText = '工作区 / 草稿箱'
+        $id('readerTitleMini').innerText = 'Research Drafts'
+        const fsBtn = $id('fullscreenIcon').closest('button')
+        if (fsBtn) fsBtn.classList.add('hidden')
+        drafts.renderView()
+        postList.render()
+        return
+    }
+    if (url === 'trash') {
+        placeholder.classList.add('hidden')
+        wrapper.classList.add('hidden')
+        draftsView.classList.add('hidden')
+        draftsView.classList.remove('flex')
+        toolbar.classList.remove('hidden')
+        trashView.classList.remove('hidden')
+        trashView.classList.add('flex')
+        $id('readerBreadcrumb').innerText = '工作区 / 回收站'
+        $id('readerTitleMini').innerText = 'Recycle Bin'
+        const fsBtn = $id('fullscreenIcon').closest('button')
+        if (fsBtn) fsBtn.classList.add('hidden')
+        trash.renderView()
+        postList.render()
+        return
+    }
+
     const post = store.findPost(url)
     if (!post) return
 
     postList.render()
-
-    const wrapper = $id('iframeWrapper')
-    const placeholder = $id('readerPlaceholder')
-    const toolbar = $id('readerToolbar')
+    draftsView.classList.add('hidden')
+    draftsView.classList.remove('flex')
+    trashView.classList.add('hidden')
+    trashView.classList.remove('flex')
+    const fsBtn = $id('fullscreenIcon').closest('button')
+    if (fsBtn) fsBtn.classList.remove('hidden')
     const iframe = $id('postIframe') as HTMLIFrameElement
     const loading = $id('readerLoading')
 
@@ -42,13 +86,25 @@ export function handleHashChange() {
         patchIframeContent(iframe)
     }
 
-    iframe.src = url
+    const ds = getDataSource()
+    if (ds.getPostHtml) {
+        ds.getPostHtml(url).then((html) => {
+            if (html) {
+                iframe.srcdoc = html
+            } else {
+                iframe.src = url
+            }
+        }).catch(() => { iframe.src = url })
+    } else {
+        iframe.src = url
+    }
     wrapper.style.opacity = '0'
     wrapper.style.transform = 'translateY(20px)'
 
     $id('readerBreadcrumb').innerText = `Research / ${post.category.toUpperCase()}`
     $id('readerTitleMini').innerText = post.title
-    $id('openExtLink').onclick = () => window.open(url, '_blank')
+    const openExt = document.getElementById('openExtLink')
+    if (openExt) openExt.onclick = () => window.open(url, '_blank')
 }
 
 export function close() {
@@ -57,6 +113,12 @@ export function close() {
     $id('readerToolbar').classList.add('hidden')
     $id('readerPlaceholder').classList.remove('hidden')
     $id('readerLoading').classList.add('hidden')
+    $id('draftsView').classList.add('hidden')
+    $id('draftsView').classList.remove('flex')
+    $id('trashView').classList.add('hidden')
+    $id('trashView').classList.remove('flex')
+    const fsBtn = $id('fullscreenIcon').closest('button')
+    if (fsBtn) fsBtn.classList.remove('hidden')
     ;($id('postIframe') as HTMLIFrameElement).src = ''
     postList.render()
 }

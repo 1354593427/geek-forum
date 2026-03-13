@@ -5,6 +5,7 @@ export default {
   content: [
     './index.html',
     './editor.html',
+    './admin.html',
     './src/**/*.{ts,js}',
   ],
   theme: {

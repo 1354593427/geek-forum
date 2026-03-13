@@ -1,7 +1,8 @@
 import './styles/main.css'
 import type { Post } from './types'
 import * as store from './core/store'
-import { storageGet, KEYS } from './core/storage'
+import { getDataSource } from './api/dataSource'
+import { getStorageAdapter } from './core/storageAdapter'
 import { $id } from './utils/dom'
 
 import * as postList from './features/postList'
@@ -11,16 +12,18 @@ import * as drafts from './features/drafts'
 import * as trash from './features/trash'
 import * as contextMenu from './features/contextMenu'
 import * as resizer from './features/resizer'
-import * as liveLog from './features/liveLog'
 import * as mobile from './features/mobile'
-import * as darkMode from './features/darkMode'
 import * as accessibility from './features/accessibility'
 
 async function boot() {
     try {
-        const rawPosts: Post[] = await (await fetch('posts.json')).json()
+        const adapter = getStorageAdapter()
+        if (adapter.init) await adapter.init()
 
-        const trashUrls = storageGet<Post[]>(KEYS.TRASH, []).map(p => p.url)
+        const dataSource = getDataSource()
+        const rawPosts: Post[] = await dataSource.getPosts()
+
+        const trashUrls = adapter.getTrash().map(p => p.url)
         store.setPosts(rawPosts.filter(p => !trashUrls.includes(p.url)))
 
         $id('totalPosts').innerText = String(store.getPosts().length)
@@ -55,9 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
     drafts.init()
     trash.init()
     resizer.init()
-    liveLog.init()
     mobile.init()
-    darkMode.init()
     accessibility.init()
 
     boot()

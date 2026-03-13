@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RDT-1B 深度解析 | VLA 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <nav class="bg-white border-b sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="../vla-2025.html" class="flex items-center gap-2 text-gray-700 hover:text-gray-900">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                <span class="font-medium">返回VLA综述</span>
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-3xl mx-auto px-4 py-8">
+        <header class="mb-8">
+            <div class="flex items-center gap-2 mb-3">
+                <span class="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs font-medium">开源</span>
+                <span class="text-sm text-gray-500">arXiv:2410.07864</span>
+            </div>
+            <h1 class="text-3xl font-bold mb-2">RDT-1B: 双臂操控的扩散Transformer</h1>
+            <p class="text-gray-600">Tsinghua University, Shanghai AI Lab | 2024年10月</p>
+        </header>
+
+        <!-- 研究背景 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="book-open" class="w-5 h-5 text-blue-600"></i>
+                研究背景
+            </h2>
+            <div class="prose text-gray-700">
+                <p class="mb-3">
+                    双臂机器人操控是具身智能的重要挑战，需要协调两个机械臂完成复杂的协作任务（如双手搬运、装配等）。现有方法多为单臂设计，双臂场景数据稀缺且控制维度高。
+                </p>
+                <p class="mb-3">
+                    扩散模型在图像生成领域展现了强大的多模态建模能力，但将其应用于高维机器人动作空间面临挑战：<strong>如何设计既能捕捉动作时间相关性、又能处理不同机器人形态的统一架构？</strong>
+                </p>
+                <div class="bg-blue-50 rounded-lg p-4 mt-4">
+                    <h4 class="font-semibold text-blue-900 mb-2">核心挑战</h4>
+                    <ul class="text-sm text-blue-800 space-y-1">
+                        <li>• 双臂协调需要建模复杂的时空依赖关系</li>
+                        <li>• 不同机器人平台（关节数、末端执行器）差异大</li>
+                        <li>• 需要统一的动作表示支持跨平台迁移</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 核心方法 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="cpu" class="w-5 h-5 text-purple-600"></i>
+                核心方法
+            </h2>
+            
+            <div class="space-y-4">
+                <div class="border-l-4 border-purple-500 pl-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">扩散Transformer架构</h3>
+                    <p class="text-gray-700 text-sm mb-2">
+                        RDT-1B采用12亿参数的Diffusion Transformer：
+                    </p>
+                    <ul class="text-sm text-gray-700 space-y-1 ml-4">
+                        <li>• 将动作序列视为需要"去噪"的目标</li>
+                        <li>• Transformer同时处理时间和空间维度</li>
+                        <li>• 支持长序列建模（预测未来64步动作）</li>
+                    </ul>
+                </div>
+
+                <div class="border-l-4 border-blue-500 pl-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">统一动作空间</h3>
+                    <p class="text-gray-700 text-sm">
+                        设计<strong>统一动作向量</strong>，维度覆盖：关节位置/速度、末端执行器位姿、夹爪状态、移动底座速度。通过掩码机制，不同机器人只使用相关维度，实现跨平台兼容。
+                    </p>
+                </div>
+
+                <div class="border-l-4 border-green-500 pl-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">多模态预训练</h3>
+                    <p class="text-gray-700 text-sm">
+                        在46个数据集的100万+机器人片段上预训练，包含单臂、双臂、移动操作等多样化数据。使用SigLIP编码视觉输入，T5-XXL编码语言指令。
+                    </p>
+                </div>
+
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h4 class="font-semibold text-gray-900 mb-2">双臂微调策略</h4>
+                    <p class="text-gray-700 text-sm">
+                        在ALOHA双机器人平台上采集6000+高质量片段进行微调。这是目前最大的双臂操作数据集之一，涵盖复杂的双手协调任务。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 实验解析 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="bar-chart-2" class="w-5 h-5 text-green-600"></i>
+                实验解析
+            </h2>
+
+            <div class="grid grid-cols-3 gap-3 mb-4">
+                <div class="bg-gray-50 rounded-lg p-3 text-center">
+                    <div class="text-xl font-bold text-green-600">1.2B</div>
+                    <div class="text-xs text-gray-600">模型参数</div>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-3 text-center">
+                    <div class="text-xl font-bold text-blue-600">1M+</div>
+                    <div class="text-xs text-gray-600">预训练片段</div>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-3 text-center">
+                    <div class="text-xl font-bold text-purple-600">SOTA</div>
+                    <div class="text-xs text-gray-600">双臂操控</div>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <h4 class="font-semibold text-gray-900">评估设置</h4>
+                <ul class="text-sm text-gray-700 space-y-1">
+                    <li>• <strong>仿真环境：</strong>Maniskill, RLBench等</li>
+                    <li>• <strong>真实机器人：</strong>ALOHA双机器人平台</li>
+                    <li>• <strong>任务类型：</strong>双手搬运、折叠、装配等</li>
+                </ul>
+
+                <h4 class="font-semibold text-gray-900 mt-4">关键结果</h4>
+                <ul class="text-sm text-gray-700 space-y-1">
+                    <li>• <strong>双臂SOTA：</strong>在双臂协调任务上达到新标杆</li>
+                    <li>• <strong>零样本泛化：</strong>到新环境/物体的迁移能力强</li>
+                    <li>• <strong>少样本适应：</strong>少量微调即可适应新机器人平台</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 局限讨论 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="alert-circle" class="w-5 h-5 text-orange-600"></i>
+                局限讨论
+            </h2>
+
+            <div class="space-y-3 text-gray-700">
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>推理速度</strong>
+                        <p class="text-sm text-gray-600">扩散模型需要多步去噪（通常10-20步），推理延迟较高，难以满足实时控制需求。</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>语言理解能力</strong>
+                        <p class="text-sm text-gray-600">相比VLA模型，RDT的语言理解能力较弱，复杂指令跟随能力有限。</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>双臂数据稀缺</strong>
+                        <p class="text-sm text-gray-600">虽然采集了6000+双臂片段，但相比单臂数据仍显不足，限制了复杂任务的泛化。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 相关链接 -->
+        <section class="bg-gray-100 rounded-xl p-6">
+            <h3 class="font-semibold mb-3">相关链接</h3>
+            <div class="flex flex-wrap gap-3">
+                <a href="https://arxiv.org/abs/2410.07864" target="_blank" class="px-4 py-2 bg-white rounded-lg text-sm text-blue-600 hover:bg-blue-50 transition-colors">
+                    arXiv论文
+                </a>
+                <a href="https://rdt-robotics.github.io/" target="_blank" class="px-4 py-2 bg-white rounded-lg text-sm text-gray-700 hover:bg-gray-200 transition-colors">
+                    项目主页
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script>lucide.createIcons();</script>
+</body>
+</html>

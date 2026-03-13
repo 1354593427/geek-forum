@@ -1,4 +1,6 @@
 import * as store from '../core/store'
+import { getDataSource } from '../api/dataSource'
+import { getCategories } from '../api/categories'
 import { $id, $input, $select } from '../utils/dom'
 import * as reader from './reader'
 import * as postList from './postList'
@@ -70,6 +72,7 @@ async function ensureCM() {
 }
 
 export function init() {
+    void populateEditCategorySelect()
     ;['editTitle', 'editTags', 'editCategory'].forEach(id => {
         $id(id).addEventListener('input', () => { userHasEdited = true })
     })
@@ -81,6 +84,19 @@ export function init() {
     window.addEventListener('message', (e: MessageEvent) => {
         if (e.data?.type === 'locate-in-source') locateInSource(e.data.searchText)
     })
+}
+
+async function populateEditCategorySelect() {
+    const sel = document.getElementById('editCategory') as HTMLSelectElement
+    if (!sel) return
+    const cats = await getCategories()
+    sel.innerHTML = cats.map((c) => `<option value="${escapeAttr(c.slug)}">${escapeAttr(c.name)}</option>`).join('')
+}
+
+function escapeAttr(s: string) {
+    const div = document.createElement('div')
+    div.textContent = s
+    return div.innerHTML.replace(/"/g, '&quot;')
 }
 
 export async function enterEditMode(url: string) {
@@ -111,8 +127,14 @@ export async function enterEditMode(url: string) {
 
     setContent('// Loading source...')
     try {
-        const res = await fetch(url)
-        setContent(await res.text())
+        const ds = getDataSource()
+        if (ds.getPostHtml) {
+            const html = await ds.getPostHtml(url)
+            setContent(html ?? `// Failed to load from API`)
+        } else {
+            const res = await fetch(url)
+            setContent(await res.text())
+        }
     } catch (e: any) {
         setContent(`// Failed to load source: ${e.message}`)
     }

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GR00T N1 深度解析 | VLA 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <nav class="bg-white border-b sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="../vla-2025.html" class="flex items-center gap-2 text-gray-700 hover:text-gray-900">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                <span class="font-medium">返回VLA综述</span>
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-3xl mx-auto px-4 py-8">
+        <header class="mb-8">
+            <div class="flex items-center gap-2 mb-3">
+                <span class="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs font-medium">开源</span>
+                <span class="text-sm text-gray-500">arXiv:2503.14734</span>
+            </div>
+            <h1 class="text-3xl font-bold mb-2">GR00T N1: NVIDIA开源人形机器人基础模型</h1>
+            <p class="text-gray-600">NVIDIA GEAR Team | 2025年3月</p>
+        </header>
+
+        <!-- 研究背景 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="book-open" class="w-5 h-5 text-blue-600"></i>
+                研究背景
+            </h2>
+            <div class="prose text-gray-700">
+                <p class="mb-3">
+                    人形机器人被视为通用具身智能的终极形态，但面临<strong>数据稀缺</strong>和<strong>泛化困难</strong>两大挑战。传统方法针对特定机器人和任务训练专用策略，难以跨平台迁移。
+                </p>
+                <p class="mb-3">
+                    NVIDIA GEAR团队提出<strong>双系统架构</strong>的VLA模型，借鉴人类认知的System 1（快速直觉）和System 2（慢速推理）理论，旨在构建可泛化的人形机器人基础模型。
+                </p>
+                <div class="bg-blue-50 rounded-lg p-4 mt-4">
+                    <h4 class="font-semibold text-blue-900 mb-2">核心动机</h4>
+                    <ul class="text-sm text-blue-800 space-y-1">
+                        <li>• 解决人形机器人数据收集成本高、多样性不足的问题</li>
+                        <li>• 实现跨机器人平台（Fourier GR-1, 1X等）的统一控制</li>
+                        <li>• 支持复杂的双臂协调和全身控制任务</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 核心方法 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="cpu" class="w-5 h-5 text-purple-600"></i>
+                核心方法
+            </h2>
+            
+            <div class="space-y-4">
+                <div class="border-l-4 border-purple-500 pl-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">双系统架构</h3>
+                    <p class="text-gray-700 text-sm mb-2">
+                        <strong>System 2 (视觉-语言模块):</strong> 基于Eagle-2 VLM，使用SmolLM2 LLM和SigLIP-2图像编码器，负责高层语义理解和任务规划。
+                    </p>
+                    <p class="text-gray-700 text-sm">
+                        <strong>System 1 (动作模块):</strong> 基于扩散Transformer，接收System 2的隐状态表示，生成50Hz的实时动作序列。
+                    </p>
+                </div>
+
+                <div class="border-l-4 border-blue-500 pl-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">异构数据混合训练</h3>
+                    <p class="text-gray-700 text-sm">
+                        训练数据包含：真实机器人轨迹、人体视频（ego-centric）、合成数据。通过统一的动作空间表示，实现跨数据源的知识迁移。
+                    </p>
+                </div>
+
+                <div class="border-l-4 border-green-500 pl-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">大规模训练基础设施</h3>
+                    <p class="text-gray-700 text-sm">
+                        使用NVIDIA OSMO编排平台，最多1024块H100 GPU并行训练，总训练量超过50,000 GPU小时。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 实验解析 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="bar-chart-2" class="w-5 h-5 text-green-600"></i>
+                实验解析
+            </h2>
+
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="bg-gray-50 rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold text-green-600">SOTA</div>
+                    <div class="text-xs text-gray-600">仿真基准性能</div>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold text-blue-600">50Hz</div>
+                    <div class="text-xs text-gray-600">实时控制频率</div>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <h4 class="font-semibold text-gray-900">评估设置</h4>
+                <ul class="text-sm text-gray-700 space-y-1">
+                    <li>• <strong>仿真环境:</strong> Isaac Sim, SIMPLER等</li>
+                    <li>• <strong>真实机器人:</strong> Fourier GR-1, 1X humanoid</li>
+                    <li>• <strong>任务类型:</strong> 双臂协调、物体操作、工具使用</li>
+                </ul>
+
+                <h4 class="font-semibold text-gray-900 mt-4">关键结果</h4>
+                <ul class="text-sm text-gray-700 space-y-1">
+                    <li>• 在标准仿真基准上超越现有模仿学习方法</li>
+                    <li>• 真实世界双臂操控任务表现强劲</li>
+                    <li>• 数据效率高，少量微调即可适应新任务</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 局限讨论 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="alert-circle" class="w-5 h-5 text-orange-600"></i>
+                局限讨论
+            </h2>
+
+            <div class="space-y-3 text-gray-700">
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>计算资源需求极高</strong>
+                        <p class="text-sm text-gray-600">50,000+ GPU小时的训练成本，普通研究机构难以复现</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>人形机器人专用</strong>
+                        <p class="text-sm text-gray-600">架构针对双足双臂设计，向其他形态（如轮式）迁移需大量调整</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>长程任务规划能力有限</strong>
+                        <p class="text-sm text-gray-600">System 2的推理深度受限于VLM的上下文长度，复杂多步骤任务仍需改进</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>安全性验证不足</strong>
+                        <p class="text-sm text-gray-600">论文未详细讨论安全约束和故障恢复机制，实际部署风险待评估</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 相关链接 -->
+        <section class="bg-gray-100 rounded-xl p-6">
+            <h3 class="font-semibold mb-3">相关链接</h3>
+            <div class="flex flex-wrap gap-3">
+                <a href="https://arxiv.org/abs/2503.14734" target="_blank" class="px-4 py-2 bg-white rounded-lg text-sm text-blue-600 hover:bg-blue-50 transition-colors">
+                    arXiv论文
+                </a>
+                <a href="https://github.com/NVIDIA/Isaac-GR00T" target="_blank" class="px-4 py-2 bg-white rounded-lg text-sm text-gray-700 hover:bg-gray-200 transition-colors">
+                    GitHub代码
+                </a>
+                <a href="https://developer.nvidia.com/isaac/gr00t" target="_blank" class="px-4 py-2 bg-white rounded-lg text-sm text-gray-700 hover:bg-gray-200 transition-colors">
+                    官方文档
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script>lucide.createIcons();</script>
+</body>
+</html>

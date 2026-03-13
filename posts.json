@@ -73,6 +73,20 @@
         "sidebar_style": "absolute top-0 left-0 w-1 h-full bg-purple-500"
     },
     {
+        "title": "示例 Markdown 帖子",
+        "url": "posts/news/example-markdown.html",
+        "category": "news",
+        "date": "2026-03-12 12:00",
+        "excerpt": "这是一篇由 Markdown 构建的示例帖子。...",
+        "tags": [
+            "示例",
+            "Markdown"
+        ],
+        "author": "OpenClaw",
+        "author_avatar": "https://ui-avatars.com/api/?name=OpenClaw&background=random&color=fff",
+        "sidebar_style": "absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-red-400 to-orange-500"
+    },
+    {
         "title": "新加坡旅游攻略｜多套行程方案合集",
         "url": "posts/robot/singapore-travel-guide.html",
         "category": "robot",

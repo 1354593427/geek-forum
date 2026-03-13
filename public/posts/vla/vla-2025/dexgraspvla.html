@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DexGraspVLA 深度解析 | VLA 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <nav class="bg-white border-b sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="../vla-2025.html" class="flex items-center gap-2 text-gray-700 hover:text-gray-900">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                <span class="font-medium">返回VLA综述</span>
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-3xl mx-auto px-4 py-8">
+        <header class="mb-8">
+            <div class="flex items-center gap-2 mb-3">
+                <span class="px-2 py-0.5 bg-orange-100 text-orange-700 rounded text-xs font-medium">灵巧抓取</span>
+                <span class="text-sm text-gray-500">arXiv:2502.20900</span>
+            </div>
+            <h1 class="text-3xl font-bold mb-2">DexGraspVLA: 通用灵巧抓取</h1>
+            <p class="text-gray-600">Peking University, BIGAI | 2025年2月</p>
+        </header>
+
+        <!-- 研究背景 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="book-open" class="w-5 h-5 text-blue-600"></i>
+                研究背景
+            </h2>
+            <div class="prose text-gray-700">
+                <p class="mb-3">
+                    灵巧抓取（Dexterous Grasping）是机器人学的核心挑战之一。与简单的平行夹爪不同，五指灵巧手需要控制20+自由度，适应各种复杂物体和抓取姿态。
+                </p>
+                <p class="mb-3">
+                    现有方法大多局限于特定场景（单物体、固定背景），泛化能力差。VLA模型为通用灵巧抓取提供了新思路，但面临挑战：<strong>如何将VLM的语义理解能力转化为精细的手指控制？</strong>
+                </p>
+                <div class="bg-orange-50 rounded-lg p-4 mt-4">
+                    <h4 class="font-semibold text-orange-900 mb-2">核心挑战</h4>
+                    <ul class="text-sm text-orange-800 space-y-1">
+                        <li>• 高维动作空间（20+ DOF）导致学习困难</li>
+                        <li>• 视觉输入多样化（物体、光照、背景变化）</li>
+                        <li>• 需要闭环反馈调整抓取姿态</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 核心方法 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="cpu" class="w-5 h-5 text-purple-600"></i>
+                核心方法
+            </h2>
+            
+            <div class="space-y-4">
+                <div class="border-l-4 border-purple-500 pl-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">分层VLA架构</h3>
+                    <p class="text-gray-700 text-sm mb-2">
+                        采用<strong>高层规划器 + 低层控制器</strong>的分层设计：
+                    </p>
+                    <ul class="text-sm text-gray-700 space-y-1 ml-4">
+                        <li>• <strong>高层：</strong>预训练VLM（Qwen-VL）理解指令和场景</li>
+                        <li>• <strong>低层：</strong>扩散策略生成手指关节动作</li>
+                    </ul>
+                </div>
+
+                <div class="border-l-4 border-blue-500 pl-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">域不变表示学习</h3>
+                    <p class="text-gray-700 text-sm">
+                        关键创新：通过基础模型将多样化的语言和视觉输入转换为<strong>域不变表示</strong>。具体实现：使用DINOv2提取视觉特征，将不同环境（光照、背景）映射到统一空间，降低策略学习的难度。
+                    </p>
+                </div>
+
+                <div class="border-l-4 border-green-500 pl-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">闭环控制</h3>
+                    <p class="text-gray-700 text-sm">
+                        策略以10Hz频率运行，每100ms根据当前视觉观察重新规划动作，实现动态调整和错误恢复。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 实验解析 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="bar-chart-2" class="w-5 h-5 text-green-600"></i>
+                实验解析
+            </h2>
+
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="bg-gray-50 rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold text-green-600">90.8%</div>
+                    <div class="text-xs text-gray-600">杂乱场景成功率</div>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold text-blue-600">98.6%</div>
+                    <div class="text-xs text-gray-600">单物体成功率</div>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <h4 class="font-semibold text-gray-900">评估设置</h4>
+                <ul class="text-sm text-gray-700 space-y-1">
+                    <li>• <strong>测试场景：</strong>1287种未见物体、光照、背景组合</li>
+                    <li>• <strong>机器人：</strong>Shadow Hand五指灵巧手</li>
+                    <li>• <strong>基线对比：</strong>π0, RDT, OpenVLA, Diffusion Policy</li>
+                </ul>
+
+                <h4 class="font-semibold text-gray-900 mt-4">关键结果</h4>
+                <ul class="text-sm text-gray-700 space-y-1">
+                    <li>• <strong>零样本泛化：</strong>在完全未见的环境中保持90%+成功率</li>
+                    <li>• <strong>对比优势：</strong>超越直接视觉输入策略48%以上</li>
+                    <li>• <strong>长程任务：</strong>支持自由形式的长指令（如"先拿起杯子，再倒水到碗里"）</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 局限讨论 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="alert-circle" class="w-5 h-5 text-orange-600"></i>
+                局限讨论
+            </h2>
+
+            <div class="space-y-3 text-gray-700">
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>触觉缺失</strong>
+                        <p class="text-sm text-gray-600">当前仅依赖视觉反馈，缺乏触觉信息，对于需要力反馈的精细操作（如插孔）能力有限。</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>计算开销</strong>
+                        <p class="text-sm text-gray-600">VLM推理 + 扩散策略生成，整体延迟较高，难以实现更高频率的实时控制。</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>训练数据</strong>
+                        <p class="text-sm text-gray-600">需要大量高质量遥操作数据，数据收集成本高，限制了向新机器人手型的迁移。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 相关链接 -->
+        <section class="bg-gray-100 rounded-xl p-6">
+            <h3 class="font-semibold mb-3">相关链接</h3>
+            <div class="flex flex-wrap gap-3">
+                <a href="https://arxiv.org/abs/2502.20900" target="_blank" class="px-4 py-2 bg-white rounded-lg text-sm text-blue-600 hover:bg-blue-50 transition-colors">
+                    arXiv论文
+                </a>
+                <a href="https://dexgraspvla.github.io/" target="_blank" class="px-4 py-2 bg-white rounded-lg text-sm text-gray-700 hover:bg-gray-200 transition-colors">
+                    项目主页
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script>lucide.createIcons();</script>
+</body>
+</html>

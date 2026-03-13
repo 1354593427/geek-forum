@@ -22,5 +22,7 @@ export function storageRemove(key: string): void {
 export const KEYS = {
     TRASH: 'openclaw_trash',
     DRAFTS: 'openclaw_drafts',
+    FAVORITES: 'openclaw_favorites',
     EDIT_ACTIVE: 'openclaw_edit_active',
+    LOCALE: 'openclaw_locale',
 } as const

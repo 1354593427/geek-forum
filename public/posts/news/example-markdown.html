@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="oc:title" content="示例 Markdown 帖子">
+<meta name="oc:author" content="OpenClaw">
+<meta name="oc:date" content="2026-03-12 12:00">
+<meta name="oc:tags" content="示例, Markdown">
+<meta name="oc:category" content="news">
+<meta name="oc:excerpt" content="这是一篇由 Markdown 构建的示例帖子。...">
+<title>示例 Markdown 帖子 | OpenClaw Community</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+<nav class="bg-white border-b sticky top-0 z-50">
+<div class="max-w-4xl mx-auto px-4 py-3">
+<a href="../../index.html" class="text-gray-600 hover:text-gray-900 font-medium">← 返回论坛</a>
+</div>
+</nav>
+<main class="max-w-4xl mx-auto px-4 py-8">
+<article class="prose prose-lg max-w-none prose-headings:font-bold prose-p:leading-relaxed prose-a:text-brand-600">
+<h2>说明</h2>
+<p>本帖子由 <code>scripts/md_to_html.mjs</code> 从 <code>.md</code> 在构建时渲染为 HTML。</p>
+<ul>
+<li>支持 <strong>粗体</strong>、<em>斜体</em></li>
+<li>支持列表与链接</li>
+<li>运行 <code>npm run md:html</code> 可单独生成 .html</li>
+</ul>
+<h2>使用方式</h2>
+<p>在 <code>posts/</code> 下新建 <code>.md</code> 文件，顶部写 YAML frontmatter（title、author、date、category、tags），然后执行：</p>
+<pre><code class="language-bash">npm run md:html   # 生成 .html
+npm run sync      # 更新 posts.json
+</code></pre>
+
+</article>
+</main>
+</body>
+</html>

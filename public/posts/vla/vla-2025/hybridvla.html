@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HybridVLA 深度解析 | VLA 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <nav class="bg-white border-b sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="../vla-2025.html" class="flex items-center gap-2 text-gray-700 hover:text-gray-900">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                <span class="font-medium">返回VLA综述</span>
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-3xl mx-auto px-4 py-8">
+        <header class="mb-8">
+            <div class="flex items-center gap-2 mb-3">
+                <span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs font-medium">ICLR 2026</span>
+                <span class="text-sm text-gray-500">arXiv:2503.10631</span>
+            </div>
+            <h1 class="text-3xl font-bold mb-2">HybridVLA: 扩散与自回归的协同</h1>
+            <p class="text-gray-600">Peking University, etc. | 2025年3月</p>
+        </header>
+
+        <!-- 研究背景 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="book-open" class="w-5 h-5 text-blue-600"></i>
+                研究背景
+            </h2>
+            <div class="prose text-gray-700">
+                <p class="mb-3">
+                    VLA模型的动作生成存在两种主流范式：<strong>自回归（Autoregressive）</strong>和<strong>扩散（Diffusion）</strong>。自回归方法继承VLM的语义推理能力，但将动作离散化导致连续性损失；扩散模型生成连续动作质量高，但推理速度慢且未充分利用VLM的推理能力。
+                </p>
+                <p class="mb-3">
+                    现有工作通常二选一，或简单拼接两种方法，未能实现真正的协同。HybridVLA提出核心问题：<strong>能否在一个统一的LLM框架内，让扩散和自回归相互强化而非相互干扰？</strong>
+                </p>
+                <div class="bg-blue-50 rounded-lg p-4 mt-4">
+                    <h4 class="font-semibold text-blue-900 mb-2">核心动机</h4>
+                    <ul class="text-sm text-blue-800 space-y-1">
+                        <li>• 自回归擅长语义推理，扩散擅长连续生成，两者互补</li>
+                        <li>• 简单拼接会导致训练不稳定和性能下降</li>
+                        <li>• 需要设计协同机制实现1+1>2的效果</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 核心方法 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="cpu" class="w-5 h-5 text-purple-600"></i>
+                核心方法
+            </h2>
+            
+            <div class="space-y-4">
+                <div class="border-l-4 border-purple-500 pl-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">统一架构设计</h3>
+                    <p class="text-gray-700 text-sm mb-2">
+                        在单个LLM内同时支持两种生成模式：
+                    </p>
+                    <ul class="text-sm text-gray-700 space-y-1 ml-4">
+                        <li>• <strong>自回归分支：</strong>预测离散动作token，利用VLM的推理能力</li>
+                        <li>• <strong>扩散分支：</strong>在LLM隐空间上进行去噪，生成连续动作</li>
+                    </ul>
+                </div>
+
+                <div class="border-l-4 border-blue-500 pl-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">协同训练配方</h3>
+                    <p class="text-gray-700 text-sm mb-2">
+                        关键创新是<strong>将扩散去噪融入next-token预测</strong>：
+                    </p>
+                    <p class="text-gray-700 text-sm">
+                        在训练时，模型交替执行自回归预测和扩散去噪步骤。扩散去噪的梯度通过特殊设计的路径传播，避免干扰自回归分支。这种"交替训练"使两个分支相互适应。
+                    </p>
+                </div>
+
+                <div class="border-l-4 border-green-500 pl-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">协同动作集成</h3>
+                    <p class="text-gray-700 text-sm">
+                        推理时，两个分支分别生成动作预测，通过<strong>自适应权重融合</strong>得到最终动作。权重根据任务类型和输入特征动态调整，简单任务依赖自回归，复杂精细任务依赖扩散。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 实验解析 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="bar-chart-2" class="w-5 h-5 text-green-600"></i>
+                实验解析
+            </h2>
+
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="bg-gray-50 rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold text-green-600">+14%</div>
+                    <div class="text-xs text-gray-600">超越SOTA VLA</div>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold text-blue-600">协同</div>
+                    <div class="text-xs text-gray-600">训练稳定性</div>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <h4 class="font-semibold text-gray-900">评估设置</h4>
+                <ul class="text-sm text-gray-700 space-y-1">
+                    <li>• <strong>仿真环境：</strong>LIBERO, SIMPLER等标准基准</li>
+                    <li>• <strong>真实机器人：</strong>Franka机械臂验证</li>
+                    <li>• <strong>基线对比：</strong>OpenVLA, π0, 纯自回归, 纯扩散</li>
+                </ul>
+
+                <h4 class="font-semibold text-gray-900 mt-4">关键结果</h4>
+                <ul class="text-sm text-gray-700 space-y-1">
+                    <li>• <strong>性能提升：</strong>相比最佳单方法基线提升14%</li>
+                    <li>• <strong>协同验证：</strong>消融实验表明两种方法确实相互强化</li>
+                    <li>• <strong>任务适应性：</strong>在简单和复杂任务上都表现优异</li>
+                </ul>
+
+                <div class="bg-green-50 rounded-lg p-4 mt-4">
+                    <h4 class="font-semibold text-green-900 mb-2">消融实验</h4>
+                    <p class="text-sm text-green-800">
+                        去掉协同训练（直接拼接两种方法），性能下降8%；去掉动作集成（固定权重平均），性能下降5%。证明了两个核心组件的必要性。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 局限讨论 -->
+        <section class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="alert-circle" class="w-5 h-5 text-orange-600"></i>
+                局限讨论
+            </h2>
+
+            <div class="space-y-3 text-gray-700">
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>训练复杂度</strong>
+                        <p class="text-sm text-gray-600">协同训练配方增加了训练复杂度，需要仔细调优超参数，训练时间比单一方法长约40%。</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>架构特异性</strong>
+                        <p class="text-sm text-gray-600">当前设计针对特定LLM架构优化，向其他VLM backbone迁移需要重新设计。</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>推理开销</strong>
+                        <p class="text-sm text-gray-600">需要同时运行两个分支，推理计算量约为单一方法的1.8倍。</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-orange-500 mt-1">•</span>
+                    <div>
+                        <strong>权重学习局限</strong>
+                        <p class="text-sm text-gray-600">自适应融合权重的学习依赖训练数据分布，在分布外任务上可能失效。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 相关链接 -->
+        <section class="bg-gray-100 rounded-xl p-6">
+            <h3 class="font-semibold mb-3">相关链接</h3>
+            <div class="flex flex-wrap gap-3">
+                <a href="https://arxiv.org/abs/2503.10631" target="_blank" class="px-4 py-2 bg-white rounded-lg text-sm text-blue-600 hover:bg-blue-50 transition-colors">
+                    arXiv论文
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script>lucide.createIcons();</script>
+</body>
+</html>

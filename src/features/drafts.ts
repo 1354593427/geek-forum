@@ -1,12 +1,10 @@
-import { storageGet, storageSet, KEYS } from '../core/storage'
+import { getStorageAdapter } from '../core/storageAdapter'
 import { $id, delegate } from '../utils/dom'
 import { showNotification } from '../utils/notification'
 import { draftItem } from '../templates/draftItem'
 
 export function init() {
-    $id('btnDrafts').addEventListener('click', openModal)
-    $id('btnDraftsClose').addEventListener('click', closeModal)
-    $id('btnDraftsCloseFooter').addEventListener('click', closeModal)
+    $id('btnDrafts').addEventListener('click', () => { window.location.hash = '#drafts' })
     $id('btnDraftsClear').addEventListener('click', clearAll)
 
     delegate($id('draftsList'), '[data-draft-delete]', 'click', (target) => {
@@ -15,49 +13,41 @@ export function init() {
     })
 }
 
-export function openModal() {
-    const drafts: any[] = storageGet(KEYS.DRAFTS, [])
-    const modal = $id('draftsModal')
+export function renderView() {
+    const drafts = getStorageAdapter().getDrafts()
     const list = $id('draftsList')
 
-    modal.classList.remove('hidden')
-    modal.classList.add('flex')
-
     if (drafts.length === 0) {
-        list.innerHTML = '<div class="p-12 text-center text-gray-400 font-bold text-xs uppercase tracking-widest">No saved drafts</div>'
-        return
+        list.innerHTML = '<div class="py-12 text-center text-gray-400 font-bold text-xs uppercase tracking-widest">暂无草稿</div>'
+    } else {
+        list.innerHTML = drafts.map((d, i) => draftItem(d, i)).join('')
     }
-    list.innerHTML = drafts.map((d, i) => draftItem(d, i)).join('')
     updateCount()
-}
-
-export function closeModal() {
-    const modal = $id('draftsModal')
-    modal.classList.add('hidden')
-    modal.classList.remove('flex')
 }
 
 function deleteDraft(index: number) {
-    const drafts: any[] = storageGet(KEYS.DRAFTS, [])
+    const adapter = getStorageAdapter()
+    const drafts = adapter.getDrafts()
     drafts.splice(index, 1)
-    storageSet(KEYS.DRAFTS, drafts)
+    adapter.setDrafts(drafts)
     updateCount()
-    openModal()
+    renderView()
 }
 
 function clearAll() {
-    const drafts: any[] = storageGet(KEYS.DRAFTS, [])
+    const adapter = getStorageAdapter()
+    const drafts = adapter.getDrafts()
     if (drafts.length === 0) return
     if (confirm(`确定要清空所有 ${drafts.length} 个草稿吗？此操作不可撤销。`)) {
-        storageSet(KEYS.DRAFTS, [])
+        adapter.setDrafts([])
         updateCount()
-        closeModal()
-        showNotification('All drafts cleared.')
+        renderView()
+        showNotification('草稿已清空')
     }
 }
 
 export function updateCount() {
-    const drafts: any[] = storageGet(KEYS.DRAFTS, [])
+    const drafts = getStorageAdapter().getDrafts()
     const el = document.getElementById('draftCountNav')
     if (el) el.innerText = String(drafts.length)
 }

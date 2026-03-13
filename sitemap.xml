@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://example.com/index.html</loc><changefreq>daily</changefreq></url>
+  <url><loc>https://example.com/posts/vla/vla-2025-frontier.html</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/vla/vla-2025.html</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/vla/vla-2025/cogact.html</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/vla/vla-2025/cot-vla.html</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/vla/vla-2025/dexgraspvla.html</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/vla/vla-2025/fast.html</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/vla/vla-2025/groot-n1.html</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/vla/vla-2025/hybridvla.html</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/vla/vla-2025/octo.html</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/vla/vla-2025/opendrivevla.html</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/vla/vla-2025/openvla.html</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/vla/vla-2025/pi0.html</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/vla/vla-2025/rdt-1b.html</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/vla/vla-2025/univla.html</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/robot/robotics-frontier-2025.html</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/robot/tech_selection.html</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/travel/singapore-4days.html</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/news/example-markdown.html</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/robot/singapore-travel-guide.html</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/news/guilin-one-day-tour.html</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/news/guilin-yangshuo-travel-guide.html</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/news/shanghai-spring-flowers-2026.html</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/travel/liuzhou-travel-guide.html</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/travel/singapore-3days.html</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/travel/singapore-5days.html</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/travel/singapore-travel-guide.html</loc><lastmod>2026-03-12</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/vla/mujoco-vla-guide.html</loc><lastmod>2026-03-10</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/algo/bank-credit-risk-model.html</loc><lastmod>2026-03-10</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://example.com/posts/robot/openclow-install-requirements.html</loc><lastmod>2026-03-10</lastmod><changefreq>monthly</changefreq></url>
+</urlset>

@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>机器人仿真平台技术选型分析</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f7fa;
+        }
+
+        /* 导航 */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(13, 71, 161, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 0 2rem;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+        }
+
+        .nav-title {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        /* 封面 */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0d47a1 0%, #1976d2 50%, #00acc1 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 2rem;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-content .subtitle {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-content .meta {
+            font-size: 1rem;
+            opacity: 0.7;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+
+        /* 内容区 */
+        .section {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: #0d47a1;
+            margin-bottom: 2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #00acc1;
+            display: inline-block;
+        }
+
+        .section-subtitle {
+            font-size: 1.3rem;
+            color: #1976d2;
+            margin: 2rem 0 1rem;
+        }
+
+        /* 卡片 */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* 平台卡片 */
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .platform-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .platform-header {
+            padding: 1.5rem;
+            color: white;
+        }
+
+        .mujoco .platform-header {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+        }
+
+        .isaac .platform-header {
+            background: linear-gradient(135deg, #1976d2, #0d47a1);
+        }
+
+        .unity .platform-header {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+        }
+
+        .gazebo .platform-header {
+            background: linear-gradient(135deg, #9c27b0, #7b1fa2);
+        }
+
+        .pybullet .platform-header {
+            background: linear-gradient(135deg, #00bcd4, #0097a7);
+        }
+
+        .platform-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .platform-tagline {
+            opacity: 0.9;
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+
+        .platform-body {
+            padding: 1.5rem;
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .pros,
+        .cons {
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .pros {
+            background: #e8f5e9;
+        }
+
+        .cons {
+            background: #ffebee;
+        }
+
+        .pros h4 {
+            color: #2e7d32;
+            margin-bottom: 0.5rem;
+        }
+
+        .cons h4 {
+            color: #c62828;
+            margin-bottom: 0.5rem;
+        }
+
+        .pros ul,
+        .cons ul {
+            list-style: none;
+            font-size: 0.85rem;
+        }
+
+        .pros li::before {
+            content: "✓ ";
+            color: #4caf50;
+            font-weight: bold;
+        }
+
+        .cons li::before {
+            content: "✗ ";
+            color: #f44336;
+            font-weight: bold;
+        }
+
+        /* 表格 */
+        .table-container {
+            overflow-x: auto;
+            margin: 2rem 0;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th {
+            background: #0d47a1;
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 0.875rem 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        tr:hover {
+            background: #e3f2fd;
+        }
+
+        .score-excellent {
+            color: #4caf50;
+            font-weight: 600;
+        }
+
+        .score-good {
+            color: #ff9800;
+            font-weight: 600;
+        }
+
+        .score-poor {
+            color: #f44336;
+            font-weight: 600;
+        }
+
+        /* 决策流程 */
+        .decision-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .decision-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: #0d47a1;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: #0d47a1;
+            margin-bottom: 0.5rem;
+        }
+
+        /* 结论 */
+        .conclusion {
+            background: linear-gradient(135deg, #0d47a1, #1976d2);
+            color: white;
+            padding: 3rem;
+            border-radius: 16px;
+            margin: 2rem 0;
+        }
+
+        .conclusion h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .conclusion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .conclusion-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .conclusion-item h4 {
+            margin-bottom: 0.5rem;
+            color: #80deea;
+        }
+
+        /* 标签 */
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .tag-primary {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .tag-success {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .tag-warning {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .tag-danger {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+
+        /* 列表 */
+        ul.feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul.feature-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        ul.feature-list li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #00acc1;
+            font-weight: bold;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .platform-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pros-cons {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 导航 -->
+    <nav class="nav">
+        <div class="nav-content">
+            <div class="nav-title">
+                <a href="../../index.html"
+                    style="color: white; text-decoration: none; margin-right: 15px; font-weight: normal; opacity: 0.8;">←
+                    返回讨论区</a>
+                机器人仿真平台技术选型
+            </div>
+            <div class="nav-links">
+                <a href="#background">背景</a>
+                <a href="#platforms">平台对比</a>
+                <a href="#comparison">详细对比</a>
+                <a href="#decision">决策建议</a>
+            </div>
+        </div>
+    </nav>
+    <!-- 封面 -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>机器人仿真平台技术选型</h1>
+            <div class="subtitle">MuJoCo · Isaac Sim · Unity ML-Agents</div>
+            <div class="meta">深度技术分析与决策建议报告</div>
+        </div>
+        <div class="scroll-hint">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                <path d="M12 5v14M19 12l-7 7-7-7" />
+            </svg>
+        </div>
+    </section>
+
+    <!-- 背景 -->
+    <section class="section" id="background">
+        <h2 class="section-title">01 项目背景与需求</h2>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon" style="background: #e3f2fd;">📋</div>
+                <div class="card-title">项目现状</div>
+            </div>
+            <ul class="feature-list">
+                <li><strong>团队现状：</strong>已有组员开始使用 MuJoCo 进行建模，具备一定代码基础</li>
+                <li><strong>核心任务：</strong>数据采集用于机器人控制算法训练</li>
+                <li><strong>最终目标：</strong>Sim-to-Real 迁移，部署到真实机器人</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon" style="background: #fff3e0;">⚠️</div>
+                <div class="card-title">关键约束</div>
+            </div>
+            <ul class="feature-list">
+                <li><strong>开发周期：</strong>需要快速迭代验证，时间有限</li>
+                <li><strong>硬件资源：</strong>GPU 资源有限，不能依赖高端显卡</li>
+                <li><strong>人员技能：</strong>以算法工程师为主，非专业仿真工程师</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon" style="background: #e8f5e9;">🎯</div>
+                <div class="card-title">选型目标</div>
+            </div>
+            <ul class="feature-list">
+                <li>评估 MuJoCo 当前路径的可行性</li>
+                <li>对比 Isaac Sim 和 Unity ML-Agents 的优劣势</li>
+                <li>给出明确的技术选型建议和实施路径</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 平台对比 -->
+    <section class="section" id="platforms">
+        <h2 class="section-title">02 候选平台深度分析</h2>
+
+        <div class="platform-grid">
+            <!-- MuJoCo -->
+            <div class="platform-card mujoco">
+                <div class="platform-header">
+                    <div class="platform-name">MuJoCo</div>
+                    <div class="platform-tagline">Multi-Joint dynamics with Contact</div>
+                </div>
+                <div class="platform-body">
+                    <p style="margin-bottom: 1rem; color: #666; font-size: 0.9rem;">
+                        Google DeepMind 开源的物理引擎，专为模型优化设计，强化学习领域事实标准。
+                    </p>
+                    <div class="pros-cons">
+                        <div class="pros">
+                            <h4>核心优势</h4>
+                            <ul>
+                                <li>物理精度顶尖</li>
+                                <li>Sim-to-Real最强</li>
+                                <li>CPU轻量高效</li>
+                                <li>开源免费</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h4>主要局限</h4>
+                            <ul>
+                                <li>渲染能力弱</li>
+                                <li>无GPU并行</li>
+                                <li>学习曲线陡峭</li>
+                                <li>视觉任务受限</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Isaac Sim -->
+            <div class="platform-card isaac">
+                <div class="platform-header">
+                    <div class="platform-name">Isaac Sim</div>
+                    <div class="platform-tagline">NVIDIA Omniverse Robotics</div>
+                </div>
+                <div class="platform-body">
+                    <p style="margin-bottom: 1rem; color: #666; font-size: 0.9rem;">
+                        NVIDIA 的 GPU 加速机器人仿真平台，支持大规模并行和真实感渲染。
+                    </p>
+                    <div class="pros-cons">
+                        <div class="pros">
+                            <h4>核心优势</h4>
+                            <ul>
+                                <li>GPU并行顶尖</li>
+                                <li>真实感渲染</li>
+                                <li>ROS2集成</li>
+                                <li>工业级生态</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h4>主要局限</h4>
+                            <ul>
+                                <li>硬件门槛高</li>
+                                <li>单环境开销大</li>
+                                <li>学习成本高</li>
+                                <li>部分需授权</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unity -->
+            <div class="platform-card unity">
+                <div class="platform-header">
+                    <div class="platform-name">Unity ML-Agents</div>
+                    <div class="platform-tagline">Game Engine + Machine Learning</div>
+                </div>
+                <div class="platform-body">
+                    <p style="margin-bottom: 1rem; color: #666; font-size: 0.9rem;">
+                        游戏引擎结合机器学习工具包，面向游戏 AI 和原型开发。
+                    </p>
+                    <div class="pros-cons">
+                        <div class="pros">
+                            <h4>核心优势</h4>
+                            <ul>
+                                <li>渲染能力最强</li>
+                                <li>生态资源丰富</li>
+                                <li>可视化友好</li>
+                                <li>跨平台部署</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h4>主要局限</h4>
+                            <ul>
+                                <li>物理精度不足</li>
+                                <li>Sim-to-Real差</li>
+                                <li>并行性能弱</li>
+                                <li>机器人支持弱</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gazebo -->
+            <div class="platform-card gazebo">
+                <div class="platform-header">
+                    <div class="platform-name">Gazebo</div>
+                    <div class="platform-tagline">ROS 官方仿真器 · 机器人标准</div>
+                </div>
+                <div class="platform-body">
+                    <p style="margin-bottom: 1rem; color: #666; font-size: 0.9rem;">
+                        ROS/ROS2 官方支持的机器人仿真平台，工业界和学术界广泛使用的标准工具。
+                    </p>
+                    <div class="pros-cons">
+                        <div class="pros">
+                            <h4>核心优势</h4>
+                            <ul>
+                                <li>ROS 原生集成</li>
+                                <li>传感器模型丰富</li>
+                                <li>开源免费</li>
+                                <li>社区生态成熟</li>
+                                <li>支持多物理引擎</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h4>主要局限</h4>
+                            <ul>
+                                <li>渲染性能较弱</li>
+                                <li>大规模并行差</li>
+                                <li>RL 训练效率低</li>
+                                <li>GPU 加速有限</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PyBullet -->
+            <div class="platform-card pybullet">
+                <div class="platform-header">
+                    <div class="platform-name">PyBullet</div>
+                    <div class="platform-tagline">轻量级物理仿真 · 快速原型</div>
+                </div>
+                <div class="platform-body">
+                    <p style="margin-bottom: 1rem; color: #666; font-size: 0.9rem;">
+                        轻量级开源物理引擎，Python 原生接口，适合快速原型和教学场景。
+                    </p>
+                    <div class="pros-cons">
+                        <div class="pros">
+                            <h4>核心优势</h4>
+                            <ul>
+                                <li>安装简单轻量</li>
+                                <li>Python 原生 API</li>
+                                <li>快速原型开发</li>
+                                <li>支持逆向运动学</li>
+                                <li>VR 支持</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h4>主要局限</h4>
+                            <ul>
+                                <li>物理精度一般</li>
+                                <li>渲染能力弱</li>
+                                <li>大规模场景受限</li>
+                                <li>文档不够完善</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 详细对比 -->
+    <section class="section" id="comparison">
+        <h2 class="section-title">03 多维度技术对比</h2>
+
+        <h3 class="section-subtitle">物理仿真精度对比</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>评估维度</th>
+                        <th>MuJoCo</th>
+                        <th>Isaac Sim</th>
+                        <th>Unity</th>
+                        <th>Gazebo</th>
+                        <th>PyBullet</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>刚体动力学</td>
+                        <td class="score-excellent">优秀</td>
+                        <td class="score-excellent">优秀</td>
+                        <td class="score-good">良好</td>
+                        <td class="score-good">良好</td>
+                        <td class="score-good">良好</td>
+                    </tr>
+                    <tr>
+                        <td>接触/碰撞检测</td>
+                        <td class="score-excellent">优秀</td>
+                        <td class="score-good">良好</td>
+                        <td class="score-poor">一般</td>
+                        <td class="score-good">良好</td>
+                        <td class="score-medium">中等</td>
+                    </tr>
+                    <tr>
+                        <td>摩擦模型</td>
+                        <td class="score-excellent">优秀</td>
+                        <td class="score-good">良好</td>
+                        <td class="score-poor">一般</td>
+                        <td class="score-good">良好</td>
+                        <td class="score-medium">中等</td>
+                    </tr>
+                    <tr>
+                        <td>数值稳定性</td>
+                        <td class="score-excellent">优秀</td>
+                        <td class="score-good">良好</td>
+                        <td class="score-poor">一般</td>
+                        <td class="score-good">良好</td>
+                        <td class="score-medium">中等</td>
+                    </tr>
+                    <tr>
+                        <td>计算精度</td>
+                        <td>双精度</td>
+                        <td>单精度</td>
+                        <td>单精度</td>
+                        <td>双精度</td>
+                        <td>单精度</td>
+                    </tr>
+                    <tr>
+                        <td>软体/可变形体</td>
+                        <td class="score-good">支持</td>
+                        <td class="score-excellent">优秀</td>
+                        <td class="score-poor">有限</td>
+                        <td class="score-medium">插件</td>
+                        <td class="score-medium">有限</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="section-subtitle">并行性能对比</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>评估维度</th>
+                        <th>MuJoCo</th>
+                        <th>Isaac Sim</th>
+                        <th>Unity</th>
+                        <th>Gazebo</th>
+                        <th>PyBullet</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>并行方式</td>
+                        <td>CPU多线程</td>
+                        <td>GPU大规模</td>
+                        <td>CPU有限</td>
+                        <td>CPU多进程</td>
+                        <td>CPU多线程</td>
+                    </tr>
+                    <tr>
+                        <td>最大环境数</td>
+                        <td>~100</td>
+                        <td class="score-excellent">4096+</td>
+                        <td>~50</td>
+                        <td>~20</td>
+                        <td>~100</td>
+                    </tr>
+                    <tr>
+                        <td>单环境开销</td>
+                        <td class="score-excellent">极低</td>
+                        <td class="score-poor">高</td>
+                        <td class="score-good">中等</td>
+                        <td class="score-poor">高</td>
+                        <td class="score-excellent">极低</td>
+                    </tr>
+                    <tr>
+                        <td>GPU 加速</td>
+                        <td class="score-medium">有限</td>
+                        <td class="score-excellent">原生支持</td>
+                        <td class="score-good">部分支持</td>
+                        <td class="score-poor">不支持</td>
+                        <td class="score-medium">有限</td>
+                    </tr>
+                    <tr>
+                        <td>多GPU支持</td>
+                        <td class="score-poor">无</td>
+                        <td class="score-excellent">有</td>
+                        <td class="score-poor">无</td>
+                        <td class="score-poor">无</td>
+                        <td class="score-poor">无</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="section-subtitle">Sim-to-Real 迁移能力对比</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>评估维度</th>
+                        <th>MuJoCo</th>
+                        <th>Isaac Sim</th>
+                        <th>Unity</th>
+                        <th>Gazebo</th>
+                        <th>PyBullet</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>物理一致性</td>
+                        <td class="score-excellent">优秀</td>
+                        <td class="score-good">良好</td>
+                        <td class="score-poor">一般</td>
+                        <td class="score-good">良好</td>
+                        <td class="score-medium">中等</td>
+                    </tr>
+                    <tr>
+                        <td>迁移成功率</td>
+                        <td class="score-excellent">高</td>
+                        <td class="score-good">中</td>
+                        <td class="score-poor">低</td>
+                        <td class="score-good">高</td>
+                        <td class="score-medium">中</td>
+                    </tr>
+                    <tr>
+                        <td>真实部署友好度</td>
+                        <td class="score-excellent">友好</td>
+                        <td class="score-good">中等</td>
+                        <td class="score-poor">困难</td>
+                        <td class="score-excellent">极友好</td>
+                        <td class="score-good">友好</td>
+                    </tr>
+                    <tr>
+                        <td>学术界采用度</td>
+                        <td class="score-excellent">广泛</td>
+                        <td class="score-good">增长中</td>
+                        <td class="score-poor">少</td>
+                        <td class="score-good">广泛</td>
+                        <td class="score-good">较广泛</td>
+                    </tr>
+                    <tr>
+                        <td>ROS 集成</td>
+                        <td class="score-medium">需桥接</td>
+                        <td class="score-excellent">原生支持</td>
+                        <td class="score-poor">需插件</td>
+                        <td class="score-excellent">原生支持</td>
+                        <td class="score-medium">需桥接</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="section-subtitle">开发体验与生态对比</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>评估维度</th>
+                        <th>MuJoCo</th>
+                        <th>Isaac Sim</th>
+                        <th>Unity</th>
+                        <th>Gazebo</th>
+                        <th>PyBullet</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>学习曲线</td>
+                        <td class="score-good">中等</td>
+                        <td class="score-poor">陡峭</td>
+                        <td class="score-good">平缓</td>
+                        <td class="score-medium">中等</td>
+                        <td class="score-excellent">简单</td>
+                    </tr>
+                    <tr>
+                        <td>文档完善度</td>
+                        <td class="score-excellent">优秀</td>
+                        <td class="score-good">良好</td>
+                        <td class="score-excellent">优秀</td>
+                        <td class="score-good">良好</td>
+                        <td class="score-medium">一般</td>
+                    </tr>
+                    <tr>
+                        <td>社区活跃度</td>
+                        <td class="score-excellent">高</td>
+                        <td class="score-good">中</td>
+                        <td class="score-excellent">高</td>
+                        <td class="score-excellent">高</td>
+                        <td class="score-good">中</td>
+                    </tr>
+                    <tr>
+                        <td>开源程度</td>
+                        <td class="score-excellent">完全开源</td>
+                        <td class="score-poor">闭源</td>
+                        <td class="score-medium">部分开源</td>
+                        <td class="score-excellent">完全开源</td>
+                        <td class="score-excellent">完全开源</td>
+                    </tr>
+                    <tr>
+                        <td>许可证</td>
+                        <td>Apache 2.0</td>
+                        <td>NVIDIA 许可</td>
+                        <td>Unity 许可</td>
+                        <td>Apache 2.0</td>
+                        <td>zlib</td>
+                    </tr>
+                    <tr>
+                        <td>典型用户</td>
+                        <td>研究者、RL</td>
+                        <td>工业、大规模</td>
+                        <td>游戏、原型</td>
+                        <td>ROS用户、教育</td>
+                        <td>教学、快速原型</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="section-subtitle">适用场景推荐</h3>
+        <div class="card">
+            <div class="platform-grid">
+                <div class="platform-card mujoco">
+                    <div class="platform-header">
+                        <div class="platform-name">MuJoCo</div>
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <p style="font-size: 0.9rem; color: #555; margin-bottom: 1rem;"><strong>推荐场景：</strong></p>
+                        <ul style="font-size: 0.85rem; color: #666; padding-left: 1.2rem;">
+                            <li>强化学习算法研究</li>
+                            <li>机器人控制算法开发</li>
+                            <li>Sim-to-Real 迁移</li>
+                            <li>步态生成与优化</li>
+                            <li>接触丰富的操作任务</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="platform-card isaac">
+                    <div class="platform-header">
+                        <div class="platform-name">Isaac Sim</div>
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <p style="font-size: 0.9rem; color: #555; margin-bottom: 1rem;"><strong>推荐场景：</strong></p>
+                        <ul style="font-size: 0.85rem; color: #666; padding-left: 1.2rem;">
+                            <li>大规模并行 RL 训练</li>
+                            <li>视觉感知任务</li>
+                            <li>工业级 ROS2 部署</li>
+                            <li>数字孪生应用</li>
+                            <li>需要 GPU 加速的场景</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="platform-card gazebo">
+                    <div class="platform-header">
+                        <div class="platform-name">Gazebo</div>
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <p style="font-size: 0.9rem; color: #555; margin-bottom: 1rem;"><strong>推荐场景：</strong></p>
+                        <ul style="font-size: 0.85rem; color: #666; padding-left: 1.2rem;">
+                            <li>ROS/ROS2 系统集成</li>
+                            <li>传感器仿真测试</li>
+                            <li>算法到真机迁移</li>
+                            <li>多机器人协作</li>
+                            <li>教育和教学场景</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="platform-card pybullet">
+                    <div class="platform-header">
+                        <div class="platform-name">PyBullet</div>
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <p style="font-size: 0.9rem; color: #555; margin-bottom: 1rem;"><strong>推荐场景：</strong></p>
+                        <ul style="font-size: 0.85rem; color: #666; padding-left: 1.2rem;">
+                            <li>快速原型验证</li>
+                            <li>Python 原生开发</li>
+                            <li>抓取与操作研究</li>
+                            <li>教学与入门学习</li>
+                            <li>轻量级仿真需求</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="platform-card unity">
+                    <div class="platform-header">
+                        <div class="platform-name">Unity ML-Agents</div>
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <p style="font-size: 0.9rem; color: #555; margin-bottom: 1rem;"><strong>推荐场景：</strong></p>
+                        <ul style="font-size: 0.85rem; color: #666; padding-left: 1.2rem;">
+                            <li>游戏 AI 开发</li>
+                            <li>高保真视觉渲染</li>
+                            <li>虚拟现实集成</li>
+                            <li>概念验证原型</li>
+                            <li>非物理精确场景</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 最新研究综述 -->
+    <section class="section" id="research">
+        <h2 class="section-title">04 最新研究进展与论文综述 (2024-2025)</h2>
+
+        <div class="card">
+            <p style="font-size: 1.05rem; color: #555; margin-bottom: 1.5rem;">
+                基于对 arXiv 2024-2025 年最新论文的调研，整理了 <strong>15+ 篇高质量论文</strong>，分析当前机器人仿真平台的使用趋势和新兴技术。
+            </p>
+        </div>
+
+        <h3 class="section-subtitle">📊 仿真平台使用统计</h3>
+        <div class="card">
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>仿真平台</th>
+                        <th>使用频率</th>
+                        <th>典型应用场景</th>
+                        <th>趋势</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>MuJoCo</strong></td>
+                        <td class="score-excellent">★★★★★ (最高)</td>
+                        <td>强化学习、控制算法、Sim-to-Real</td>
+                        <td class="score-excellent">持续增长</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Isaac Sim/Gym</strong></td>
+                        <td class="score-good">★★★★☆</td>
+                        <td>大规模并行训练、视觉感知、工业部署</td>
+                        <td class="score-excellent">快速上升</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Gazebo</strong></td>
+                        <td class="score-good">★★★☆☆</td>
+                        <td>ROS集成、传统机器人、教育</td>
+                        <td class="score-medium">稳定</td>
+                    </tr>
+                    <tr>
+                        <td><strong>PyBullet</strong></td>
+                        <td class="score-good">★★★☆☆</td>
+                        <td>快速原型、多体动力学、抓取</td>
+                        <td class="score-medium">稳定</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Unity ML-Agents</strong></td>
+                        <td class="score-poor">★★☆☆☆</td>
+                        <td>游戏化场景、视觉任务</td>
+                        <td class="score-poor">下降</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="section-subtitle">📑 重点论文推荐 (15篇)</h3>
+
+        <div class="platform-grid">
+            <div class="platform-card mujoco">
+                <div class="platform-header">
+                    <div class="platform-name">MuJoCo 相关</div>
+                </div>
+                <div style="padding: 1.5rem;">
+                    <div class="paper-item"
+                        style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                        <h4 style="color: #2e7d32; font-size: 0.95rem; margin-bottom: 0.5rem;">1. Few-Shot Neural
+                            Differentiable Simulator</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">结合分析仿真与GNN的少样本Real-to-Sim方法
+                        </p>
+                        <a href="https://arxiv.org/abs/2603.06218" target="_blank"
+                            style="font-size: 0.8rem; color: #1976d2;">arXiv:2603.06218 →</a>
+                    </div>
+                    <div class="paper-item"
+                        style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                        <h4 style="color: #2e7d32; font-size: 0.95rem; margin-bottom: 0.5rem;">2. Dual-Agent RL for
+                            Human-Robot Co-Adaptation</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">基于MuJoCo的双智能体多模型强化学习</p>
+                        <a href="https://arxiv.org/abs/2603.06163" target="_blank"
+                            style="font-size: 0.8rem; color: #1976d2;">arXiv:2603.06163 →</a>
+                    </div>
+                    <div class="paper-item"
+                        style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                        <h4 style="color: #2e7d32; font-size: 0.95rem; margin-bottom: 0.5rem;">3. Contact-Grounded
+                            Policy (CGP)</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">基于接触感知的灵巧操作策略</p>
+                        <a href="https://arxiv.org/abs/2603.05687" target="_blank"
+                            style="font-size: 0.8rem; color: #1976d2;">arXiv:2603.05687 →</a>
+                    </div>
+                    <div class="paper-item"
+                        style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                        <h4 style="color: #2e7d32; font-size: 0.95rem; margin-bottom: 0.5rem;">4. OpenHEART: Legged
+                            Manipulator</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">腿式机械臂操作异构关节物体</p>
+                        <a href="https://arxiv.org/abs/2603.05830" target="_blank"
+                            style="font-size: 0.8rem; color: #1976d2;">arXiv:2603.05830 →</a>
+                    </div>
+                    <div class="paper-item">
+                        <h4 style="color: #2e7d32; font-size: 0.95rem; margin-bottom: 0.5rem;">5. TDGC: Quadruped
+                            Navigation</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">任务级决策到步态控制的层次策略</p>
+                        <a href="https://arxiv.org/abs/2603.05783" target="_blank"
+                            style="font-size: 0.8rem; color: #1976d2;">arXiv:2603.05783 →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="platform-card isaac">
+                <div class="platform-header">
+                    <div class="platform-name">Isaac Sim/新兴平台</div>
+                </div>
+                <div style="padding: 1.5rem;">
+                    <div class="paper-item"
+                        style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                        <h4 style="color: #0d47a1; font-size: 0.95rem; margin-bottom: 0.5rem;">6. MagRobot: Magnetic
+                            Navigation Simulator</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">首个开源磁导航机器人仿真平台</p>
+                        <a href="https://arxiv.org/abs/2603.05992" target="_blank"
+                            style="font-size: 0.8rem; color: #1976d2;">arXiv:2603.05992 →</a>
+                    </div>
+                    <div class="paper-item"
+                        style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                        <h4 style="color: #0d47a1; font-size: 0.95rem; margin-bottom: 0.5rem;">7. Multimodal Behavior
+                            Tree Generation</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">VLM生成行为树，在仿真器中评估</p>
+                        <a href="https://arxiv.org/abs/2603.06084" target="_blank"
+                            style="font-size: 0.8rem; color: #1976d2;">arXiv:2603.06084 →</a>
+                    </div>
+                    <div class="paper-item"
+                        style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                        <h4 style="color: #0d47a1; font-size: 0.95rem; margin-bottom: 0.5rem;">8. TADPO: RL Off-road
+                            Driving</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">端到端强化学习越野驾驶</p>
+                        <a href="https://arxiv.org/abs/2603.05995" target="_blank"
+                            style="font-size: 0.8rem; color: #1976d2;">arXiv:2603.05995 →</a>
+                    </div>
+                    <div class="paper-item"
+                        style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                        <h4 style="color: #0d47a1; font-size: 0.95rem; margin-bottom: 0.5rem;">9. DeFM: Depth Foundation
+                            Model</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">机器人深度基础表示学习</p>
+                        <a href="https://arxiv.org/abs/2601.18923" target="_blank"
+                            style="font-size: 0.8rem; color: #1976d2;">arXiv:2601.18923 →</a>
+                    </div>
+                    <div class="paper-item">
+                        <h4 style="color: #0d47a1; font-size: 0.95rem; margin-bottom: 0.5rem;">10. CompliantVLA-adaptor
+                        </h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">VLM引导的变阻抗控制</p>
+                        <a href="https://arxiv.org/abs/2601.15541" target="_blank"
+                            style="font-size: 0.8rem; color: #1976d2;">arXiv:2601.15541 →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="platform-grid" style="margin-top: 1.5rem;">
+            <div class="platform-card" style="border: 2px solid #ff9800;">
+                <div class="platform-header" style="background: linear-gradient(135deg, #ff9800, #f57c00);">
+                    <div class="platform-name">其他仿真平台</div>
+                </div>
+                <div style="padding: 1.5rem;">
+                    <div class="paper-item"
+                        style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                        <h4 style="color: #e65100; font-size: 0.95rem; margin-bottom: 0.5rem;">11. ROScopter: ROSflight
+                            2.0</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">基于ROS2的多旋翼自动驾驶仪</p>
+                        <a href="https://arxiv.org/abs/2603.05404" target="_blank"
+                            style="font-size: 0.8rem; color: #1976d2;">arXiv:2603.05404 →</a>
+                    </div>
+                    <div class="paper-item"
+                        style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                        <h4 style="color: #e65100; font-size: 0.95rem; margin-bottom: 0.5rem;">12. Smoothly
+                            Differentiable Contact</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">可微分接触流形生成框架</p>
+                        <a href="https://arxiv.org/abs/2602.20304" target="_blank"
+                            style="font-size: 0.8rem; color: #1976d2;">arXiv:2602.20304 →</a>
+                    </div>
+                    <div class="paper-item"
+                        style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                        <h4 style="color: #e65100; font-size: 0.95rem; margin-bottom: 0.5rem;">13. A Perspective on DOM
+                            Challenges</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">可变形物体操作综述</p>
+                        <a href="https://arxiv.org/abs/2602.22998" target="_blank"
+                            style="font-size: 0.8rem; color: #1976d2;">arXiv:2602.22998 →</a>
+                    </div>
+                    <div class="paper-item"
+                        style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                        <h4 style="color: #e65100; font-size: 0.95rem; margin-bottom: 0.5rem;">14. Data Analogies
+                            Cross-Embodiment</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">跨具身迁移的数据类比方法</p>
+                        <a href="https://arxiv.org/abs/2603.06450" target="_blank"
+                            style="font-size: 0.8rem; color: #1976d2;">arXiv:2603.06450 →</a>
+                    </div>
+                    <div class="paper-item">
+                        <h4 style="color: #e65100; font-size: 0.95rem; margin-bottom: 0.5rem;">15. XR in Social Robotics
+                            Review</h4>
+                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">扩展现实在人机交互中的十年回顾</p>
+                        <a href="https://arxiv.org/abs/2602.15840" target="_blank"
+                            style="font-size: 0.8rem; color: #1976d2;">arXiv:2602.15840 →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="platform-card" style="border: 2px solid #9c27b0;">
+                <div class="platform-header" style="background: linear-gradient(135deg, #9c27b0, #7b1fa2);">
+                    <div class="platform-name">新兴趋势与洞察</div>
+                </div>
+                <div style="padding: 1.5rem;">
+                    <div class="trend-item" style="margin-bottom: 1.2rem;">
+                        <h4 style="color: #7b1fa2; font-size: 0.95rem; margin-bottom: 0.5rem;">🔥 可微分仿真</h4>
+                        <p style="font-size: 0.85rem; color: #666;">Differentiable Sim成为热点，支持梯度优化和策略学习</p>
+                    </div>
+                    <div class="trend-item" style="margin-bottom: 1.2rem;">
+                        <h4 style="color: #7b1fa2; font-size: 0.95rem; margin-bottom: 0.5rem;">🤖 Sim-to-Real</h4>
+                        <p style="font-size: 0.85rem; color: #666;">域随机化 + 系统辨识 + 高保真物理成为标准做法</p>
+                    </div>
+                    <div class="trend-item" style="margin-bottom: 1.2rem;">
+                        <h4 style="color: #7b1fa2; font-size: 0.95rem; margin-bottom: 0.5rem;">👁️ 视觉-语言-动作 (VLA)</h4>
+                        <p style="font-size: 0.85rem; color: #666;">多模态大模型与仿真平台深度结合</p>
+                    </div>
+                    <div class="trend-item" style="margin-bottom: 1.2rem;">
+                        <h4 style="color: #7b1fa2; font-size: 0.95rem; margin-bottom: 0.5rem;">⚡ 实时性能</h4>
+                        <p style="font-size: 0.85rem; color: #666;">GPU并行加速成为大规模训练标配</p>
+                    </div>
+                    <div class="trend-item">
+                        <h4 style="color: #7b1fa2; font-size: 0.95rem; margin-bottom: 0.5rem;">🎯 专用仿真器</h4>
+                        <p style="font-size: 0.85rem; color: #666;">针对特定任务(磁导航、软体机器人)的专用平台涌现</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-subtitle">📈 平台选择建议更新</h3>
+        <div class="card">
+            <div class="conclusion" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <h2 style="color: white;">💡 基于最新研究的建议</h2>
+                <div class="conclusion-grid" style="margin-top: 1.5rem;">
+                    <div class="conclusion-item" style="background: rgba(255,255,255,0.15);">
+                        <h4 style="color: #fff;">MuJoCo 仍是首选</h4>
+                        <p style="color: rgba(255,255,255,0.9);">在最新论文中出现频率最高，特别适合控制算法和RL研究</p>
+                    </div>
+                    <div class="conclusion-item" style="background: rgba(255,255,255,0.15);">
+                        <h4 style="color: #fff;">关注可微分仿真</h4>
+                        <p style="color: rgba(255,255,255,0.9);">Differentiable Physics成为新趋势，MuJoCo XLA等框架值得关注</p>
+                    </div>
+                    <div class="conclusion-item" style="background: rgba(255,255,255,0.15);">
+                        <h4 style="color: #fff;">Isaac Sim 增长迅速</h4>
+                        <p style="color: rgba(255,255,255,0.9);">在视觉任务和大规模并行训练中采用率快速上升</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 决策建议 -->
+    <section class="section" id="decision">
+        <h2 class="section-title">05 决策建议与实施路径</h2>
+
+        <div class="conclusion">
+            <h2>🎯 核心结论</h2>
+            <p style="font-size: 1.1rem; opacity: 0.9;">
+                推荐继续使用 <strong>MuJoCo</strong> 作为主力平台，按需引入 <strong>Isaac Sim</strong> 作为视觉/并行训练补充。
+            </p>
+
+            <div class="conclusion-grid">
+                <div class="conclusion-item">
+                    <h4>选择 MuJoCo 的理由</h4>
+                    <p>物理精度高、Sim-to-Real迁移强、团队已有基础、开发效率高</p>
+                </div>
+                <div class="conclusion-item">
+                    <h4>引入 Isaac Sim 的时机</h4>
+                    <p>需要大规模并行(>100环境)、视觉感知任务、工业级ROS2部署</p>
+                </div>
+                <div class="conclusion-item">
+                    <h4>避免使用 Unity</h4>
+                    <p>物理精度不足、Sim-to-Real差距大，不适合核心算法研发</p>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-subtitle">实施路径</h3>
+        <div class="decision-flow">
+            <div class="decision-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <div class="step-title">阶段一：MuJoCo 快速验证（1-2周）</div>
+                    <p>利用现有代码基础，快速验证控制算法可行性，建立技术基线</p>
+                </div>
+            </div>
+            <div class="decision-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <div class="step-title">阶段二：MuJoCo 深度开发（3-8周）</div>
+                    <p>完善控制算法，进行 Sim-to-Real 验证，产出核心研究成果</p>
+                </div>
+            </div>
+            <div class="decision-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <div class="step-title">阶段三：Isaac Sim 按需引入（如需要）</div>
+                    <p>如需大规模数据或视觉任务，引入 Isaac Sim 作为补充工具</p>
+                </div>
+            </div>
+            <div class="decision-step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <div class="step-title">阶段四：混合部署优化（9-12周）</div>
+                    <p>MuJoCo 负责控制核心，Isaac Sim 负责视觉感知，形成完整方案</p>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-subtitle">风险提示</h3>
+        <div class="card">
+            <ul class="feature-list">
+                <li><span class="tag tag-warning">风险1</span> <strong>MuJoCo 渲染能力不足</strong> → 后期引入 Isaac Sim 或真实相机数据
+                </li>
+                <li><span class="tag tag-warning">风险2</span> <strong>Isaac Sim 硬件门槛</strong> → 云服务按需租用，或保持 MuJoCo 为主
+                </li>
+                <li><span class="tag tag-warning">风险3</span> <strong>双平台维护复杂度</strong> → 明确分工，MuJoCo 负责控制，Isaac 负责视觉
+                </li>
+                <li><span class="tag tag-warning">风险4</span> <strong>Sim-to-Real 差距</strong> → 域随机化 + 系统辨识 + 高保真物理</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <section class="section" style="text-align: center; padding: 3rem 2rem; color: #666;">
+        <p>机器人仿真平台技术选型分析报告</p>
+        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Generated for Technical Review</p>
+    </section>
+
+    <script>
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

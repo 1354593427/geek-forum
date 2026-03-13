@@ -51,10 +51,15 @@
                     class="flex items-center gap-2 px-4 py-2 rounded-xl text-gray-600 hover:bg-gray-100 text-sm font-bold transition-all">
                     <i data-lucide="copy" class="w-4 h-4"></i> 复制源码
                 </button>
+                <button id="btnEditorPublish"
+                    class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-600 text-white hover:bg-brand-700 text-sm font-bold shadow-lg shadow-brand-200 transition-all transform active:scale-95">
+                    <i data-lucide="send" class="w-4 h-4"></i> 立即发布
+                </button>
                 <button id="btnEditorDownload"
                     class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-900 text-white hover:bg-black text-sm font-bold shadow-lg shadow-gray-200 transition-all transform active:scale-95">
-                    <i data-lucide="download" class="w-4 h-4"></i> 生成帖子文件
+                    <i data-lucide="download" class="w-4 h-4"></i> 生成文档
                 </button>
+
             </div>
         </div>
     </header>
@@ -75,11 +80,7 @@
                     <label class="block text-xs font-black text-gray-900 uppercase mb-2">所属分类</label>
                     <select id="post-category"
                         class="w-full px-4 py-2.5 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none font-bold text-gray-900 text-sm appearance-none">
-                        <option value="robot">机器人仿真 (Robot)</option>
-                        <option value="algo">算法前沿 (Algo)</option>
-                        <option value="vla">具身智能 (VLA)</option>
-                        <option value="news">新鲜动态 (News)</option>
-                        <option value="travel">旅游频道 (Travel)</option>
+                        <option value="robot">加载中...</option>
                     </select>
                 </div>
 
@@ -153,6 +154,34 @@
                     Initialize New Task
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- Media Library Modal (阶段 D) -->
+    <div id="mediaModal"
+        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[101] hidden items-center justify-center p-6">
+        <div class="bg-white w-full max-w-3xl rounded-[24px] shadow-2xl overflow-hidden flex flex-col max-h-[85vh] border border-gray-100">
+            <div class="p-6 border-b border-gray-100 flex items-center justify-between shrink-0">
+                <h3 class="text-lg font-black uppercase tracking-wider text-gray-900">媒体库</h3>
+                <button id="btnMediaClose" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5 text-gray-500"></i>
+                </button>
+            </div>
+            <div class="p-6 border-b border-gray-100 bg-gray-50/60 shrink-0">
+                <div id="mediaUploadZone"
+                    class="border-2 border-dashed border-gray-200 rounded-xl p-8 text-center cursor-pointer hover:border-brand-400 hover:bg-brand-50/30 transition-colors">
+                    <input type="file" id="mediaFileInput" accept="image/*" class="hidden">
+                    <i data-lucide="upload" class="w-10 h-10 mx-auto text-gray-400 mb-2"></i>
+                    <p class="text-sm font-bold text-gray-500">点击或拖拽上传图片</p>
+                    <p class="text-xs text-gray-400 mt-1">支持 JPG / PNG / GIF / WebP</p>
+                </div>
+            </div>
+            <div id="mediaGrid" class="flex-1 overflow-y-auto p-6 grid grid-cols-4 sm:grid-cols-5 gap-4">
+                <!-- 媒体缩略图注入 -->
+            </div>
+            <p id="mediaNoApiHint" class="hidden px-6 py-4 text-sm text-amber-600 bg-amber-50 border-t border-amber-100 shrink-0">
+                未配置 API 地址，请先设置 VITE_API_BASE 以使用媒体库
+            </p>
         </div>
     </div>
 </body>

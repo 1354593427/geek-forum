@@ -1,7 +1,14 @@
 import './styles/editor.css'
-import { storageGet, storageSet, storageRemove, KEYS } from './core/storage'
+import { getStorageAdapter } from './core/storageAdapter'
+import { getAuthToken } from './api/auth'
+import { getCategories } from './api/categories'
 import { $id, $input, $select, delegate } from './utils/dom'
 import { showNotification } from './utils/notification'
+
+function getApiBase(): string {
+    const base = (import.meta.env.VITE_API_BASE as string) || ''
+    return base.replace(/\/$/, '')
+}
 
 lucide.createIcons()
 
@@ -23,6 +30,17 @@ const quill = new Quill('#editor-container', {
     },
 })
 
+// 阶段 D：自定义图片按钮 → 打开媒体库
+const toolbar = quill.getModule('toolbar')
+toolbar.addHandler('image', () => openMediaModal(insertImageIntoQuill))
+
+function insertImageIntoQuill(url: string) {
+    const range = quill.getSelection(true) || { index: quill.getLength(), length: 0 }
+    const src = url.startsWith('/') || url.startsWith('http') ? url : `/${url.replace(/^\//, '')}`
+    quill.insertEmbed(range.index, 'image', src)
+    quill.setSelection(range.index + 1)
+}
+
 let isEditMode = false
 let activeDraftId: string | null = null
 
@@ -36,8 +54,10 @@ $id('btnEditorDrafts').addEventListener('click', openDraftsModal)
 $id('btnEditorDiscard').addEventListener('click', discardCurrentSession)
 $id('btnEditorCopy').addEventListener('click', copyHtml)
 $id('btnEditorDownload').addEventListener('click', downloadHtml)
+$id('btnEditorPublish').addEventListener('click', publishToApi)
 $id('btnEditorDraftsClose').addEventListener('click', closeDraftsModal)
 $id('btnEditorNewDraft').addEventListener('click', createNewDraft)
+
 
 delegate($id('draftsList'), '[data-draft-resume]', 'click', (target) => {
     resumeDraft(target.dataset.draftResume!)
@@ -59,10 +79,11 @@ function saveToLocal() {
         lastUpdated: Date.now(),
     }
 
+    const adapter = getStorageAdapter()
     if (isEditMode) {
-        storageSet(KEYS.EDIT_ACTIVE, data)
+        adapter.setEditActive(data)
     } else {
-        const drafts: any[] = storageGet(KEYS.DRAFTS, [])
+        const drafts = adapter.getDrafts()
         const idx = drafts.findIndex((d: any) => d.id === activeDraftId)
         if (idx > -1) {
             drafts[idx] = data
@@ -71,13 +92,13 @@ function saveToLocal() {
             data.id = activeDraftId
             drafts.push(data)
         }
-        storageSet(KEYS.DRAFTS, drafts)
+        adapter.setDrafts(drafts)
         updateDraftBadge()
     }
 }
 
 function loadFromLocal() {
-    const drafts: any[] = storageGet(KEYS.DRAFTS, [])
+    const drafts = getStorageAdapter().getDrafts()
     if (activeDraftId) {
         const d = drafts.find((x: any) => x.id === activeDraftId)
         if (d) applyData(d)
@@ -100,18 +121,19 @@ function applyData(d: any) {
 }
 
 function updateDraftBadge() {
-    const n = storageGet<any[]>(KEYS.DRAFTS, []).length
+    const n = getStorageAdapter().getDrafts().length
     const badge = document.getElementById('draftCountBadge')
     if (badge) { badge.innerText = String(n); badge.classList.toggle('hidden', n === 0) }
 }
 
 function discardCurrentSession() {
     if (!confirm('确定要丢弃当前的草稿吗？此操作不可撤销。')) return
+    const adapter = getStorageAdapter()
     if (isEditMode) {
-        storageRemove(KEYS.EDIT_ACTIVE)
+        adapter.removeEditActive()
         window.location.href = 'index.html'
     } else if (activeDraftId) {
-        storageSet(KEYS.DRAFTS, storageGet<any[]>(KEYS.DRAFTS, []).filter((d: any) => d.id !== activeDraftId))
+        adapter.setDrafts(adapter.getDrafts().filter((d: any) => d.id !== activeDraftId))
         location.reload()
     } else {
         location.reload()
@@ -119,7 +141,7 @@ function discardCurrentSession() {
 }
 
 function openDraftsModal() {
-    const drafts: any[] = storageGet(KEYS.DRAFTS, [])
+    const drafts = getStorageAdapter().getDrafts()
     const modal = $id('draftsModal')
     const list = $id('draftsList')
 
@@ -160,7 +182,8 @@ function resumeDraft(id: string) {
 }
 
 function deleteDraft(id: string) {
-    storageSet(KEYS.DRAFTS, storageGet<any[]>(KEYS.DRAFTS, []).filter((d: any) => d.id !== id))
+    const adapter = getStorageAdapter()
+    adapter.setDrafts(adapter.getDrafts().filter((d: any) => d.id !== id))
     if (activeDraftId === id) { activeDraftId = null; quill.root.innerHTML = ''; $input('post-title').value = '' }
     openDraftsModal()
     updateDraftBadge()
@@ -242,16 +265,270 @@ function downloadHtml() {
     URL.revokeObjectURL(a.href)
 }
 
-setTimeout(() => { checkEditMode(); updatePreview() }, 500)
+async function publishToApi() {
+    const token = getAuthToken()
+    if (!token) {
+        showNotification('请先登录管理后台以使用在线发布功能')
+        return
+    }
+
+    if (!confirm('确定要将当前内容同步到在线讨论区吗？')) return
+
+    const title = $input('post-title').value.trim()
+    const category = $select('post-category').value
+    const author = $input('post-author').value
+    const tags = $input('post-tags').value.split(',').map(t => t.trim()).filter(Boolean)
+    const date = $input('post-date').value.replace('T', ' ')
+    const content = quill.root.innerHTML
+
+    // 默认生成一个 URL 如果不存在
+    let url = isEditMode ? (new URLSearchParams(window.location.search).get('url') || '') : ''
+    if (!url) {
+        const slug = title.replace(/[^a-z0-9\u4e00-\u9fa5]/gi, '-').toLowerCase()
+        url = `posts/${category}/${slug || Date.now()}.html`
+    }
+
+    const payload = {
+        title,
+        url,
+        category,
+        date,
+        tags,
+        author,
+        author_avatar: `https://ui-avatars.com/api/?name=${author}&background=0D8ABC&color=fff`,
+        sidebar_style: 'standard',
+        html: getFullHtml()
+    }
+
+    try {
+        const base = (import.meta.env.VITE_API_BASE as string)?.replace(/\/$/, '')
+        const res = await fetch(`${base}/posts`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+        })
+
+        if (res.status === 409) {
+            // 如果已存在，询问是否覆盖
+            if (confirm('该文章地址已存在，是否覆盖？')) {
+                const updateRes = await fetch(`${base}/posts`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(payload)
+                })
+                if (updateRes.ok) {
+                    showNotification('文章已成功更新！')
+                    if (activeDraftId) deleteDraft(activeDraftId)
+                } else {
+                    showNotification('更新失败')
+                }
+            }
+            return
+        }
+
+        if (res.ok) {
+            showNotification('文章发布成功！')
+            if (activeDraftId) deleteDraft(activeDraftId)
+        } else {
+            const data = await res.json()
+            showNotification(`发布失败: ${data.error || '未知错误'}`)
+        }
+    } catch (e) {
+        showNotification('网络错误，发布失败')
+    }
+}
+
+
+// ---- 媒体库 Modal (阶段 D) ----
+let mediaSelectCallback: ((url: string) => void) | null = null
+
+function openMediaModal(onSelect: (url: string) => void) {
+    mediaSelectCallback = onSelect
+    const modal = $id('mediaModal')
+    const noApi = $id('mediaNoApiHint')
+    const base = getApiBase()
+    if (!base) {
+        noApi.classList.remove('hidden')
+        modal.classList.remove('hidden')
+        modal.classList.add('flex')
+        $id('mediaGrid').innerHTML = ''
+        lucide.createIcons()
+        return
+    }
+    noApi.classList.add('hidden')
+    modal.classList.remove('hidden')
+    modal.classList.add('flex')
+    loadMediaList()
+    lucide.createIcons()
+}
+
+function closeMediaModal() {
+    $id('mediaModal').classList.add('hidden')
+    $id('mediaModal').classList.remove('flex')
+    mediaSelectCallback = null
+}
+
+async function loadMediaList() {
+    const grid = $id('mediaGrid')
+    const base = getApiBase()
+    if (!base) return
+    grid.innerHTML = '<div class="col-span-full py-12 text-center text-gray-400 text-sm">加载中...</div>'
+    try {
+        const res = await fetch(`${base}/media`)
+        const data = await res.json()
+        const items = data?.items || []
+        if (items.length === 0) {
+            grid.innerHTML = '<div class="col-span-full py-12 text-center text-gray-400 text-sm">暂无上传，请先上传图片</div>'
+        } else {
+            grid.innerHTML = items.map((it: { url: string; thumbUrl: string; name: string }) => {
+                const thumb = it.thumbUrl || it.url
+                const url = it.url
+                return `<div class="aspect-square rounded-xl border-2 border-gray-100 overflow-hidden cursor-pointer hover:border-brand-400 hover:ring-2 hover:ring-brand-100 transition-all group" data-media-url="${url}">
+                    <img src="${thumb}" alt="${it.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200">
+                </div>`
+            }).join('')
+        }
+    } catch (e) {
+        grid.innerHTML = '<div class="col-span-full py-12 text-center text-red-500 text-sm">加载失败，请检查 API 连接</div>'
+    }
+    lucide.createIcons()
+}
+
+async function uploadMedia(file: File): Promise<string | null> {
+    const base = getApiBase()
+    const token = getAuthToken()
+    if (!base || !token) {
+        showNotification('请先登录并配置 API')
+        return null
+    }
+    const fd = new FormData()
+    fd.append('file', file)
+    try {
+        const res = await fetch(`${base}/media/upload`, {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${token}` },
+            body: fd,
+        })
+        const data = await res.json()
+        if (data?.url) {
+            return data.url.startsWith('http') ? data.url : data.url
+        }
+        showNotification(data?.error || '上传失败')
+        return null
+    } catch {
+        showNotification('上传失败')
+        return null
+    }
+}
+
+$id('btnMediaClose').addEventListener('click', closeMediaModal)
+
+$id('mediaUploadZone').addEventListener('click', () => $id('mediaFileInput').click())
+
+$id('mediaFileInput').addEventListener('change', async (e) => {
+    const input = e.target as HTMLInputElement
+    const file = input.files?.[0]
+    input.value = ''
+    if (!file || !file.type.startsWith('image/')) return
+    showNotification('上传中...')
+    const url = await uploadMedia(file)
+    if (url) {
+        showNotification('上传成功')
+        loadMediaList()
+        if (mediaSelectCallback) {
+            mediaSelectCallback(url)
+            closeMediaModal()
+        }
+    }
+})
+
+$id('mediaUploadZone').addEventListener('dragover', (e) => {
+    e.preventDefault()
+    $id('mediaUploadZone').classList.add('border-brand-400', 'bg-brand-50')
+})
+$id('mediaUploadZone').addEventListener('dragleave', () => {
+    $id('mediaUploadZone').classList.remove('border-brand-400', 'bg-brand-50')
+})
+$id('mediaUploadZone').addEventListener('drop', async (e) => {
+    e.preventDefault()
+    $id('mediaUploadZone').classList.remove('border-brand-400', 'bg-brand-50')
+    const file = e.dataTransfer?.files?.[0]
+    if (!file || !file.type.startsWith('image/')) return
+    showNotification('上传中...')
+    const url = await uploadMedia(file)
+    if (url) {
+        showNotification('上传成功')
+        loadMediaList()
+        if (mediaSelectCallback) {
+            mediaSelectCallback(url)
+            closeMediaModal()
+        }
+    }
+})
+
+delegate($id('mediaGrid'), '[data-media-url]', 'click', (el) => {
+    const url = el.getAttribute('data-media-url')
+    if (url && mediaSelectCallback) {
+        mediaSelectCallback(url)
+        closeMediaModal()
+    }
+})
+
+async function initCategorySelect() {
+    const sel = $select('post-category')
+    const cats = await getCategories()
+    sel.innerHTML = cats.map((c) => `<option value="${escapeHtml(c.slug)}">${escapeHtml(c.name)}</option>`).join('')
+    if (!sel.value && cats.length > 0) sel.value = cats[0].slug
+}
+
+function escapeHtml(s: string) {
+    const div = document.createElement('div')
+    div.textContent = s
+    return div.innerHTML
+}
+
+setTimeout(() => {
+    void initCategorySelect().then(() => {
+        void checkEditMode()
+        updatePreview()
+    })
+}, 500)
 
 async function checkEditMode() {
-    const editData = new URLSearchParams(window.location.search).get('edit')
+    const adapter = getStorageAdapter()
+    if (adapter.init) await adapter.init()
+
+    const params = new URLSearchParams(window.location.search)
+    const editData = params.get('edit')
+    const urlParam = params.get('url')
+    const idParam = params.get('id')
+
+    if (idParam) {
+        const drafts = adapter.getDrafts()
+        const d = drafts.find((x: { id: string }) => x.id === idParam)
+        if (d) {
+            activeDraftId = idParam
+            applyData(d)
+            showNotification('已加载草稿')
+        } else {
+            loadFromLocal()
+        }
+        return
+    }
+
     if (editData) {
         isEditMode = true
         try {
             const post = JSON.parse(decodeURIComponent(escape(atob(editData))))
-            const saved = storageGet<any>(KEYS.EDIT_ACTIVE, null)
+            const saved = getStorageAdapter().getEditActive() as any
             if (saved && (saved.url === post.url || saved.title === post.title)) {
+
                 applyData(saved)
                 showNotification('Resumed uncommitted local changes for this document.')
                 return
@@ -270,8 +547,32 @@ async function checkEditMode() {
             } catch (e) { console.error('Failed to fetch article:', e) }
             showNotification('Neural Edit Mode Active - Modifying Existing Archive')
         } catch (e) { console.error('Failed to parse edit data:', e); loadFromLocal() }
+    } else if (urlParam) {
+        // 从 API 获取现有文章
+        isEditMode = true
+        const base = (import.meta.env.VITE_API_BASE as string)?.replace(/\/$/, '')
+        try {
+            const res = await fetch(`${base}/posts/${encodeURIComponent(urlParam)}`)
+            if (res.ok) {
+                const post = await res.json()
+                $input('post-title').value = post.title || ''
+                $select('post-category').value = post.category || 'robot'
+                $input('post-author').value = post.author || 'OpenClaw Agent'
+                $input('post-tags').value = (post.tags || []).join(', ')
+                if (post.date) $input('post-date').value = post.date.replace(' ', 'T')
+                if (post.html) {
+                    const doc = new DOMParser().parseFromString(post.html, 'text/html')
+                    const el = doc.querySelector('article') || doc.querySelector('main')
+                    if (el) { quill.clipboard.dangerouslyPasteHTML(el.innerHTML); updatePreview() }
+                }
+                showNotification('已加载在线文档内容')
+            }
+        } catch (e) {
+            console.error('Failed to load post by URL:', e)
+        }
     } else {
         isEditMode = false
         loadFromLocal()
     }
 }
+

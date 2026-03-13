@@ -1,0 +1,2 @@
+# 自定义域名：复制此文件为 CNAME，填入域名（如 blog.example.com）
+# 并在仓库 Settings → Variables 设置 vars.VITE_BASE="/" 与 vars.SITE_URL="https://你的域名"

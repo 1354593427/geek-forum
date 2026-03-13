@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw 安装配置最低要求调研</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f7fa;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(13, 71, 161, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 0 2rem;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+        }
+
+        .nav-title {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .hero {
+            min-height: 50vh;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 2rem;
+        }
+
+        .hero-content h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #6366f1;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #a855f7;
+            display: inline-block;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 1rem 0;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th {
+            background: #6366f1;
+            color: white;
+            padding: 0.875rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        td {
+            padding: 0.75rem 0.875rem;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 0.9rem;
+            vertical-align: top;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        tr:hover {
+            background: #f0f0ff;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 0.3rem;
+        }
+
+        .tag-primary {
+            background: #e0e7ff;
+            color: #6366f1;
+        }
+
+        .tag-success {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .tag-warning {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .tag-danger {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .code-block {
+            background: #1e1e2e;
+            color: #cdd6f4;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .code-block .comment {
+            color: #6c7086;
+        }
+
+        .code-block .cmd {
+            color: #89b4fa;
+        }
+
+        .note {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1rem 0;
+        }
+
+        .note-title {
+            font-weight: 600;
+            color: #1d4ed8;
+            margin-bottom: 0.5rem;
+        }
+
+        .warning-box {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1rem 0;
+        }
+
+        .warning-box-title {
+            font-weight: 600;
+            color: #b45309;
+            margin-bottom: 0.5rem;
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .pros,
+        .cons {
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .pros {
+            background: #ecfdf5;
+        }
+
+        .cons {
+            background: #fef2f2;
+        }
+
+        .pros h4 {
+            color: #059669;
+            margin-bottom: 0.5rem;
+        }
+
+        .cons h4 {
+            color: #dc2626;
+            margin-bottom: 0.5rem;
+        }
+
+        ul {
+            padding-left: 1.3rem;
+            margin: 0.5rem 0;
+        }
+
+        li {
+            margin-bottom: 0.4rem;
+        }
+
+        .requirement-row td:first-child {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .requirement-row td:last-child {
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 1.8rem;
+            }
+
+            .pros-cons {
+                grid-template-columns: 1fr;
+            }
+
+            th,
+            td {
+                padding: 0.5rem;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="nav">
+        <div class="nav-content">
+            <div class="nav-title">
+                <a href="../../index.html"
+                    style="color: white; text-decoration: none; margin-right: 15px; font-weight: normal; opacity: 0.8;">←
+                    返回讨论区</a>
+                OpenClaw 安装配置指南
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>OpenClaw 安装配置最低要求</h1>
+            <div class="subtitle">macOS / Linux / Windows (WSL2) · 详细硬件配置指南</div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">01 官方明确要求</h2>
+
+        <div class="card">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>配置项</th>
+                            <th>最低要求</th>
+                            <th>信息来源</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Node.js</strong></td>
+                            <td><span class="tag tag-primary">22.0.0+</span></td>
+                            <td>docs.openclaw.ai/install</td>
+                        </tr>
+                        <tr>
+                            <td><strong>操作系统</strong></td>
+                            <td>macOS / Linux / Windows (WSL2)</td>
+                            <td>docs.openclaw.ai/install</td>
+                        </tr>
+                        <tr>
+                            <td><strong>pnpm</strong></td>
+                            <td>仅源码构建时需要</td>
+                            <td>docs.openclaw.ai/install</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="note">
+            <div class="note-title">📌 重要说明</div>
+            <p><strong>OpenClaw 官方文档未明确指定 CPU、内存、磁盘等硬件要求。</strong>以下是结合 Node.js 22 官方支持平台、WSL2
+                系统要求、以及实际使用场景给出的<strong>推荐配置</strong>，用于判断现有电脑是否足够安装。</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">02 各平台详细配置要求</h2>
+
+        <div class="card">
+            <div class="card-title">🍎 macOS</div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>配置项</th>
+                            <th>最低要求</th>
+                            <th>推荐配置</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="requirement-row">
+                            <td>macOS 版本</td>
+                            <td>macOS 10.15 (Catalina)+</td>
+                            <td>macOS 12+</td>
+                            <td>Node.js 22 要求 macOS 10.15+</td>
+                        </tr>
+                        <tr class="requirement-row">
+                            <td>CPU</td>
+                            <td>Intel Core i5 / Apple M1+</td>
+                            <td>Intel i7 / M1+</td>
+                            <td>64位处理器</td>
+                        </tr>
+                        <tr class="requirement-row">
+                            <td>内存 (RAM)</td>
+                            <td>4 GB</td>
+                            <td>8 GB+</td>
+                            <td>Node.js 运行时 + Gateway 建议 4GB 起步</td>
+                        </tr>
+                        <tr class="requirement-row">
+                            <td>磁盘空间</td>
+                            <td>10 GB</td>
+                            <td>20 GB+</td>
+                            <td>Node.js + 依赖 + 日志存储</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">🐧 Linux (Ubuntu/Debian)</div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>配置项</th>
+                            <th>最低要求</th>
+                            <th>推荐配置</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="requirement-row">
+                            <td>Linux 版本</td>
+                            <td>Ubuntu 18.04+ / Debian 10+</td>
+                            <td>Ubuntu 20.04+ / Debian 11+</td>
+                            <td>需要 systemd 支持</td>
+                        </tr>
+                        <tr class="requirement-row">
+                            <td>CPU</td>
+                            <td>64位 x86 处理器</td>
+                            <td>x86_64 / ARM64</td>
+                            <td>任何 64 位处理器</td>
+                        </tr>
+                        <tr class="requirement-row">
+                            <td>内存 (RAM)</td>
+                            <td>4 GB</td>
+                            <td>8 GB+</td>
+                            <td>Gateway 后台运行需要一定内存</td>
+                        </tr>
+                        <tr class="requirement-row">
+                            <td>磁盘空间</td>
+                            <td>10 GB</td>
+                            <td>20 GB+</td>
+                            <td>apt 缓存 + Node.js</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">🪟 Windows (WSL2) - 官方推荐</div>
+            <div class="warning-box">
+                <div class="warning-box-title">⚠️ 强烈推荐使用 WSL2</div>
+                <p>OpenClaw 官方<strong>强烈推荐</strong>在 Windows 上使用 WSL2 (Windows Subsystem for Linux 2)。原生命令行支持不完善，WSL2
+                    可提供与 Linux 一致的体验，避免路径、权限、工具兼容性问题。</p>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>配置项</th>
+                            <th>最低要求</th>
+                            <th>推荐配置</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="requirement-row">
+                            <td>Windows 版本</td>
+                            <td><span class="tag tag-danger">Win10 2004+ (Build 19041+)</span></td>
+                            <td><span class="tag tag-success">Win10 22H2+ / Win11</span></td>
+                            <td>WSL2 需要 Win10 2004+</td>
+                        </tr>
+                        <tr class="requirement-row">
+                            <td>CPU</td>
+                            <td>64位，支持虚拟化</td>
+                            <td>Intel i5 / AMD Ryzen 5+</td>
+                            <td>必须 CPU 支持 VT-x/AMD-V</td>
+                        </tr>
+                        <tr class="requirement-row">
+                            <td>内存 (RAM)</td>
+                            <td>4 GB</td>
+                            <td>8 GB+</td>
+                            <td>Windows + WSL2 需要更多内存</td>
+                        </tr>
+                        <tr class="requirement-row">
+                            <td>磁盘空间</td>
+                            <td>20 GB</td>
+                            <td>50 GB+</td>
+                            <td>Win 系统 + WSL2 镜像 + Ubuntu</td>
+                        </tr>
+                        <tr class="requirement-row">
+                            <td>显卡 (可选)</td>
+                            <td>—</td>
+                            <td>NVIDIA GPU (可选)</td>
+                            <td>仅使用 GPU 加速功能时需要</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">03 关键配置详解</h2>
+
+        <div class="card">
+            <div class="card-title">🔍 为什么要求这些配置？</div>
+
+            <h4 style="color: #333; margin: 1rem 0 0.5rem;">1. Windows 版本要求 (WSL2)</h4>
+            <ul style="margin-bottom: 1rem;">
+                <li><strong>原因：</strong>WSL2 仅在 Windows 10 版本 2004 (Build 19041) 及以上版本可用</li>
+                <li><strong>查询方法：</strong>设置 → 系统 → 关于，查看 "Windows 规格"</li>
+                <li><strong>不符合条件：</strong>Win10 1903/1909 用户需要手动升级或使用 WSL1（不推荐）</li>
+            </ul>
+
+            <h4 style="color: #333; margin: 1rem 0 0.5rem;">2. 内存 (RAM) 4GB 起步</h4>
+            <ul style="margin-bottom: 1rem;">
+                <li><strong>原因：</strong>Node.js 22 运行时需要约 100-200MB 基础内存</li>
+                <li><strong>Gateway 消耗：</strong>OpenClaw Gateway 后台服务需要 200-500MB 内存</li>
+                <li><strong>操作系统开销：</strong>Windows/macOS/Linux 本身需要约 2-3GB 内存</li>
+                <li><strong>建议：</strong>如果同时运行其他应用，8GB 更舒适</li>
+            </ul>
+
+            <h4 style="color: #333; margin: 1rem 0 0.5rem;">3. CPU 虚拟化支持</h4>
+            <ul style="margin-bottom: 1rem;">
+                <li><strong>原因：</strong>WSL2 需要 CPU 虚拟化技术 (Intel VT-x 或 AMD-V)</li>
+                <li><strong>检查方法：</strong>
+                    <ul>
+                        <li>Intel: 控制面板 → 程序 → 启用/关闭 Windows 功能 → 勾选 "Hyper-V"</li>
+                        <li>AMD: 已在 AMD-V 中默认启用</li>
+                    </ul>
+                </li>
+                <li><strong>BIOS 设置：</strong>如遇问题，需在 BIOS 中开启 Virtualization Technology</li>
+            </ul>
+
+            <h4 style="color: #333; margin: 1rem 0 0.5rem;">4. 磁盘空间</h4>
+            <ul>
+                <li><strong>WSL2 Ubuntu 基础镜像：</strong>约 5-8GB</li>
+                <li><strong>Node.js + OpenClaw 全局安装：</strong>约 500MB - 1GB</li>
+                <li><strong>日志和缓存：</strong>随着使用会增加，建议预留空间</li>
+                <li><strong>SSD vs HDD：</strong>强烈推荐 SSD，IO 性能对 Node.js 开发体验影响很大</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">04 快速自查清单</h2>
+
+        <div class="card">
+            <p style="margin-bottom: 1rem;">安装前检查以下项目：</p>
+
+            <div style="margin-left: 1rem;">
+                <p style="margin-bottom: 0.5rem;"><strong>Windows 用户：</strong></p>
+                <ul style="margin-bottom: 1rem;">
+                    <li>☑️ Windows 10 版本 ≥ 2004 或 Windows 11</li>
+                    <li>☑️ CPU 支持虚拟化技术 (VT-x/AMD-V)</li>
+                    <li>☑️ 已开启 Hyper-V 或 WSL 功能</li>
+                    <li>☑️ 有 20GB+ 可用磁盘空间</li>
+                </ul>
+
+                <p style="margin-bottom: 0.5rem;"><strong>macOS 用户：</strong></p>
+                <ul style="margin-bottom: 1rem;">
+                    <li>☑️ macOS 版本 ≥ 10.15</li>
+                    <li>☑️ 有 10GB+ 可用磁盘空间</li>
+                </ul>
+
+                <p style="margin-bottom: 0.5rem;"><strong>Linux 用户：</strong></p>
+                <ul>
+                    <li>☑️ Ubuntu 18.04+ 或 Debian 10+</li>
+                    <li>☑️ systemd 已启用</li>
+                    <li>☑️ 有 10GB+ 可用磁盘空间</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">05 安装方式</h2>
+
+        <div class="card">
+            <div class="card-title">方式一：Installer 脚本（推荐）</div>
+
+            <p style="margin-bottom: 0.5rem; font-weight: 600;">macOS / Linux / WSL2:</p>
+            <div class="code-block">
+                <span class="cmd">curl -fsSL https://openclaw.ai/install.sh | bash</span>
+            </div>
+
+            <p style="margin-bottom: 0.5rem; font-weight: 600;">Windows (PowerShell):</p>
+            <div class="code-block">
+                <span class="cmd">iwr -useb https://openclaw.ai/install.ps1 | iex</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">方式二：npm / pnpm 手动安装</div>
+            <div class="code-block">
+                <span class="cmd">npm install -g openclaw@latest</span><br>
+                <span class="cmd">openclaw onboard --install-daemon</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">06 验证安装与环境自检</h2>
+
+        <div class="card">
+            <p style="margin-bottom: 1rem; color: #555; line-height: 1.625;">安装完成后，为了确保 OpenClaw
+                后台守护进程（Daemon）正常运转并能与您的宿主机硬件正确通信，必须进行严格的生命周期验证。请在您的终端中输入并执行以下基础自检命令：</p>
+            <div class="code-block" style="margin-bottom: 1.5rem;">
+                <span class="comment"># 1. 检查 OpenClaw 核心服务的运行状态与健康度</span><br>
+                <span class="cmd">openclaw status</span><br><br>
+                <span class="comment"># 2. 检查当前安装的 CLI 客户端与 Daemon 服务端版本是否匹配</span><br>
+                <span class="cmd">openclaw --version</span>
+            </div>
+
+            <h4 style="color: #333; margin: 1.5rem 0 0.5rem; font-size: 1.05rem;">✓ 预期的正常输出示例 (Expected Output)</h4>
+            <div class="code-block"
+                style="background: #f8f9fa; color: #333; border: 1px solid #e2e8f0; font-family: monospace;">
+                <span style="color: #16a34a; font-weight: bold;">●</span> OpenClaw Daemon is active and running<br>
+                <span style="color: #64748b;">└─</span> CLI Version: 2.1.0-stable<br>
+                <span style="color: #64748b;">└─</span> Daemon Platform: linux-x64 (WSL)<br>
+                <span style="color: #64748b;">└─</span> Underlying Node.js: v22.0.0<br>
+                <span style="color: #64748b;">└─</span> Port Listening: :8080
+            </div>
+
+            <div class="warning-box" style="margin-top: 1.5rem; border-left-color: #ef4444; background: #fef2f2;">
+                <div class="warning-box-title" style="color: #b91c1c;">💣 常见自检错误排查 (Troubleshooting)</div>
+                <ul style="margin-bottom: 0; color: #7f1d1d; font-size: 0.9rem;">
+                    <li style="margin-bottom: 0.5rem;"><strong>命令找不到 (command not found)</strong>：意味着 npm
+                        的全局二进制路径尚未注册。请检查 Node.js 全局安装路径（如 <code>~/.npm-global/bin</code>）是否已正确追加至您的
+                        <code>~/.bashrc</code> 或 <code>~/.zshrc</code> 的 <code>$PATH</code> 变量中。
+                    </li>
+                    <li style="margin-bottom: 0.5rem;"><strong>Daemon 启动崩溃 (EACCES: permission denied)</strong>：通常发生于
+                        Linux/macOS 环境下无特权用户的权限不足。请尝试执行 <code>sudo openclaw onboard --repair</code> 修复运行时权限。</li>
+                    <li><strong>端口地址冲突 (EADDRINUSE: Port 8080)</strong>：OpenClaw Gateway 默认监听宿主机的 8080 端口。若已被其他服务（如
+                        Nginx, Tomcat）占用，必须手动映射：可通过注入环境变量 <code>export OPENCLAW_PORT=9090</code> 来强制切换服务的监听端口。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">07 信息来源</h2>
+
+        <div class="card">
+            <ul>
+                <li><strong>OpenClaw 安装文档：</strong><a href="https://docs.openclaw.ai/install" target="_blank"
+                        style="color: #6366f1;">https://docs.openclaw.ai/install</a></li>
+                <li><strong>OpenClaw Windows 平台：</strong><a href="https://docs.openclaw.ai/platforms/windows"
+                        target="_blank" style="color: #6366f1;">https://docs.openclaw.ai/platforms/windows</a></li>
+                <li><strong>WSL2 安装指南 (Microsoft)：</strong><a
+                        href="https://learn.microsoft.com/en-us/windows/wsl/install" target="_blank"
+                        style="color: #6366f1;">https://learn.microsoft.com/en-us/windows/wsl/install</a></li>
+                <li><strong>Node.js 官方 releases：</strong><a href="https://nodejs.org/en/about/releases/" target="_blank"
+                        style="color: #6366f1;">https://nodejs.org/en/about/releases/</a></li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="section" style="text-align: center; padding: 2rem; color: #666;">
+        <p>OpenClaw 安装配置调研 - 详细硬件要求指南</p>
+        <p style="font-size: 0.85rem; margin-top: 0.5rem;">更新时间：2026-03-10 | 信息来源：官方文档 + Microsoft WSL 文档</p>
+    </section>
+
+</body>
+
+</html>

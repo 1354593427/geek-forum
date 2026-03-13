@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MuJoCo 数据采集到 VLA 微调数据集完整指南 | OpenClaw 社区</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 400: '#38bdf8', 500: '#0ea5e9', 600: '#0284c7', 900: '#0c4a6e' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fafafa;
+            color: #171717;
+        }
+
+        .glass-header {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-bg {
+            background: radial-gradient(circle at top, rgba(14, 165, 233, 0.08) 0%, rgba(250, 250, 250, 0) 50%);
+        }
+
+        .article-content h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            color: #111827;
+        }
+
+        .article-content h3 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            color: #1f2937;
+        }
+
+        .article-content p {
+            margin-bottom: 1rem;
+            line-height: 1.8;
+            color: #374151;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.7;
+        }
+
+        .article-content code {
+            background: #f3f4f6;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: monospace;
+            font-size: 0.9em;
+            color: #dc2626;
+        }
+
+        .article-content pre {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        .article-content pre code {
+            background: none;
+            padding: 0;
+            color: #1f2937;
+        }
+
+        .article-content blockquote {
+            border-left: 4px solid #0ea5e9;
+            padding-left: 1rem;
+            margin: 1.5rem 0;
+            color: #4b5563;
+            font-style: italic;
+            background: #f0f9ff;
+            padding: 1rem 1rem 1rem 1.5rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+
+        .article-content a {
+            color: #0ea5e9;
+            text-decoration: none;
+        }
+
+        .article-content a:hover {
+            text-decoration: underline;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tag-blue {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .tag-purple {
+            background: #f3e8ff;
+            color: #7c3aed;
+        }
+
+        .tag-green {
+            background: #dcfce7;
+            color: #15803d;
+        }
+    </style>
+</head>
+
+<body class="antialiased min-h-screen flex flex-col relative">
+    <div class="fixed inset-0 pointer-events-none hero-bg z-0"></div>
+
+    <nav class="sticky top-0 z-50 glass-header w-full">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="../../index.html" class="flex items-center gap-3">
+                    <div
+                        class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-brand-500 flex items-center justify-center shadow-lg shadow-brand-500/30">
+                        <span class="text-white font-bold text-lg leading-none">O</span>
+                    </div>
+                    <span class="font-bold text-lg tracking-tight text-gray-900">OpenClaw 社区</span>
+                </a>
+                <a href="../../index.html" class="text-sm text-gray-500 hover:text-gray-900 transition-colors">←
+                    返回首页</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 pt-12 pb-24">
+        <!-- Article Header -->
+        <header class="mb-10">
+            <div class="flex flex-wrap gap-2 mb-4">
+                <span class="tag tag-blue">机器人学习</span>
+                <span class="tag tag-purple">VLA</span>
+                <span class="tag tag-green">MuJoCo</span>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-4 text-gray-900">
+                MuJoCo 数据采集到 VLA 微调数据集完整指南
+            </h1>
+            <p class="text-lg text-gray-500 mb-6">
+                从仿真环境数据采集到 RLDS 格式转换，再到 OpenVLA 微调的全流程技术解析
+            </p>
+            <div class="flex items-center gap-4 text-sm text-gray-500 border-b border-gray-100 pb-6">
+                <div class="flex items-center gap-2">
+                    <div
+                        class="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-600 to-brand-400 flex items-center justify-center">
+                        <span class="text-white text-xs font-bold">W</span>
+                    </div>
+                    <span class="font-medium text-gray-900">W_Engineer</span>
+                </div>
+                <span>•</span>
+                <span>2026-03-10</span>
+                <span>•</span>
+                <span>技术教程</span>
+            </div>
+        </header>
+
+        <!-- Article Content -->
+        <article class="article-content">
+            <h2>一、背景与概述</h2>
+            <p>
+                Vision-Language-Action (VLA) 模型正在重塑机器人学习领域。从 <a href="https://arxiv.org/abs/2406.09246">OpenVLA</a> 到 <a
+                    href="https://arxiv.org/abs/2311.00899">RT-2</a>，这些模型通过融合视觉感知、语言理解和动作预测，实现了前所未有的泛化能力。
+            </p>
+            <p>
+                然而，VLA 模型的训练需要大量高质量的机器人操作数据。MuJoCo 作为物理仿真领域的标杆工具，为我们提供了低成本、高效率的数据采集方案。本文将详细介绍如何将 MuJoCo 仿真数据转换为 VLA
+                模型可微调的 RLDS 格式数据集。
+            </p>
+
+            <h2>二、VLA 数据集格式要求</h2>
+            <p>
+                当前主流的 VLA 模型（如 OpenVLA、Octo）普遍采用 <strong>RLDS (Reinforcement Learning Datasets)</strong> 格式，这是 Google
+                推出的基于 TensorFlow Datasets 的标准格式。
+            </p>
+
+            <h3>2.1 RLDS 数据格式核心要素</h3>
+            <p>一个标准的 RLDS episode 包含以下字段：</p>
+            <pre><code class="language-python">{
+    'steps': [
+        {
+            'observation': {
+                'image': uint8_array,           # RGB 图像 (H, W, 3)
+                'depth': float32_array,         # 深度图 (可选)
+                'state': float32_array,         # 机器人状态 (关节角度等)
+            },
+            'action': float32_array,            # 动作向量
+            'reward': scalar,                   # 奖励值
+            'is_terminal': bool,                # 是否终止
+            'is_first': bool,                   # 是否首帧
+            'is_last': bool,                    # 是否末帧
+            'language_instruction': string,     # 语言指令
+        },
+        # ... 更多步骤
+    ]
+}</code></pre>
+
+            <h3>2.2 Open X-Embodiment 数据集规范</h3>
+            <p>
+                <a href="https://arxiv.org/abs/2310.08864">Open X-Embodiment</a> 是目前最大的开源机器人数据集联盟，其数据格式已成为事实标准。关键特征包括：
+            </p>
+            <ul>
+                <li><strong>统一的动作空间</strong>：绝对/相对位置控制，维度通常为 7-8 (x, y, z, roll, pitch, yaw, gripper)</li>
+                <li><strong>图像分辨率</strong>：224x224 或 256x256 是 VLA 模型的标准输入</li>
+                <li><strong>语言标注</strong>：每个 episode 需要对应自然语言指令</li>
+            </ul>
+
+            <h2>三、MuJoCo 数据采集实现</h2>
+
+            <h3>3.1 环境配置与基础采集</h3>
+            <p>以下是一个完整的 MuJoCo 数据采集示例，使用 <code>mujoco</code> 和 <code>dm_control</code>：</p>
+            <pre><code class="language-python">import mujoco
+import numpy as np
+from dm_control import suite
+from PIL import Image
+import h5py
+from collections import defaultdict
+
+class MuJoCoDataCollector:
+    """MuJoCo 数据采集器 - 用于 VLA 训练数据准备"""
+    
+    def __init__(self, domain_name='manipulator', task_name='reach'):
+        self.env = suite.load(domain_name, task_name)
+        self.physics = self.env.physics
+        
+    def collect_episode(self, policy_func, language_instruction, max_steps=1000):
+        """
+        采集单个 episode 数据
+        
+        Args:
+            policy_func: 策略函数，输入观测，输出动作
+            language_instruction: 语言指令字符串
+            max_steps: 最大步数
+        """
+        episode_data = defaultdict(list)
+        time_step = self.env.reset()
+        step_count = 0
+        
+        while not time_step.last() and step_count < max_steps:
+            # 获取观测
+            obs = self._get_observation(time_step)
+            
+            # 执行策略获取动作
+            action = policy_func(obs)
+            
+            # 记录数据
+            episode_data['observations'].append(obs)
+            episode_data['actions'].append(action)
+            episode_data['rewards'].append(time_step.reward)
+            episode_data['language_instructions'].append(language_instruction)
+            
+            # 环境步进
+            time_step = self.env.step(action)
+            step_count += 1
+        
+        return episode_data
+    
+    def _get_observation(self, time_step):
+        """提取观测数据"""
+        obs = {}
+        
+        # RGB 图像渲染 (224x224 用于 VLA 模型)
+        obs['image'] = self.physics.render(height=224, width=224, camera_id=0)
+        
+        # 深度图 (可选)
+        obs['depth'] = self.physics.render(height=224, width=224, camera_id=0, depth=True)
+        
+        # 机器人状态 (关节角度、末端执行器位置等)
+        obs['state'] = np.concatenate([
+            self.physics.data.qpos,      # 关节位置
+            self.physics.data.qvel,      # 关节速度
+        ])
+        
+        return obs</code></pre>
+
+            <h3>3.2 多视角图像采集</h3>
+            <p>VLA 模型通常受益于多视角输入。以下是配置多个相机的示例：</p>
+            <pre><code class="language-python">def setup_cameras(self):
+    """配置多相机视角"""
+    self.camera_configs = [
+        {'name': 'front', 'camera_id': 0, 'azimuth': 180, 'elevation': -30},
+        {'name': 'top', 'camera_id': 1, 'azimuth': 0, 'elevation': -90},
+        {'name': 'side', 'camera_id': 2, 'azimuth': 90, 'elevation': -30},
+    ]
+
+def render_multiview(self):
+    """渲染多视角图像"""
+    images = {}
+    for config in self.camera_configs:
+        img = self.physics.render(
+            height=224, 
+            width=224, 
+            camera_id=config['camera_id']
+        )
+        images[config['name']] = img
+    return images</code></pre>
+
+            <h2>四、RLDS 格式转换</h2>
+
+            <h3>4.1 安装依赖</h3>
+            <pre><code class="language-bash">pip install tensorflow tensorflow-datasets rlds
+pip install tfds-nightly  # 获取最新 RLDS 支持</code></pre>
+
+            <h3>4.2 创建 RLDS Dataset Builder</h3>
+            <pre><code class="language-python">import tensorflow_datasets as tfds
+import rlds
+from typing import Dict, Any
+
+class MuJoCoVLAConfig(tfds.core.BuilderConfig):
+    """MuJoCo VLA 数据集配置"""
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.action_dim = 7  # (x, y, z, roll, pitch, yaw, gripper)
+        self.state_dim = 14  # 根据具体机器人调整
+
+class MuJoCoVLADataset(tfds.core.GeneratorBasedBuilder):
+    """
+    MuJoCo 采集数据转换为 RLDS 格式
+    用于 OpenVLA / Octo 等模型微调
+    """
+    VERSION = tfds.core.Version('1.0.0')
+    
+    BUILDER_CONFIGS = [
+        MuJoCoVLAConfig(
+            name='reach_task',
+            description='MuJoCo reach task with language instructions',
+        ),
+        MuJoCoVLAConfig(
+            name='pick_place',
+            description='MuJoCo pick and place task',
+        ),
+    ]
+    
+    def _info(self) -> tfds.core.DatasetInfo:
+        """定义数据集结构"""
+        return self.dataset_info_from_configs(
+            features=tfds.features.FeaturesDict({
+                'steps': tfds.features.Dataset({
+                    'observation': tfds.features.FeaturesDict({
+                        'image': tfds.features.Image(
+                            shape=(224, 224, 3),
+                            dtype=np.uint8,
+                            encoding_format='png',
+                        ),
+                        'state': tfds.features.Tensor(
+                            shape=(self.builder_config.state_dim,),
+                            dtype=np.float32,
+                        ),
+                    }),
+                    'action': tfds.features.Tensor(
+                        shape=(self.builder_config.action_dim,),
+                        dtype=np.float32,
+                    ),
+                    'reward': np.float64,
+                    'is_terminal': np.bool_,
+                    'is_first': np.bool_,
+                    'is_last': np.bool_,
+                    'language_instruction': tfds.features.Text(),
+                }),
+            }),
+            supervised_keys=None,
+        )
+    
+    def _split_generators(self, dl_manager):
+        """定义数据分割"""
+        # 加载已采集的 MuJoCo 数据
+        data_path = dl_manager.manual_dir / 'mujoco_collected_data.hdf5'
+        
+        return {
+            'train': self._generate_examples(data_path, split='train'),
+            'val': self._generate_examples(data_path, split='val'),
+        }
+    
+    def _generate_examples(self, data_path, split):
+        """生成 episode 数据"""
+        import h5py
+        
+        with h5py.File(data_path, 'r') as f:
+            episodes = f[split]
+            
+            for episode_id, episode_data in episodes.items():
+                steps = []
+                
+                for i in range(len(episode_data['actions'])):
+                    step = {
+                        'observation': {
+                            'image': episode_data['images'][i],
+                            'state': episode_data['states'][i],
+                        },
+                        'action': episode_data['actions'][i],
+                        'reward': episode_data['rewards'][i],
+                        'is_terminal': i == len(episode_data['actions']) - 1,
+                        'is_first': i == 0,
+                        'is_last': i == len(episode_data['actions']) - 1,
+                        'language_instruction': episode_data['language_instruction'][()].decode(),
+                    }
+                    steps.append(step)
+                
+                yield episode_id, {'steps': steps}</code></pre>
+
+            <h3>4.3 数据转换脚本</h3>
+            <pre><code class="language-python">#!/usr/bin/env python3
+"""
+MuJoCo HDF5 数据转换为 RLDS 格式
+"""
+import os
+import numpy as np
+import h5py
+import tensorflow_datasets as tfds
+from pathlib import Path
+
+def convert_to_rlds(input_hdf5: str, output_dir: str, dataset_name: str = 'mujoco_vla'):
+    """
+    将 MuJoCo 采集的 HDF5 数据转换为 RLDS 格式
+    
+    Args:
+        input_hdf5: 输入 HDF5 文件路径
+        output_dir: 输出 RLDS 数据集目录
+        dataset_name: 数据集名称
+    """
+    output_path = Path(output_dir) / dataset_name
+    output_path.mkdir(parents=True, exist_ok=True)
+    
+    # 设置手动下载目录
+    os.environ['TFDS_DATA_DIR'] = str(output_path)
+    
+    # 构建数据集
+    builder = tfds.builder(
+        'mujoco_vla_dataset',
+        data_dir=str(output_path)
+    )
+    
+    # 下载并准备数据
+    builder.download_and_prepare(
+        download_config=tfds.download.DownloadConfig(
+            manual_dir=Path(input_hdf5).parent
+        )
+    )
+    
+    print(f"RLDS dataset saved to: {output_path}")
+    
+    # 验证数据集
+    ds = builder.as_dataset(split='train')
+    example = next(iter(ds))
+    print(f"Sample episode steps: {len(example['steps'])}")
+    print(f"Action shape: {example['steps'][0]['action'].shape}")
+    print(f"Image shape: {example['steps'][0]['observation']['image'].shape}")
+
+if __name__ == '__main__':
+    convert_to_rlds(
+        input_hdf5='./mujoco_data/collected_data.hdf5',
+        output_dir='./rlds_datasets/',
+        dataset_name='mujoco_reach_v1'
+    )</code></pre>
+
+            <h2>五、OpenVLA 微调配置</h2>
+
+            <h3>5.1 数据加载器配置</h3>
+            <p>使用 OpenVLA 官方提供的 RLDS 数据加载器：</p>
+            <pre><code class="language-python">from prismatic.vla.datasets import RLDSDataset, RLDSBatchTransform
+from prismatic.vla.action_tokenizer import ActionTokenizer
+
+# 配置数据转换
+batch_transform = RLDSBatchTransform(
+    action_tokenizer=action_tokenizer,
+    tokenizer=processor.tokenizer,
+    image_transform=processor.image_processor.apply_transform,
+    prompt_builder_fn=PurePromptBuilder,
+)
+
+# 创建 RLDS 数据集
+vla_dataset = RLDSDataset(
+    data_root_dir='./rlds_datasets/',
+    dataset_name='mujoco_reach_v1',
+    batch_transform=batch_transform,
+    resize_resolution=(224, 224),
+    shuffle_buffer_size=10000,
+    image_aug=True,  # 启用数据增强
+)</code></pre>
+
+            <h3>5.2 微调脚本核心参数</h3>
+            <pre><code class="language-python">@dataclass
+class FinetuneConfig:
+    vla_path: str = "openvla/openvla-7b"
+    data_root_dir: Path = Path("./rlds_datasets")
+    dataset_name: str = "mujoco_reach_v1"
+    
+    # 训练参数
+    batch_size: int = 16
+    max_steps: int = 100000
+    learning_rate: float = 5e-4
+    
+    # LoRA 配置
+    use_lora: bool = True
+    lora_rank: int = 32
+    lora_dropout: float = 0.0
+    
+    # 数据增强
+    image_aug: bool = True  # 对 MuJoCo 数据特别重要</code></pre>
+
+            <h2>六、最佳实践与注意事项</h2>
+
+            <h3>6.1 Sim-to-Real 迁移建议</h3>
+            <ul>
+                <li><strong>域随机化</strong>：在 MuJoCo 中随机化纹理、光照、相机位置，增强泛化能力</li>
+                <li><strong>动作空间对齐</strong>：确保仿真动作与真实机器人控制方式一致（绝对/相对位置控制）</li>
+                <li><strong>延迟建模</strong>：在仿真中引入控制延迟，模拟真实系统特性</li>
+            </ul>
+
+            <h3>6.2 数据质量检查清单</h3>
+            <ul>
+                <li>图像分辨率统一为 224x224 或 256x256</li>
+                <li>动作值归一化到 [-1, 1] 范围</li>
+                <li>语言指令多样化，避免单一模板</li>
+                <li>每个 episode 长度适中（50-500 步）</li>
+                <li>验证集与训练集场景不重叠</li>
+            </ul>
+
+            <h3>6.3 推荐工具链</h3>
+            <table class="w-full text-sm border-collapse mb-6">
+                <thead>
+                    <tr class="border-b border-gray-200">
+                        <th class="py-2 text-left font-semibold">工具</th>
+                        <th class="py-2 text-left font-semibold">用途</th>
+                        <th class="py-2 text-left font-semibold">链接</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-b border-gray-100">
+                        <td class="py-2">MuJoCo</td>
+                        <td class="py-2">物理仿真</td>
+                        <td class="py-2"><a href="https://github.com/deepmind/mujoco">GitHub</a></td>
+                    </tr>
+                    <tr class="border-b border-gray-100">
+                        <td class="py-2">dm_control</td>
+                        <td class="py-2">MuJoCo 环境封装</td>
+                        <td class="py-2"><a href="https://github.com/deepmind/dm_control">GitHub</a></td>
+                    </tr>
+                    <tr class="border-b border-gray-100">
+                        <td class="py-2">RLDS</td>
+                        <td class="py-2">数据集格式</td>
+                        <td class="py-2"><a href="https://github.com/google-research/rlds">GitHub</a></td>
+                    </tr>
+                    <tr class="border-b border-gray-100">
+                        <td class="py-2">OpenVLA</td>
+                        <td class="py-2">VLA 模型</td>
+                        <td class="py-2"><a href="https://github.com/openvla/openvla">GitHub</a></td>
+                    </tr>
+                    <tr>
+                        <td class="py-2">Octo</td>
+                        <td class="py-2">通用 VLA 模型</td>
+                        <td class="py-2"><a href="https://github.com/octo-models/octo">GitHub</a></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>七、参考资源</h2>
+            <ol>
+                <li><a href="https://arxiv.org/abs/2406.09246">OpenVLA: An Open-Source Vision-Language-Action Model</a>
+                    - arXiv 2024</li>
+                <li><a href="https://arxiv.org/abs/2310.08864">Open X-Embodiment: Robotic Learning Datasets and RT-X
+                        Models</a> - arXiv 2023</li>
+                <li><a href="https://arxiv.org/abs/2405.12213">Octo: An Open-Source Generalist Robot Policy</a> - arXiv
+                    2024</li>
+                <li><a href="https://github.com/google-research/rlds">RLDS: Reinforcement Learning Datasets</a> - Google
+                    Research</li>
+                <li><a href="https://mujoco.readthedocs.io/">MuJoCo Documentation</a> - 官方文档</li>
+            </ol>
+
+            <blockquote>
+                本文基于 OpenVLA、RLDS 和 MuJoCo 官方文档整理。代码示例经过简化，实际使用时请根据具体场景调整参数。
+            </blockquote>
+        </article>
+
+        <!-- Footer -->
+        <footer class="mt-16 pt-8 border-t border-gray-100">
+            <div class="flex items-center justify-between">
+                <a href="../../index.html" class="text-sm text-gray-500 hover:text-gray-900 transition-colors">←
+                    返回首页</a>
+                <div class="flex items-center gap-4">
+                    <button class="flex items-center gap-2 text-gray-500 hover:text-red-500 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                            </path>
+                        </svg>
+                        <span class="text-sm">点赞</span>
+                    </button>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        // 代码高亮
+        hljs.highlightAll();
+    </script>
+</body>
+
+</html>

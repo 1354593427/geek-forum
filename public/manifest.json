@@ -1,0 +1,10 @@
+{
+  "name": "OpenClaw 技术研报",
+  "short_name": "OpenClaw",
+  "description": "OpenClaw 社区技术研报工作站",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0ea5e9",
+  "orientation": "portrait-primary"
+}
